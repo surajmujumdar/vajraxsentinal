@@ -127,9 +127,9 @@ export const FindingDrawer = ({ finding, onClose, onStatusUpdated }) => {
       bottom: 0,
       width: '100%',
       maxWidth: '680px',
-      background: '#090d16',
-      borderLeft: '1px solid #1e293b',
-      boxShadow: '-10px 0 40px rgba(0, 0, 0, 0.8)',
+      background: '#070104',
+      borderLeft: '1px solid rgba(255, 23, 68, 0.3)',
+      boxShadow: '-10px 0 40px rgba(0, 0, 0, 0.95), 0 0 30px rgba(255, 23, 68, 0.2)',
       zIndex: 100,
       display: 'flex',
       flexDirection: 'column',
@@ -138,31 +138,33 @@ export const FindingDrawer = ({ finding, onClose, onStatusUpdated }) => {
       {/* Header */}
       <div style={{
         padding: '24px',
-        borderBottom: '1px solid #1e293b',
+        borderBottom: '1px solid rgba(255, 23, 68, 0.25)',
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'space-between',
-        background: '#0d1322'
+        background: '#0e0106'
       }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
             <SeverityBadge severity={finding.severity} />
             <span style={{
-              background: '#1e293b',
-              color: '#38bdf8',
+              background: '#1a030c',
+              color: '#ff5252',
               fontSize: '11px',
               padding: '2px 8px',
               borderRadius: '4px',
-              fontFamily: 'var(--font-mono)'
+              fontFamily: 'var(--font-mono)',
+              border: '1px solid rgba(255, 23, 68, 0.3)'
             }}>
               {finding.source}
             </span>
             <span style={{
-              background: '#1e293b',
+              background: '#1a030c',
               color: '#94a3b8',
               fontSize: '11px',
               padding: '2px 8px',
-              borderRadius: '4px'
+              borderRadius: '4px',
+              border: '1px solid rgba(255, 23, 68, 0.2)'
             }}>
               {finding.scanner}
             </span>
@@ -193,14 +195,14 @@ export const FindingDrawer = ({ finding, onClose, onStatusUpdated }) => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: '#0f172a',
+          background: '#110207',
           padding: '12px 16px',
           borderRadius: '8px',
-          border: '1px solid #1e293b'
+          border: '1px solid rgba(255, 23, 68, 0.3)'
         }}>
           <div>
             <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase' }}>Normalized Risk Score</div>
-            <div style={{ fontSize: '20px', fontWeight: '800', color: '#00f2fe', fontFamily: 'var(--font-mono)' }}>
+            <div style={{ fontSize: '20px', fontWeight: '800', color: '#ff1744', fontFamily: 'var(--font-mono)' }}>
               {finding.risk_score || 0} <span style={{ fontSize: '12px', color: '#64748b' }}>/ 100</span>
             </div>
           </div>
@@ -215,9 +217,9 @@ export const FindingDrawer = ({ finding, onClose, onStatusUpdated }) => {
                   borderRadius: '6px',
                   fontSize: '12px',
                   fontWeight: '600',
-                  border: currentStatus === st ? '1px solid #38bdf8' : '1px solid #1e293b',
-                  background: currentStatus === st ? 'rgba(56, 189, 248, 0.15)' : '#1e293b',
-                  color: currentStatus === st ? '#38bdf8' : '#94a3b8',
+                  border: currentStatus === st ? '1px solid #ff1744' : '1px solid rgba(255, 23, 68, 0.2)',
+                  background: currentStatus === st ? 'rgba(255, 23, 68, 0.25)' : '#14030a',
+                  color: currentStatus === st ? '#ff1744' : '#94a3b8',
                   cursor: 'pointer',
                   textTransform: 'capitalize'
                 }}
@@ -230,26 +232,26 @@ export const FindingDrawer = ({ finding, onClose, onStatusUpdated }) => {
 
         {/* GEMINI AI REMEDIATION & FIX PATCH CODE */}
         <div style={{
-          background: 'rgba(139, 92, 246, 0.08)',
-          border: '1px solid rgba(168, 85, 247, 0.35)',
+          background: 'rgba(255, 23, 68, 0.06)',
+          border: '1px solid rgba(255, 23, 68, 0.35)',
           borderRadius: '12px',
           padding: '18px',
-          boxShadow: '0 0 20px rgba(139, 92, 246, 0.1)'
+          boxShadow: '0 0 20px rgba(255, 23, 68, 0.12)'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '10px', borderBottom: '1px solid rgba(168, 85, 247, 0.2)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '10px', borderBottom: '1px solid rgba(255, 23, 68, 0.2)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Sparkles size={18} color="#c084fc" />
-              <span style={{ fontSize: '14px', fontWeight: '800', color: '#e9d5ff', fontFamily: 'var(--font-hud)', tracking: '0.05em' }}>
+              <Sparkles size={18} color="#ff1744" />
+              <span style={{ fontSize: '14px', fontWeight: '800', color: '#ffebee', fontFamily: 'var(--font-hud)', letterSpacing: '0.05em' }}>
                 GEMINI AI REMEDY & FIX PATCH
               </span>
             </div>
-            <span style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', padding: '2px 8px', borderRadius: '4px', background: 'rgba(168, 85, 247, 0.2)', color: '#d8b4fe', fontWeight: '700' }}>
+            <span style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', padding: '2px 8px', borderRadius: '4px', background: 'rgba(255, 23, 68, 0.2)', color: '#ff8a80', fontWeight: '700' }}>
               CONFIDENCE 99.4%
             </span>
           </div>
 
           <div style={{ marginBottom: '14px' }}>
-            <div style={{ fontSize: '11px', color: '#c084fc', fontWeight: '700', textTransform: 'uppercase', marginBottom: '4px', fontFamily: 'var(--font-mono)' }}>
+            <div style={{ fontSize: '11px', color: '#ff5252', fontWeight: '700', textTransform: 'uppercase', marginBottom: '4px', fontFamily: 'var(--font-mono)' }}>
               AI STRATEGY PLAN:
             </div>
             <p style={{ fontSize: '13px', color: '#e2e8f0', lineHeight: 1.5 }}>
@@ -258,18 +260,18 @@ export const FindingDrawer = ({ finding, onClose, onStatusUpdated }) => {
           </div>
 
           {/* Code Box */}
-          <div style={{ borderRadius: '8px', overflow: 'hidden', border: '1px solid #1e293b', background: '#070b14', marginBottom: '14px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', background: '#0f172a', borderBottom: '1px solid #1e293b', fontSize: '11px', fontFamily: 'var(--font-mono)', color: '#38bdf8' }}>
+          <div style={{ borderRadius: '8px', overflow: 'hidden', border: '1px solid rgba(255, 23, 68, 0.3)', background: '#0a0106', marginBottom: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', background: '#14030a', borderBottom: '1px solid rgba(255, 23, 68, 0.25)', fontSize: '11px', fontFamily: 'var(--font-mono)', color: '#ff5252' }}>
               <span>RECOMMENDED FIX CODE PATCH</span>
               <button
                 onClick={handleCopyCode}
-                style={{ background: 'transparent', border: 'none', color: '#38bdf8', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px' }}
+                style={{ background: 'transparent', border: 'none', color: '#ff5252', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px' }}
               >
-                {copied ? <Check size={14} color="#10b981" /> : <Copy size={14} />}
+                {copied ? <Check size={14} color="#ff1744" /> : <Copy size={14} />}
                 <span>{copied ? 'COPIED' : 'COPY CODE'}</span>
               </button>
             </div>
-            <pre style={{ margin: 0, padding: '14px', fontSize: '11px', color: '#e0f2fe', fontFamily: 'var(--font-mono)', lineHeight: 1.6, overflowX: 'auto' }}>
+            <pre style={{ margin: 0, padding: '14px', fontSize: '11px', color: '#ffebee', fontFamily: 'var(--font-mono)', lineHeight: 1.6, overflowX: 'auto' }}>
               <code>{remedyInfo.code}</code>
             </pre>
           </div>
@@ -282,8 +284,8 @@ export const FindingDrawer = ({ finding, onClose, onStatusUpdated }) => {
               width: '100%',
               padding: '10px 16px',
               borderRadius: '8px',
-              background: 'linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%)',
-              border: 'none',
+              background: 'linear-gradient(135deg, #ff1744 0%, #b7092b 100%)',
+              border: '1px solid #ff1744',
               color: '#ffffff',
               fontWeight: '700',
               fontSize: '13px',
@@ -292,7 +294,7 @@ export const FindingDrawer = ({ finding, onClose, onStatusUpdated }) => {
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
-              boxShadow: '0 0 15px rgba(139, 92, 246, 0.4)',
+              boxShadow: '0 0 15px rgba(255, 23, 68, 0.5)',
               transition: 'all 0.2s'
             }}
           >
@@ -307,13 +309,13 @@ export const FindingDrawer = ({ finding, onClose, onStatusUpdated }) => {
             Affected Target & Location
           </div>
           {finding.file && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#38bdf8', fontFamily: 'var(--font-mono)', fontSize: '13px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#ff5252', fontFamily: 'var(--font-mono)', fontSize: '13px' }}>
               <FileCode size={16} />
               <span>{finding.file}:{finding.line || 1}</span>
             </div>
           )}
           {finding.endpoint && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#00f2fe', fontFamily: 'var(--font-mono)', fontSize: '13px', marginTop: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#ff1744', fontFamily: 'var(--font-mono)', fontSize: '13px', marginTop: '4px' }}>
               <Globe size={16} />
               <span>{finding.endpoint} {finding.parameter ? `(Param: ${finding.parameter})` : ''}</span>
             </div>
@@ -337,17 +339,17 @@ export const FindingDrawer = ({ finding, onClose, onStatusUpdated }) => {
           </h3>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
             {finding.cwe?.map((cwe) => (
-              <span key={cwe} style={{ background: '#1e293b', color: '#38bdf8', padding: '3px 8px', borderRadius: '4px', fontSize: '12px', fontFamily: 'var(--font-mono)' }}>
+              <span key={cwe} style={{ background: '#14030a', color: '#ff5252', padding: '3px 8px', borderRadius: '4px', fontSize: '12px', fontFamily: 'var(--font-mono)', border: '1px solid rgba(255, 23, 68, 0.25)' }}>
                 {cwe}
               </span>
             ))}
             {finding.cves?.map((cve) => (
-              <span key={cve} style={{ background: 'rgba(255, 51, 102, 0.15)', color: '#ff3366', border: '1px solid rgba(255, 51, 102, 0.3)', padding: '3px 8px', borderRadius: '4px', fontSize: '12px', fontFamily: 'var(--font-mono)' }}>
+              <span key={cve} style={{ background: 'rgba(255, 23, 68, 0.15)', color: '#ff1744', border: '1px solid rgba(255, 23, 68, 0.4)', padding: '3px 8px', borderRadius: '4px', fontSize: '12px', fontFamily: 'var(--font-mono)' }}>
                 {cve}
               </span>
             ))}
             {finding.owasp?.map((ow) => (
-              <span key={ow} style={{ background: 'rgba(168, 85, 247, 0.15)', color: '#a855f7', padding: '3px 8px', borderRadius: '4px', fontSize: '12px' }}>
+              <span key={ow} style={{ background: 'rgba(225, 29, 72, 0.15)', color: '#fb7185', border: '1px solid rgba(225, 29, 72, 0.3)', padding: '3px 8px', borderRadius: '4px', fontSize: '12px' }}>
                 OWASP {ow}
               </span>
             ))}
