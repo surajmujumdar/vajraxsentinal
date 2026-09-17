@@ -6168,40 +6168,41 @@ export const FALLBACK_FINDINGS = [
 ];
 
 export const FALLBACK_DASHBOARD = {
-  total_projects: 3,
+  total_projects: 20,
   total_assessments: 56,
   total_scans: 56,
   total_findings: 411,
-  open_findings: 315,
+  open_findings: 359,
   critical_findings: 44,
-  high_findings: 89,
-  medium_findings: 143,
-  low_findings: 117,
-  overall_risk_score: 84.5,
-  risk_score: 84.5,
+  high_findings: 79,
+  medium_findings: 119,
+  low_findings: 99,
+  info_findings: 18,
+  overall_risk_score: 40.6,
+  risk_score: 40.6,
   severity_distribution: {
-  "CRITICAL": 44,
-  "HIGH": 89,
-  "MEDIUM": 143,
-  "LOW": 117,
-  "INFO": 18
-},
+    "CRITICAL": 44,
+    "HIGH": 79,
+    "MEDIUM": 119,
+    "LOW": 99,
+    "INFO": 18
+  },
   engine_distribution: {
-  "SECRETS": 55,
-  "SAST": 135,
-  "DAST": 98,
-  "WEB": 80,
-  "SCA": 42,
-  "SSL": 1
-},
+    "SAST": 130,
+    "DAST": 79,
+    "WEB": 57,
+    "SECRETS": 50,
+    "SCA": 42,
+    "SSL": 1
+  },
   findings_by_source: {
-  "SECRETS": 55,
-  "SAST": 135,
-  "DAST": 98,
-  "WEB": 80,
-  "SCA": 42,
-  "SSL": 1
-},
+    "SAST": 130,
+    "DAST": 79,
+    "WEB": 57,
+    "SECRETS": 50,
+    "SCA": 42,
+    "SSL": 1
+  },
   active_rate: 98.5,
   asset_coverage: 96.9,
   total_endpoints: 24650,

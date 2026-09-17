@@ -712,7 +712,11 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 font-mono">
-              <div className="p-3 rounded-lg bg-command-900/90 border border-rose-500/30 shadow-[0_0_8px_rgba(244,63,94,0.15)]">
+              <div 
+                onClick={() => onViewFindings && onViewFindings({ severity: 'CRITICAL' })}
+                className="p-3 rounded-lg bg-command-900/90 border border-rose-500/30 shadow-[0_0_8px_rgba(244,63,94,0.15)] cursor-pointer hover:border-rose-400 hover:bg-rose-950/30 transition-all"
+                title="View all CRITICAL findings in Findings Explorer"
+              >
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-[10px] text-rose-300/80 tracking-wider font-bold uppercase">CRITICAL</span>
                   <span className="w-2 h-2 rounded-full bg-rose-400 shadow-[0_0_6px_#f43f5e]"></span>
@@ -721,7 +725,7 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                   <div className="text-2xl font-hud font-black text-rose-400 leading-none drop-shadow-[0_0_6px_#f43f5e]">
                     {dist.CRITICAL}
                   </div>
-                  <span className="text-[9px] text-rose-300/60 font-semibold">THREATS</span>
+                  <span className="text-[9px] text-rose-300/60 font-semibold">THREATS →</span>
                 </div>
                 <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-cyan-950 mt-2.5">
                   <div 
@@ -731,7 +735,11 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                 </div>
               </div>
 
-              <div className="p-3 rounded-lg bg-command-900/90 border border-amber-500/30 shadow-[0_0_8px_rgba(245,158,11,0.15)]">
+              <div 
+                onClick={() => onViewFindings && onViewFindings({ severity: 'HIGH' })}
+                className="p-3 rounded-lg bg-command-900/90 border border-amber-500/30 shadow-[0_0_8px_rgba(245,158,11,0.15)] cursor-pointer hover:border-amber-400 hover:bg-amber-950/30 transition-all"
+                title="View all HIGH findings in Findings Explorer"
+              >
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-[10px] text-amber-300/80 tracking-wider font-bold uppercase">HIGH</span>
                   <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b]"></span>
@@ -740,7 +748,7 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                   <div className="text-2xl font-hud font-black text-amber-400 leading-none drop-shadow-[0_0_6px_#f59e0b]">
                     {dist.HIGH}
                   </div>
-                  <span className="text-[9px] text-amber-300/60 font-semibold">ELEVATED</span>
+                  <span className="text-[9px] text-amber-300/60 font-semibold">ELEVATED →</span>
                 </div>
                 <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-cyan-950 mt-2.5">
                   <div 
@@ -750,7 +758,11 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                 </div>
               </div>
 
-              <div className="p-3 rounded-lg bg-command-900/90 border border-cyan-500/30 shadow-[0_0_8px_rgba(6,182,212,0.15)]">
+              <div 
+                onClick={() => onViewFindings && onViewFindings({ severity: 'MEDIUM' })}
+                className="p-3 rounded-lg bg-command-900/90 border border-cyan-500/30 shadow-[0_0_8px_rgba(6,182,212,0.15)] cursor-pointer hover:border-cyan-400 hover:bg-cyan-950/30 transition-all"
+                title="View all MEDIUM findings in Findings Explorer"
+              >
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-[10px] text-cyan-300/80 tracking-wider font-bold uppercase">MEDIUM</span>
                   <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_6px_#38bdf8]"></span>
@@ -759,7 +771,7 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                   <div className="text-2xl font-hud font-black text-cyan-300 leading-none drop-shadow-[0_0_6px_#38bdf8]">
                     {dist.MEDIUM}
                   </div>
-                  <span className="text-[9px] text-cyan-400/60 font-semibold">MODERATE</span>
+                  <span className="text-[9px] text-cyan-400/60 font-semibold">MODERATE →</span>
                 </div>
                 <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-cyan-950 mt-2.5">
                   <div 
@@ -769,7 +781,11 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                 </div>
               </div>
 
-              <div className="p-3 rounded-lg bg-command-900/90 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.15)]">
+              <div 
+                onClick={() => onViewFindings && onViewFindings({ severity: 'LOW' })}
+                className="p-3 rounded-lg bg-command-900/90 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.15)] cursor-pointer hover:border-emerald-400 hover:bg-emerald-950/30 transition-all"
+                title="View all LOW findings in Findings Explorer"
+              >
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-[10px] text-emerald-400/80 tracking-wider font-bold uppercase">LOW</span>
                   <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#10b981]"></span>
@@ -778,7 +794,7 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                   <div className="text-2xl font-hud font-black text-emerald-400 leading-none drop-shadow-[0_0_6px_#10b981]">
                     {dist.LOW}
                   </div>
-                  <span className="text-[9px] text-emerald-400/60 font-semibold">INFO</span>
+                  <span className="text-[9px] text-emerald-400/60 font-semibold">INFO →</span>
                 </div>
                 <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-cyan-950 mt-2.5">
                   <div 
