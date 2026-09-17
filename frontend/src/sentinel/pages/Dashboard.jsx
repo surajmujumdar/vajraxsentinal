@@ -626,16 +626,16 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
           </div>
 
           {/* VULNERABILITIES BY SEVERITY BAR */}
-          <div className="lg:col-span-12 w-full tech-border-card rounded-lg p-4 bg-command-950/90 border border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.15)]">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-2.5 border-b border-cyan-900/50 mb-3 gap-3">
+          <div className="lg:col-span-12 w-full tech-border-card rounded-lg p-4 bg-command-950/90 border border-rose-500/30 shadow-[0_0_20px_rgba(255,23,68,0.15)]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-2.5 border-b border-rose-900/50 mb-3 gap-3">
               <div className="flex items-center space-x-2.5">
-                <div className="w-2.5 h-2.5 rounded-sm bg-cyan-400 shadow-[0_0_8px_#38bdf8]"></div>
-                <span className="font-hud font-bold tracking-widest text-xs uppercase text-cyan-200">VULNERABILITIES BY SEVERITY</span>
+                <div className="w-2.5 h-2.5 rounded-sm bg-rose-500 shadow-[0_0_8px_#ff1744]"></div>
+                <span className="font-hud font-bold tracking-widest text-xs uppercase text-rose-200">VULNERABILITIES BY SEVERITY</span>
                 <span className="hud-slashes"></span>
               </div>
               <div className="flex flex-wrap items-center gap-3">
                 {/* Time Range Filter Pills */}
-                <div className="flex items-center space-x-1 p-0.5 rounded-lg bg-command-900/90 border border-cyan-900/60 font-mono text-[10px]">
+                <div className="flex items-center space-x-1 p-0.5 rounded-lg bg-command-900/90 border border-rose-900/60 font-mono text-[10px]">
                   {[
                     { id: '24h', label: 'LAST 24HR' },
                     { id: '3d', label: '3 DAYS' },
@@ -647,8 +647,8 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                       onClick={() => setVulnTimeFilter(filter.id)}
                       className={`px-2.5 py-1 rounded transition-all font-bold cursor-pointer ${
                         vulnTimeFilter === filter.id
-                          ? 'bg-gradient-to-r from-cyan-500/30 to-blue-500/20 text-cyan-200 border border-cyan-400/60 shadow-[0_0_10px_rgba(6,182,212,0.3)]'
-                          : 'text-slate-400 hover:text-cyan-200 hover:bg-cyan-950/40 border border-transparent'
+                          ? 'bg-gradient-to-r from-rose-500/30 to-red-600/20 text-rose-200 border border-rose-400/60 shadow-[0_0_10px_rgba(255,23,68,0.3)]'
+                          : 'text-slate-400 hover:text-rose-200 hover:bg-rose-950/40 border border-transparent'
                       }`}
                     >
                       {filter.label}
@@ -656,14 +656,14 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                   ))}
                 </div>
 
-                <div className="px-3 py-1 rounded-md bg-cyan-950/90 border border-cyan-500/50 shadow-[0_0_12px_rgba(6,182,212,0.3)] flex items-center space-x-2 font-mono">
-                  <span className="text-[10px] text-cyan-400/90 uppercase tracking-widest font-bold">TOTAL</span>
-                  <span className="text-sm font-hud font-black text-white drop-shadow-[0_0_8px_rgba(56,189,248,0.8)]">
+                <div className="px-3 py-1 rounded-md bg-rose-950/90 border border-rose-500/50 shadow-[0_0_12px_rgba(255,23,68,0.3)] flex items-center space-x-2 font-mono">
+                  <span className="text-[10px] text-rose-400/90 uppercase tracking-widest font-bold">TOTAL</span>
+                  <span className="text-sm font-hud font-black text-white drop-shadow-[0_0_8px_rgba(255,23,68,0.8)]">
                     {totalFiltered}
                   </span>
                 </div>
-                <div className="flex items-center space-x-1.5 pl-2 border-l border-cyan-900/50">
-                  <span className="text-[10px] font-mono text-cyan-400/80 uppercase tracking-wider">LIVE FEED</span>
+                <div className="flex items-center space-x-1.5 pl-2 border-l border-rose-900/50">
+                  <span className="text-[10px] font-mono text-rose-400/80 uppercase tracking-wider">LIVE FEED</span>
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_#10b981]"></span>
                 </div>
               </div>
@@ -684,7 +684,7 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                   </div>
                   <span className="text-[9px] text-rose-300/60 font-semibold">THREATS →</span>
                 </div>
-                <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-cyan-950 mt-2.5">
+                <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-rose-950 mt-2.5">
                   <div 
                     className="bg-rose-400 h-full shadow-[0_0_6px_#f43f5e] transition-all duration-500"
                     style={{ width: `${totalFiltered > 0 ? Math.round((dist.CRITICAL / totalFiltered) * 100) : 0}%` }}
@@ -707,7 +707,7 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                   </div>
                   <span className="text-[9px] text-amber-300/60 font-semibold">ELEVATED →</span>
                 </div>
-                <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-cyan-950 mt-2.5">
+                <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-rose-950 mt-2.5">
                   <div 
                     className="bg-amber-400 h-full shadow-[0_0_6px_#f59e0b] transition-all duration-500"
                     style={{ width: `${totalFiltered > 0 ? Math.round((dist.HIGH / totalFiltered) * 100) : 0}%` }}
@@ -717,22 +717,22 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
 
               <div 
                 onClick={() => onViewFindings && onViewFindings({ severity: 'MEDIUM' })}
-                className="p-3 rounded-lg bg-command-900/90 border border-cyan-500/30 shadow-[0_0_8px_rgba(6,182,212,0.15)] cursor-pointer hover:border-cyan-400 hover:bg-cyan-950/30 transition-all"
+                className="p-3 rounded-lg bg-command-900/90 border border-rose-900/60 shadow-[0_0_8px_rgba(255,23,68,0.15)] cursor-pointer hover:border-rose-400 hover:bg-rose-950/30 transition-all"
                 title="View all MEDIUM findings in Findings Explorer"
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] text-cyan-300/80 tracking-wider font-bold uppercase">MEDIUM</span>
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_6px_#38bdf8]"></span>
+                  <span className="text-[10px] text-rose-300/80 tracking-wider font-bold uppercase">MEDIUM</span>
+                  <span className="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_6px_#ff1744]"></span>
                 </div>
                 <div className="flex items-baseline justify-between">
-                  <div className="text-2xl font-hud font-black text-cyan-300 leading-none drop-shadow-[0_0_6px_#38bdf8]">
+                  <div className="text-2xl font-hud font-black text-rose-300 leading-none drop-shadow-[0_0_6px_#ff1744]">
                     {dist.MEDIUM}
                   </div>
-                  <span className="text-[9px] text-cyan-400/60 font-semibold">MODERATE →</span>
+                  <span className="text-[9px] text-rose-400/60 font-semibold">MODERATE →</span>
                 </div>
-                <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-cyan-950 mt-2.5">
+                <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-rose-950 mt-2.5">
                   <div 
-                    className="bg-cyan-400 h-full shadow-[0_0_6px_#38bdf8] transition-all duration-500"
+                    className="bg-rose-500 h-full shadow-[0_0_6px_#ff1744] transition-all duration-500"
                     style={{ width: `${totalFiltered > 0 ? Math.round((dist.MEDIUM / totalFiltered) * 100) : 0}%` }}
                   ></div>
                 </div>
@@ -753,7 +753,7 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                   </div>
                   <span className="text-[9px] text-emerald-400/60 font-semibold">INFO →</span>
                 </div>
-                <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-cyan-950 mt-2.5">
+                <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-rose-950 mt-2.5">
                   <div 
                     className="bg-emerald-400 h-full shadow-[0_0_6px_#10b981] transition-all duration-500"
                     style={{ width: `${totalFiltered > 0 ? Math.round((dist.LOW / totalFiltered) * 100) : 0}%` }}
@@ -771,7 +771,7 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
 
             {/* 3. TOP 10 SECURITY FINDINGS */}
             <div className="tech-border-card rounded-xl p-4 bg-command-950/90 border border-rose-500/30 shadow-[0_0_20px_rgba(244,63,94,0.15)]">
-              <div className="pb-2.5 border-b border-cyan-900/40 mb-3">
+              <div className="pb-2.5 border-b border-rose-900/40 mb-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2.5 min-w-0">
                     <ShieldAlert className="w-5 h-5 text-rose-400 drop-shadow-[0_0_8px_rgba(244,63,94,0.5)]" />
@@ -779,7 +779,7 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                   </div>
                   <span className="px-2 py-0.5 rounded bg-rose-500/15 border border-rose-500/30 text-[10px] font-mono text-rose-300">PRIORITY DISPATCH QUEUE</span>
                 </div>
-                <span className="block text-[10px] font-mono text-cyan-400/70 tracking-wider mt-0.5">SORTED BY EXPLOITABILITY</span>
+                <span className="block text-[10px] font-mono text-rose-400/70 tracking-wider mt-0.5">SORTED BY EXPLOITABILITY</span>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 font-mono text-xs">
@@ -795,7 +795,7 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                           <span className="text-[9px] text-slate-400 truncate block">{f.file ? `${f.file}:${f.line}` : (f.endpoint || f.scanner)}</span>
                         </div>
                       </div>
-                      <span className="text-[10px] text-cyan-300 font-bold shrink-0 ml-2">{f.risk_score ? `SCORE ${f.risk_score}` : 'ETA 2h'}</span>
+                      <span className="text-[10px] text-rose-300 font-bold shrink-0 ml-2">{f.risk_score ? `SCORE ${f.risk_score}` : 'ETA 2h'}</span>
                     </div>
                   ))
                 ) : (
@@ -813,7 +813,7 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                   ].map((f, idx) => (
                     <div key={idx} className="p-2.5 rounded-lg bg-command-900/80 border border-rose-500/20 flex items-center justify-between">
                       <div className="flex items-center space-x-2.5 min-w-0">
-                        <span className={`px-1.5 py-0.5 rounded ${f.severity === 'CRITICAL' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/40' : f.severity === 'HIGH' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40' : 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'} font-bold text-[9px]`}>
+                        <span className={`px-1.5 py-0.5 rounded ${f.severity === 'CRITICAL' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/40' : f.severity === 'HIGH' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40' : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'} font-bold text-[9px]`}>
                           {f.severity === 'CRITICAL' ? 'CRIT' : f.severity?.substring(0,4)}
                         </span>
                         <div className="truncate">
@@ -821,14 +821,14 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                           <span className="text-[9px] text-slate-400 truncate block">{f.target}</span>
                         </div>
                       </div>
-                      <span className="text-[10px] text-cyan-300 font-bold shrink-0 ml-2">{f.score}</span>
+                      <span className="text-[10px] text-rose-300 font-bold shrink-0 ml-2">{f.score}</span>
                     </div>
                   ))
                 )}
               </div>
-              <div className="flex items-center justify-between text-xs font-mono text-slate-400 pt-2 border-t border-cyan-950 mt-3">
+              <div className="flex items-center justify-between text-xs font-mono text-slate-400 pt-2 border-t border-rose-950 mt-3">
                 <span className="text-slate-400">DISPLAYING TOP 10 PRIORITY DISPATCHES</span>
-                <button onClick={onViewFindings} className="text-cyan-300 font-bold hover:underline flex items-center space-x-1">
+                <button onClick={onViewFindings} className="text-rose-300 font-bold hover:underline flex items-center space-x-1">
                   <span>FULL QUEUE</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
@@ -849,13 +849,13 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
       {/* Interactive DAST Telemetry & WAF Diagnostic Modal */}
       {dastModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md font-sans text-white animate-fadeIn">
-          <div className="w-full max-w-4xl rounded-2xl bg-command-950 border border-cyan-500/40 p-6 shadow-[0_0_50px_rgba(6,182,212,0.3)] relative max-h-[90vh] overflow-y-auto">
+          <div className="w-full max-w-4xl rounded-2xl bg-command-950 border border-rose-500/40 p-6 shadow-[0_0_50px_rgba(255,23,68,0.3)] relative max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-cyan-900/50 mb-5">
+            <div className="flex items-center justify-between pb-4 border-b border-rose-900/50 mb-5">
               <div className="flex items-center space-x-3">
-                <span className="w-3 h-3 rounded-sm bg-cyan-400 shadow-[0_0_10px_#38bdf8]"></span>
+                <span className="w-3 h-3 rounded-sm bg-rose-500 shadow-[0_0_10px_#ff1744]"></span>
                 <div>
-                  <h2 className="font-hud font-bold text-lg text-cyan-200 uppercase tracking-widest drop-shadow-[0_0_8px_rgba(56,189,248,0.4)]">
+                  <h2 className="font-hud font-bold text-lg text-rose-200 uppercase tracking-widest drop-shadow-[0_0_8px_rgba(255,23,68,0.4)]">
                     DAST TELEMETRY & DIAGNOSTIC COMMAND CENTER
                   </h2>
                   <p className="text-xs text-slate-400 font-mono">
@@ -865,33 +865,33 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
               </div>
               <button 
                 onClick={() => setDastModalOpen(false)}
-                className="w-8 h-8 rounded-lg bg-command-900 border border-cyan-900/60 flex items-center justify-center text-slate-400 hover:text-white hover:border-cyan-400 transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-lg bg-command-900 border border-rose-900/60 flex items-center justify-center text-slate-400 hover:text-white hover:border-rose-400 transition-colors cursor-pointer"
               >
                 ✕
               </button>
             </div>
 
             {/* Target Diagnostic Probe Input Form */}
-            <form onSubmit={handleRunDashboardDiagnostics} className="mb-5 p-4 rounded-xl bg-command-900/90 border border-cyan-900/80 flex flex-col md:flex-row items-center justify-between gap-3 font-mono text-xs shadow-inner">
+            <form onSubmit={handleRunDashboardDiagnostics} className="mb-5 p-4 rounded-xl bg-command-900/90 border border-rose-900/80 flex flex-col md:flex-row items-center justify-between gap-3 font-mono text-xs shadow-inner">
               <div className="flex items-center space-x-2 w-full md:w-auto flex-1">
-                <Radar className="w-5 h-5 text-cyan-400" />
+                <Radar className="w-5 h-5 text-rose-400" />
                 <span className="text-slate-300 font-bold whitespace-nowrap">Target Probe:</span>
                 <input 
                   type="url" 
                   value={diagUrl}
                   onChange={(e) => setDiagUrl(e.target.value)}
                   placeholder="https://your-target-app.com"
-                  className="flex-1 bg-command-950 border border-cyan-900/80 rounded-lg px-3.5 py-2 text-cyan-200 placeholder-slate-500 focus:outline-none focus:border-cyan-400 text-xs"
+                  className="flex-1 bg-command-950 border border-rose-900/80 rounded-lg px-3.5 py-2 text-rose-200 placeholder-slate-500 focus:outline-none focus:border-rose-400 text-xs"
                 />
               </div>
               <button 
                 type="submit"
                 disabled={diagLoading}
-                className="w-full md:w-auto px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-500/20 to-blue-600/30 text-cyan-200 border border-cyan-400/60 font-hud font-bold text-xs uppercase hover:border-cyan-300 transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-[0_0_12px_rgba(0,242,254,0.3)] disabled:opacity-50"
+                className="w-full md:w-auto px-5 py-2 rounded-lg bg-gradient-to-r from-rose-500/20 to-red-600/30 text-rose-200 border border-rose-400/60 font-hud font-bold text-xs uppercase hover:border-rose-300 transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-[0_0_12px_rgba(255,23,68,0.3)] disabled:opacity-50"
               >
                 {diagLoading ? (
                   <>
-                    <span className="w-3.5 h-3.5 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin"></span>
+                    <span className="w-3.5 h-3.5 border-2 border-rose-400 border-t-transparent rounded-full animate-spin"></span>
                     <span>PROBING TARGET...</span>
                   </>
                 ) : (
@@ -924,10 +924,10 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                 <p className="text-xs mb-2 leading-relaxed">{diagResult.blocking_reason || 'Target is reachable for DAST security auditing.'}</p>
                 {diagResult.recommendations && diagResult.recommendations.length > 0 && (
                   <div className="mt-2 pt-2 border-t border-white/10 text-[11px] text-slate-300 space-y-1">
-                    <span className="font-bold text-cyan-300 block">Guidance & Recommendations:</span>
+                    <span className="font-bold text-rose-300 block">Guidance & Recommendations:</span>
                     {diagResult.recommendations.map((rec, i) => (
                       <div key={i} className="flex items-start space-x-1.5">
-                        <span className="text-cyan-400">►</span>
+                        <span className="text-rose-400">►</span>
                         <span>{rec}</span>
                       </div>
                     ))}
@@ -938,17 +938,17 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
 
             {/* DAST Telemetry Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono mb-5">
-              <div className="p-3.5 rounded-xl bg-command-900/90 border border-cyan-900/60 text-center shadow-inner">
+              <div className="p-3.5 rounded-xl bg-command-900/90 border border-rose-900/60 text-center shadow-inner">
                 <span className="text-[10px] text-slate-400 font-bold uppercase block mb-1">DAST COVERAGE</span>
-                <span className="text-2xl font-hud font-black text-cyan-300">{metrics?.dast_telemetry?.coverage_percentage ?? 69.7}%</span>
+                <span className="text-2xl font-hud font-black text-rose-300">{metrics?.dast_telemetry?.coverage_percentage ?? 69.7}%</span>
                 <span className="text-[10px] text-slate-400 block mt-1">STATUS: {metrics?.dast_telemetry?.coverage_status || 'MODERATE'}</span>
               </div>
-              <div className="p-3.5 rounded-xl bg-command-900/90 border border-cyan-900/60 text-center shadow-inner">
+              <div className="p-3.5 rounded-xl bg-command-900/90 border border-rose-900/60 text-center shadow-inner">
                 <span className="text-[10px] text-slate-400 font-bold uppercase block mb-1">MONITORED TARGETS</span>
                 <span className="text-2xl font-hud font-bold text-white">{metrics?.dast_telemetry?.monitored_targets ?? 15}</span>
                 <span className="text-[10px] text-slate-400 block mt-1">Scope Endpoints</span>
               </div>
-              <div className="p-3.5 rounded-xl bg-command-900/90 border border-cyan-900/60 text-center shadow-inner">
+              <div className="p-3.5 rounded-xl bg-command-900/90 border border-rose-900/60 text-center shadow-inner">
                 <span className="text-[10px] text-slate-400 font-bold uppercase block mb-1">REQUESTS (HITS)</span>
                 <span className="text-2xl font-hud font-bold text-white">{metrics?.dast_telemetry?.total_requests ?? 5583}</span>
                 <span className="text-[10px] text-emerald-400 block mt-1">{metrics?.dast_telemetry?.successful_requests ?? 5495} Successful</span>
@@ -961,22 +961,22 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
             </div>
 
             {/* Sub-metrics summary table */}
-            <div className="p-4 rounded-xl bg-command-900/90 border border-cyan-900/60 font-mono text-xs mb-5">
-              <span className="font-bold text-cyan-300 block mb-2 uppercase tracking-wide">Endpoint Audit Summary:</span>
+            <div className="p-4 rounded-xl bg-command-900/90 border border-rose-900/60 font-mono text-xs mb-5">
+              <span className="font-bold text-rose-300 block mb-2 uppercase tracking-wide">Endpoint Audit Summary:</span>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-slate-300">
-                <div className="flex justify-between border-b border-cyan-900/40 pb-1">
+                <div className="flex justify-between border-b border-rose-900/40 pb-1">
                   <span>URLs Discovered:</span>
-                  <span className="font-bold text-cyan-300">{metrics?.dast_telemetry?.urls_discovered ?? 15}</span>
+                  <span className="font-bold text-rose-300">{metrics?.dast_telemetry?.urls_discovered ?? 15}</span>
                 </div>
-                <div className="flex justify-between border-b border-cyan-900/40 pb-1">
+                <div className="flex justify-between border-b border-rose-900/40 pb-1">
                   <span>URLs Scanned:</span>
                   <span className="font-bold text-purple-400">{metrics?.dast_telemetry?.urls_scanned ?? 20}</span>
                 </div>
-                <div className="flex justify-between border-b border-cyan-900/40 pb-1">
+                <div className="flex justify-between border-b border-rose-900/40 pb-1">
                   <span>Rate Limited (429):</span>
                   <span className="font-bold text-amber-400">{metrics?.dast_telemetry?.rate_limited_requests ?? 0}</span>
                 </div>
-                <div className="flex justify-between border-b border-cyan-900/40 pb-1">
+                <div className="flex justify-between border-b border-rose-900/40 pb-1">
                   <span>WAF Active:</span>
                   <span className="font-bold text-amber-400">{metrics?.dast_telemetry?.waf_status || 'NONE DETECTED'}</span>
                 </div>
@@ -984,10 +984,10 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center justify-end space-x-3 pt-3 border-t border-cyan-900/50">
+            <div className="flex items-center justify-end space-x-3 pt-3 border-t border-rose-900/50">
               <button 
                 onClick={() => setDastModalOpen(false)}
-                className="px-4 py-2 rounded-lg bg-command-900 border border-cyan-900/60 hover:border-cyan-400 text-slate-300 font-mono text-xs font-bold cursor-pointer"
+                className="px-4 py-2 rounded-lg bg-command-900 border border-rose-900/60 hover:border-rose-400 text-slate-300 font-mono text-xs font-bold cursor-pointer"
               >
                 Close
               </button>
@@ -996,7 +996,7 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                   setDastModalOpen(false);
                   if (onNewAssessment) onNewAssessment();
                 }}
-                className="px-4.5 py-2 rounded-lg bg-gradient-to-r from-cyan-500/20 to-blue-600/30 text-cyan-200 border border-cyan-400/60 font-hud font-bold text-xs uppercase hover:border-cyan-300 cursor-pointer shadow-[0_0_15px_rgba(0,242,254,0.3)]"
+                className="px-4.5 py-2 rounded-lg bg-gradient-to-r from-rose-500/20 to-red-600/30 text-rose-200 border border-rose-400/60 font-hud font-bold text-xs uppercase hover:border-rose-300 cursor-pointer shadow-[0_0_15px_rgba(255,23,68,0.3)]"
               >
                 Start New DAST Audit
               </button>
