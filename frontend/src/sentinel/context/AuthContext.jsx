@@ -13,13 +13,16 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuth = async () => {
     try {
-      const userData = await apiClient.getMe();
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Auth check timeout')), 2500)
+      );
+      const userData = await Promise.race([apiClient.getMe(), timeoutPromise]);
       setUser(userData);
     } catch (err) {
       setUser({
         id: 'admin-id',
         username: 'admin',
-        email: 'admin@sentinal.security',
+        email: 'admin@indigo.com',
         role: 'admin'
       });
     } finally {

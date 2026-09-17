@@ -1,9 +1,12 @@
 const getApiBase = () => {
   if (typeof window !== 'undefined') {
-    if (process.env.NEXT_PUBLIC_API_URL) {
+    if (process.env.NEXT_PUBLIC_API_URL && !process.env.NEXT_PUBLIC_API_URL.includes('vajraxsentina-i7r5')) {
       return `${process.env.NEXT_PUBLIC_API_URL}/api/sentinel`;
     }
     const host = window.location.hostname || 'localhost';
+    if (host.includes('onrender.com')) {
+      return `https://vajraxsentinel-backend.onrender.com/api/sentinel`;
+    }
     const protocol = window.location.protocol || 'http:';
     return `${protocol}//${host}:8000/api/sentinel`;
   }
