@@ -79,7 +79,8 @@ export const Sidebar = ({ currentTab, onTabChange }) => {
 
   return (
     <aside 
-      className="w-full lg:w-[360px] xl:w-[380px] 2xl:w-[410px] flex-shrink-0 tech-border-card rounded-2xl border border-rose-500/30 bg-command-900/95 backdrop-blur-md shadow-[0_0_45px_rgba(7,1,4,0.95)] sticky top-[84px] h-[calc(100vh-104px)] max-h-[calc(100vh-104px)] z-30 p-4 sm:p-5 select-none overflow-hidden flex flex-col justify-between"
+      className="w-full lg:w-[360px] xl:w-[380px] 2xl:w-[410px] flex-shrink-0 tech-border-card rounded-2xl border border-rose-500/30 bg-command-900/95 backdrop-blur-md shadow-[0_0_45px_rgba(7,1,4,0.95)] sticky top-[80px] self-start h-[calc(100vh-100px)] max-h-[calc(100vh-100px)] z-30 p-4 sm:p-5 select-none overflow-hidden flex flex-col justify-between"
+      style={{ position: 'sticky', top: '80px' }}
       data-purpose="platform-modules-sidebar"
     >
       {/* Sidebar Header / Module Crest */}
