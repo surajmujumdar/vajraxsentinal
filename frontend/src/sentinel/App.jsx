@@ -55,6 +55,8 @@ function SentinelMain() {
     return <Login />;
   }
 
+  const [findingsFilter, setFindingsFilter] = useState({ source: '', severity: '' });
+
   const handleAssessmentStarted = (newAssessment) => {
     setActiveRunningAssessment(newAssessment);
   };
@@ -76,13 +78,27 @@ function SentinelMain() {
     setCurrentTab('assessment_detail');
   };
 
+  const handleViewFindings = (filter = {}) => {
+    if (typeof filter === 'string') {
+      setFindingsFilter({ source: filter, severity: '' });
+    } else if (filter) {
+      setFindingsFilter({
+        source: filter.source || '',
+        severity: filter.severity || ''
+      });
+    } else {
+      setFindingsFilter({ source: '', severity: '' });
+    }
+    setCurrentTab('findings');
+  };
+
   const renderContent = () => {
     if (currentTab === 'assessment_detail' && selectedAssessmentId) {
       return (
         <AssessmentDetails
           assessmentId={selectedAssessmentId}
           onBack={() => setCurrentTab('assessments')}
-          onViewAllFindings={() => setCurrentTab('findings')}
+          onViewAllFindings={() => handleViewFindings()}
         />
       );
     }
@@ -93,7 +109,7 @@ function SentinelMain() {
           <Dashboard
             onNewAssessment={() => setCurrentTab('new_assessment')}
             onViewAssessment={handleViewAssessmentDetails}
-            onViewFindings={() => setCurrentTab('findings')}
+            onViewFindings={handleViewFindings}
           />
         );
       case 'new_assessment':
@@ -109,7 +125,7 @@ function SentinelMain() {
           />
         );
       case 'findings':
-        return <FindingsExplorer />;
+        return <FindingsExplorer initialSource={findingsFilter.source} initialSeverity={findingsFilter.severity} />;
       case 'sast':
         return <FindingsExplorer initialSource="SAST" />;
       case 'dast':
@@ -149,7 +165,7 @@ function SentinelMain() {
           <Dashboard
             onNewAssessment={() => setCurrentTab('new_assessment')}
             onViewAssessment={handleViewAssessmentDetails}
-            onViewFindings={() => setCurrentTab('findings')}
+            onViewFindings={handleViewFindings}
           />
         );
     }

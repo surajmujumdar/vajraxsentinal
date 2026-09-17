@@ -24,7 +24,7 @@ import { SeverityBadge } from '../components/SeverityBadge';
 import { FindingDrawer } from '../components/FindingDrawer';
 import { FALLBACK_FINDINGS } from '../api/fallback_data';
 
-export const FindingsExplorer = ({ initialSource = '' }) => {
+export const FindingsExplorer = ({ initialSource = '', initialSeverity = '' }) => {
   const [findings, setFindings] = useState(FALLBACK_FINDINGS || []);
   const [totalOpenFindings, setTotalOpenFindings] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -35,14 +35,18 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
 
   // Filters
   const [search, setSearch] = useState('');
-  const [severity, setSeverity] = useState('');
-  const [source, setSource] = useState(initialSource);
+  const [severity, setSeverity] = useState(initialSeverity || '');
+  const [source, setSource] = useState(initialSource || '');
   const [statusFilter, setStatusFilter] = useState('open'); // Default to open
   const [limit, setLimit] = useState(500);
 
   useEffect(() => {
     setSource(initialSource);
   }, [initialSource]);
+
+  useEffect(() => {
+    setSeverity(initialSeverity);
+  }, [initialSeverity]);
 
   useEffect(() => {
     const fetchSummary = async () => {
