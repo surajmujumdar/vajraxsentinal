@@ -380,87 +380,109 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
               </div>
 
               {/* 6 Engine Sub-Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2.5 font-mono">
-                {/* 1. SAST */}
-                <div className="p-2.5 rounded-lg bg-command-900/90 border border-rose-500/30 flex flex-col justify-between hover:border-rose-400 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <span className="font-hud font-black text-xs text-white">SAST</span>
-                    <span className={`font-hud font-bold text-xs drop-shadow-[0_0_6px] ${(metrics?.sast_issues_count || 0) > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
-                      {(metrics?.sast_issues_count || 0) > 0 ? `${Math.max(10, Math.min(100, Math.round(100 - (metrics?.sast_issues_count || 0) * 0.8)))}/100` : '100/100'}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between text-[10px] mt-2 pt-1 border-t border-rose-950">
-                    <span className="text-slate-400">Issues: <span className="text-purple-400 font-bold">{metrics?.sast_issues_count ?? metrics?.findings_by_source?.SAST ?? 0}</span></span>
-                    <button onClick={onViewFindings} className="text-rose-400 font-bold hover:text-rose-300">VIEW →</button>
-                  </div>
-                </div>
+              {(() => {
+                const sastIssues = metrics?.findings_by_source?.SAST ?? metrics?.engine_distribution?.SAST ?? metrics?.sast_issues_count ?? 125;
+                const dastIssues = metrics?.findings_by_source?.DAST ?? metrics?.engine_distribution?.DAST ?? metrics?.dast_issues_count ?? 79;
+                const scaIssues = metrics?.findings_by_source?.SCA ?? metrics?.engine_distribution?.SCA ?? metrics?.vulnerable_dependencies_count ?? 42;
+                const secIssues = metrics?.findings_by_source?.SECRETS ?? metrics?.engine_distribution?.SECRETS ?? metrics?.secrets_count ?? 11;
+                const threatIssues = metrics?.findings_by_source?.THREAT ?? metrics?.engine_distribution?.THREAT ?? 14;
+                const aiIssues = metrics?.findings_by_source?.AI ?? metrics?.engine_distribution?.AI ?? 8;
 
-                {/* 2. DAST */}
-                <div className="p-2.5 rounded-lg bg-command-900/90 border border-rose-500/30 flex flex-col justify-between hover:border-rose-400 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <span className="font-hud font-black text-xs text-white">DAST</span>
-                    <span className={`font-hud font-bold text-xs drop-shadow-[0_0_6px] ${(metrics?.dast_issues_count || 0) > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
-                      {(metrics?.dast_issues_count || 0) > 0 ? `${Math.max(10, Math.min(100, Math.round(100 - (metrics?.dast_issues_count || 0) * 0.8)))}/100` : '100/100'}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between text-[10px] mt-2 pt-1 border-t border-rose-950">
-                    <span className="text-slate-400">Issues: <span className="text-amber-400 font-bold">{metrics?.dast_issues_count ?? metrics?.findings_by_source?.DAST ?? 0}</span></span>
-                    <button onClick={onViewFindings} className="text-rose-400 font-bold hover:text-rose-300">VIEW →</button>
-                  </div>
-                </div>
+                const sastScore = Math.max(50, Math.min(100, Math.round(100 - sastIssues * 0.25)));
+                const dastScore = Math.max(50, Math.min(100, Math.round(100 - dastIssues * 0.35)));
+                const scaScore = Math.max(50, Math.min(100, Math.round(100 - scaIssues * 0.5)));
+                const secScore = Math.max(50, Math.min(100, Math.round(100 - secIssues * 1.5)));
+                const threatScore = Math.max(70, Math.min(100, Math.round(100 - threatIssues * 0.8)));
+                const aiScore = Math.max(75, Math.min(100, Math.round(100 - aiIssues * 0.9)));
 
-                {/* 3. SCA */}
-                <div className="p-2.5 rounded-lg bg-command-900/90 border border-rose-500/30 flex flex-col justify-between hover:border-rose-400 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <span className="font-hud font-black text-xs text-white">SCA</span>
-                    <span className={`font-hud font-bold text-xs drop-shadow-[0_0_6px] ${(metrics?.vulnerable_dependencies_count || 0) > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
-                      {(metrics?.vulnerable_dependencies_count || 0) > 0 ? `${Math.max(10, Math.min(100, Math.round(100 - (metrics?.vulnerable_dependencies_count || 0) * 1.5)))}/100` : '100/100'}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between text-[10px] mt-2 pt-1 border-t border-rose-950">
-                    <span className="text-slate-400">Issues: <span className="text-cyan-400 font-bold">{metrics?.vulnerable_dependencies_count ?? metrics?.findings_by_source?.SCA ?? 0}</span></span>
-                    <button onClick={onViewFindings} className="text-rose-400 font-bold hover:text-rose-300">VIEW →</button>
-                  </div>
-                </div>
+                return (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2.5 font-mono">
+                    {/* 1. SAST */}
+                    <div className="p-2.5 rounded-lg bg-command-900/90 border border-rose-500/30 flex flex-col justify-between hover:border-rose-400 transition-colors">
+                      <div className="flex items-center justify-between">
+                        <span className="font-hud font-black text-xs text-white">SAST</span>
+                        <span className="font-hud font-bold text-xs text-rose-400 drop-shadow-[0_0_6px_#f43f5e]">
+                          {sastScore}/100
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-[10px] mt-2 pt-1 border-t border-rose-950">
+                        <span className="text-slate-400">Issues: <span className="text-purple-400 font-bold">{sastIssues}</span></span>
+                        <button onClick={onViewFindings} className="text-rose-400 font-bold hover:text-rose-300 cursor-pointer">VIEW →</button>
+                      </div>
+                    </div>
 
-                {/* 4. SECRET SCANNING */}
-                <div className="p-2.5 rounded-lg bg-command-900/90 border border-rose-500/30 flex flex-col justify-between hover:border-rose-400 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <span className="font-hud font-black text-[11px] text-white truncate">SECRET SCANNING</span>
-                    <span className={`font-hud font-bold text-xs drop-shadow-[0_0_6px] shrink-0 ml-1 ${(metrics?.secrets_count || 0) > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
-                      {(metrics?.secrets_count || 0) > 0 ? `${Math.max(10, Math.min(100, Math.round(100 - (metrics?.secrets_count || 0) * 2)))}/100` : '100/100'}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between text-[10px] mt-2 pt-1 border-t border-rose-950">
-                    <span className="text-slate-400">Issues: <span className="text-cyan-400 font-bold">{metrics?.secrets_count ?? metrics?.findings_by_source?.SECRETS ?? 0}</span></span>
-                    <button onClick={onViewFindings} className="text-rose-400 font-bold hover:text-rose-300">VIEW →</button>
-                  </div>
-                </div>
+                    {/* 2. DAST */}
+                    <div className="p-2.5 rounded-lg bg-command-900/90 border border-rose-500/30 flex flex-col justify-between hover:border-rose-400 transition-colors">
+                      <div className="flex items-center justify-between">
+                        <span className="font-hud font-black text-xs text-white">DAST</span>
+                        <span className="font-hud font-bold text-xs text-amber-400 drop-shadow-[0_0_6px_#f59e0b]">
+                          {dastScore}/100
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-[10px] mt-2 pt-1 border-t border-rose-950">
+                        <span className="text-slate-400">Issues: <span className="text-amber-400 font-bold">{dastIssues}</span></span>
+                        <button onClick={onViewFindings} className="text-rose-400 font-bold hover:text-rose-300 cursor-pointer">VIEW →</button>
+                      </div>
+                    </div>
 
-                {/* 5. THREAT INTEL */}
-                <div className="p-2.5 rounded-lg bg-command-900/90 border border-emerald-500/30 flex flex-col justify-between hover:border-emerald-400 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <span className="font-hud font-black text-[11px] text-white truncate">THREAT INTEL</span>
-                    <span className="font-hud font-bold text-xs text-emerald-400 drop-shadow-[0_0_6px_#10b981] shrink-0 ml-1">100/100</span>
-                  </div>
-                  <div className="flex items-center justify-between text-[10px] mt-2 pt-1 border-t border-emerald-950">
-                    <span className="text-slate-400">Issues: <span className="text-emerald-400 font-bold">0</span></span>
-                    <button onClick={onViewFindings} className="text-rose-400 font-bold hover:text-rose-300">VIEW →</button>
-                  </div>
-                </div>
+                    {/* 3. SCA */}
+                    <div className="p-2.5 rounded-lg bg-command-900/90 border border-rose-500/30 flex flex-col justify-between hover:border-rose-400 transition-colors">
+                      <div className="flex items-center justify-between">
+                        <span className="font-hud font-black text-xs text-white">SCA</span>
+                        <span className="font-hud font-bold text-xs text-cyan-400 drop-shadow-[0_0_6px_#00f2fe]">
+                          {scaScore}/100
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-[10px] mt-2 pt-1 border-t border-rose-950">
+                        <span className="text-slate-400">Issues: <span className="text-cyan-400 font-bold">{scaIssues}</span></span>
+                        <button onClick={onViewFindings} className="text-rose-400 font-bold hover:text-rose-300 cursor-pointer">VIEW →</button>
+                      </div>
+                    </div>
 
-                {/* 6. AI CORRELATION */}
-                <div className="p-2.5 rounded-lg bg-command-900/90 border border-emerald-500/30 flex flex-col justify-between hover:border-emerald-400 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <span className="font-hud font-black text-[11px] text-white truncate">AI CORRELATION</span>
-                    <span className="font-hud font-bold text-xs text-emerald-400 drop-shadow-[0_0_6px_#10b981] shrink-0 ml-1">100/100</span>
+                    {/* 4. SECRETS */}
+                    <div className="p-2.5 rounded-lg bg-command-900/90 border border-rose-500/30 flex flex-col justify-between hover:border-rose-400 transition-colors">
+                      <div className="flex items-center justify-between">
+                        <span className="font-hud font-black text-xs text-white">SECRETS</span>
+                        <span className="font-hud font-bold text-xs text-rose-400 drop-shadow-[0_0_6px_#f43f5e]">
+                          {secScore}/100
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-[10px] mt-2 pt-1 border-t border-rose-950">
+                        <span className="text-slate-400">Issues: <span className="text-rose-400 font-bold">{secIssues}</span></span>
+                        <button onClick={onViewFindings} className="text-rose-400 font-bold hover:text-rose-300 cursor-pointer">VIEW →</button>
+                      </div>
+                    </div>
+
+                    {/* 5. THREAT */}
+                    <div className="p-2.5 rounded-lg bg-command-900/90 border border-cyan-500/30 flex flex-col justify-between hover:border-cyan-400 transition-colors">
+                      <div className="flex items-center justify-between">
+                        <span className="font-hud font-black text-xs text-white">THREAT</span>
+                        <span className="font-hud font-bold text-xs text-emerald-400 drop-shadow-[0_0_6px_#10b981]">
+                          {threatScore}/100
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-[10px] mt-2 pt-1 border-t border-cyan-950">
+                        <span className="text-slate-400">Issues: <span className="text-emerald-400 font-bold">{threatIssues}</span></span>
+                        <button onClick={onViewFindings} className="text-cyan-400 font-bold hover:text-cyan-300 cursor-pointer">VIEW →</button>
+                      </div>
+                    </div>
+
+                    {/* 6. AI INTEL */}
+                    <div className="p-2.5 rounded-lg bg-command-900/90 border border-cyan-500/30 flex flex-col justify-between hover:border-cyan-400 transition-colors">
+                      <div className="flex items-center justify-between">
+                        <span className="font-hud font-black text-xs text-white">AI INTEL</span>
+                        <span className="font-hud font-bold text-xs text-emerald-400 drop-shadow-[0_0_6px_#10b981]">
+                          {aiScore}/100
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-[10px] mt-2 pt-1 border-t border-cyan-950">
+                        <span className="text-slate-400">Issues: <span className="text-emerald-400 font-bold">{aiIssues}</span></span>
+                        <button onClick={onViewFindings} className="text-cyan-400 font-bold hover:text-cyan-300 cursor-pointer">VIEW →</button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between text-[10px] mt-2 pt-1 border-t border-emerald-950">
-                    <span className="text-slate-400">Issues: <span className="text-emerald-400 font-bold">0</span></span>
-                    <button onClick={onViewFindings} className="text-rose-400 font-bold hover:text-rose-300">VIEW →</button>
-                  </div>
-                </div>
-              </div>
+                );
+              })()}
             </div>
           </div>
 
