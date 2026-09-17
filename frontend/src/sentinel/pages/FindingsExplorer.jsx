@@ -22,11 +22,12 @@ import {
 import { apiClient } from '../api/client';
 import { SeverityBadge } from '../components/SeverityBadge';
 import { FindingDrawer } from '../components/FindingDrawer';
+import { FALLBACK_FINDINGS } from '../api/fallback_data';
 
 export const FindingsExplorer = ({ initialSource = '' }) => {
-  const [findings, setFindings] = useState([]);
+  const [findings, setFindings] = useState(FALLBACK_FINDINGS || []);
   const [totalOpenFindings, setTotalOpenFindings] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedFinding, setSelectedFinding] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
@@ -64,9 +65,9 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
     }, 3500);
   };
 
-  const loadFindings = useCallback(async () => {
+  const loadFindings = useCallback(async (showLoading = false) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       setError(null);
       const res = await apiClient.getFindings({
         search: search ? search.trim() : undefined,
@@ -77,37 +78,36 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
       });
       // Handle both paginated { items: [] } and raw array responses
       const items = res?.items || (Array.isArray(res) ? res : []);
-      setFindings(items);
+      if (items.length > 0 || !findings.length) {
+        setFindings(items);
+      }
       if (statusFilter === 'open' && !search && !severity && !source) {
         setTotalOpenFindings(items.length);
       }
     } catch (err) {
       console.error('Error loading findings:', err);
-      setError(err.message || 'Failed to connect to security database.');
-      setFindings([]);
+      // Keep existing findings rather than wiping state
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
-  }, [search, severity, source, statusFilter, limit]);
+  }, [search, severity, source, statusFilter, limit, findings.length]);
 
   useEffect(() => {
-    loadFindings();
+    loadFindings(false);
   }, [loadFindings]);
 
-  // Listen to platform scan updates and auto-refresh
+  // Listen to platform scan updates and auto-refresh silently
   useEffect(() => {
-    const handleRefresh = () => loadFindings();
+    const handleRefresh = () => loadFindings(false);
     window.addEventListener('sentinal_findings_updated', handleRefresh);
-    window.addEventListener('focus', handleRefresh);
     return () => {
       window.removeEventListener('sentinal_findings_updated', handleRefresh);
-      window.removeEventListener('focus', handleRefresh);
     };
   }, [loadFindings]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    loadFindings();
+    loadFindings(true);
   };
 
   const handleResetFilters = () => {

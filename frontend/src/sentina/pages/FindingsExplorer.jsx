@@ -98,10 +98,8 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
   useEffect(() => {
     const handleRefresh = () => loadFindings();
     window.addEventListener('sentinal_findings_updated', handleRefresh);
-    window.addEventListener('focus', handleRefresh);
     return () => {
       window.removeEventListener('sentinal_findings_updated', handleRefresh);
-      window.removeEventListener('focus', handleRefresh);
     };
   }, [loadFindings]);
 
