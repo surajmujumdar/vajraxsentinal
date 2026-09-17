@@ -51,12 +51,8 @@ export default function ConfigurationManagement() {
   }, [token])
 
   useEffect(() => {
-    if (!isAuthenticated || user?.role !== 'Admin') {
-      router.push('/')
-      return
-    }
     fetchConfigurations()
-  }, [isAuthenticated, user, router, fetchConfigurations])
+  }, [fetchConfigurations])
 
   const handleCreateConfig = async () => {
     try {

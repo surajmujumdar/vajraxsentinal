@@ -125,13 +125,9 @@ export default function AdminDashboard() {
   }, [token, API_URL])
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login')
-      return
-    }
     fetchStats()
     fetchAllCompanies()
-  }, [isAuthenticated, router, fetchStats, fetchAllCompanies])
+  }, [fetchStats, fetchAllCompanies])
 
   const handleSyncFeed = (feedName: string) => {
     setSyncingFeed(feedName)
