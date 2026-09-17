@@ -4,6 +4,7 @@ import './globals.css'
 import SamAICopilot from '@/components/SamAICopilot'
 import NotificationToast from '@/components/NotificationToast'
 import LanguageTranslator from '@/components/LanguageTranslator'
+import ErrorBoundary from '@/components/ErrorBoundary'
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -72,10 +73,12 @@ export default function RootLayout({
         />
       </head>
       <body style={{ fontFamily: "var(--font-outfit), 'Outfit', 'Plus Jakarta Sans', sans-serif" }}>
-        <LanguageTranslator />
-        <NotificationToast />
-        {children}
-        <SamAICopilot />
+        <ErrorBoundary>
+          <LanguageTranslator />
+          <NotificationToast />
+          {children}
+          <SamAICopilot />
+        </ErrorBoundary>
       </body>
     </html>
   )
