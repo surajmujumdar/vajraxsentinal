@@ -148,6 +148,8 @@ def get_dashboard_metrics(
         overall_risk_score=overall_risk,
         risk_score=overall_risk,
         open_findings=len(findings),
+        total_findings=len(all_findings),
+        resolved_findings=len(all_findings) - len(findings),
         severity_distribution=sev_counts,
         findings_by_source=source_counts,
         findings_by_scanner=scanner_counts,

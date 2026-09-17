@@ -206,6 +206,8 @@ class DashboardMetrics(BaseModel):
     overall_risk_score: float
     risk_score: Optional[float] = None
     open_findings: Optional[int] = None
+    total_findings: Optional[int] = None
+    resolved_findings: Optional[int] = None
     severity_distribution: Dict[str, int]
     findings_by_source: Dict[str, int]
     findings_by_scanner: Dict[str, int]
