@@ -9,6 +9,7 @@ def generate_uuid():
 
 class User(Base):
     __tablename__ = "users"
+    __table_args__ = {'extend_existing': True}
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
     username = Column(String(64), unique=True, index=True, nullable=False)
@@ -24,6 +25,7 @@ class User(Base):
 
 class Project(Base):
     __tablename__ = "projects"
+    __table_args__ = {'extend_existing': True}
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
     name = Column(String(128), nullable=False)
@@ -41,6 +43,7 @@ class Project(Base):
 
 class Asset(Base):
     __tablename__ = "assets"
+    __table_args__ = {'extend_existing': True}
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
     project_id = Column(String(36), ForeignKey("projects.id"), nullable=False, index=True)
@@ -62,6 +65,7 @@ class Asset(Base):
 
 class Assessment(Base):
     __tablename__ = "assessments"
+    __table_args__ = {'extend_existing': True}
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
     project_id = Column(String(36), ForeignKey("projects.id"), nullable=False)
@@ -97,6 +101,7 @@ class Assessment(Base):
 
 class ScanJob(Base):
     __tablename__ = "scan_jobs"
+    __table_args__ = {'extend_existing': True}
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
     assessment_id = Column(String(36), ForeignKey("assessments.id"), nullable=False)
@@ -113,6 +118,7 @@ class ScanJob(Base):
 
 class Finding(Base):
     __tablename__ = "findings"
+    __table_args__ = {'extend_existing': True}
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
     assessment_id = Column(String(36), ForeignKey("assessments.id"), nullable=False, index=True)
@@ -154,6 +160,7 @@ class Finding(Base):
 
 class CorrelatedRisk(Base):
     __tablename__ = "correlated_risks"
+    __table_args__ = {'extend_existing': True}
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
     assessment_id = Column(String(36), ForeignKey("assessments.id"), nullable=False, index=True)
@@ -177,6 +184,7 @@ class CorrelatedRisk(Base):
 
 class Report(Base):
     __tablename__ = "reports"
+    __table_args__ = {'extend_existing': True}
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
     assessment_id = Column(String(36), ForeignKey("assessments.id"), nullable=False, unique=True)
@@ -198,6 +206,7 @@ class Report(Base):
 
 class AuditLog(Base):
     __tablename__ = "audit_logs"
+    __table_args__ = {'extend_existing': True}
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
     user_id = Column(String(36), ForeignKey("users.id"), nullable=True)
