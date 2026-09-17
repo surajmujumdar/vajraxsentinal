@@ -81,16 +81,12 @@ export default function ActivityLogsPage() {
   }, [token, filter, selectedUserId])
 
   useEffect(() => {
-    if (!isAuthenticated || user?.role !== 'Admin') {
-      router.push('/')
-      return
-    }
     fetchLogs()
     
     const interval = setInterval(fetchLogs, 10000)
     
     return () => clearInterval(interval)
-  }, [isAuthenticated, user, router, fetchLogs])
+  }, [fetchLogs])
 
   const getActionColor = (action: string) => {
     switch (action) {

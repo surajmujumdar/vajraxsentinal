@@ -66,12 +66,8 @@ export default function UserManagement() {
   }, [token])
 
   useEffect(() => {
-    if (!isAuthenticated || user?.role !== 'Admin') {
-      router.push('/')
-      return
-    }
     fetchUsers()
-  }, [isAuthenticated, user, router, fetchUsers])
+  }, [fetchUsers])
 
   const handleUpdateRole = async () => {
     if (!selectedUser) return
