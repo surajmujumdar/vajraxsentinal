@@ -6,7 +6,7 @@ export const dynamicParams = false;
 export async function generateStaticParams() {
   const staticIds = Array.from({ length: 50 }, (_, i) => ({ id: String(i + 1) }));
   try {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://vajraxsentina-i7r5.onrender.com';
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://vajraxsentinel-backend.onrender.com';
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 5000);
     const res = await fetch(`${API_URL}/api/companies/?active_only=true`, { signal: controller.signal }).catch(() => null);
