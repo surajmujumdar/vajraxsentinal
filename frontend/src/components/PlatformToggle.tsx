@@ -27,7 +27,7 @@ export default function PlatformToggle({ className = '', compact = false }: Plat
 
   return (
     <div
-      className={`inline-flex items-center p-1 bg-command-950/90 border border-cyan-500/30 rounded-xl backdrop-blur-xl shadow-[0_0_16px_rgba(6,182,212,0.2)] relative select-none flex-shrink-0 font-hud ${className}`}
+      className={`inline-flex items-center p-1 bg-command-950/90 border border-rose-500/30 rounded-xl backdrop-blur-xl shadow-[0_0_16px_rgba(255,23,68,0.25)] relative select-none flex-shrink-0 font-hud ${className}`}
       data-purpose="platform-mode-toggle"
     >
       {/* VAJRA Switch Button */}
@@ -37,13 +37,13 @@ export default function PlatformToggle({ className = '', compact = false }: Plat
         onClick={() => handleSwitch('VAJRA')}
         className={`relative z-10 flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer ${
           isVajra
-            ? 'text-white shadow-[0_0_12px_rgba(56,189,248,0.4)]'
-            : 'text-slate-400 hover:text-cyan-200'
+            ? 'text-white shadow-[0_0_12px_rgba(255,23,68,0.5)]'
+            : 'text-slate-400 hover:text-rose-200'
         }`}
       >
         <Shield
           className={`w-3.5 h-3.5 transition-transform duration-200 ${
-            isVajra ? 'text-cyan-400 scale-110 drop-shadow-[0_0_8px_#00f2fe]' : 'text-slate-500'
+            isVajra ? 'text-rose-400 scale-110 drop-shadow-[0_0_8px_#ff1744]' : 'text-slate-500'
           }`}
         />
         <span>VAJRA</span>
@@ -51,7 +51,7 @@ export default function PlatformToggle({ className = '', compact = false }: Plat
           <span
             className={`text-[8.5px] px-1.5 py-0.5 rounded font-mono font-bold tracking-normal ${
               isVajra
-                ? 'bg-cyan-500/30 text-cyan-200 border border-cyan-400/50 shadow-[0_0_8px_rgba(6,182,212,0.3)]'
+                ? 'bg-rose-500/30 text-rose-200 border border-rose-400/50 shadow-[0_0_8px_rgba(255,23,68,0.3)]'
                 : 'bg-slate-800/80 text-slate-500'
             }`}
           >
@@ -62,7 +62,7 @@ export default function PlatformToggle({ className = '', compact = false }: Plat
           <motion.div
             layoutId="platform-active-pill"
             transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-            className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-500/30 via-blue-600/40 to-cyan-500/30 border border-cyan-400 shadow-[0_0_14px_rgba(0,242,254,0.6)] -z-10"
+            className="absolute inset-0 rounded-lg bg-gradient-to-r from-red-600/40 via-rose-600/40 to-red-600/40 border border-rose-400 shadow-[0_0_14px_rgba(255,23,68,0.6)] -z-10"
           />
         )}
       </button>
@@ -74,13 +74,13 @@ export default function PlatformToggle({ className = '', compact = false }: Plat
         onClick={() => handleSwitch('SENTINEL')}
         className={`relative z-10 flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer ${
           isSentinel
-            ? 'text-white shadow-[0_0_12px_rgba(0,242,254,0.4)]'
-            : 'text-slate-400 hover:text-cyan-200'
+            ? 'text-white shadow-[0_0_12px_rgba(255,23,68,0.5)]'
+            : 'text-slate-400 hover:text-rose-200'
         }`}
       >
         <Crosshair
           className={`w-3.5 h-3.5 transition-transform duration-200 ${
-            isSentinel ? 'text-cyan-400 scale-110 rotate-45 drop-shadow-[0_0_8px_#00f2fe]' : 'text-slate-500'
+            isSentinel ? 'text-rose-400 scale-110 rotate-45 drop-shadow-[0_0_8px_#ff1744]' : 'text-slate-500'
           }`}
         />
         <span>SENTINEL</span>
@@ -88,7 +88,7 @@ export default function PlatformToggle({ className = '', compact = false }: Plat
           <span
             className={`text-[8.5px] px-1.5 py-0.5 rounded font-mono font-bold tracking-normal ${
               isSentinel
-                ? 'bg-cyan-500/30 text-cyan-200 border border-cyan-400/50 shadow-[0_0_8px_rgba(6,182,212,0.3)]'
+                ? 'bg-rose-500/30 text-rose-200 border border-rose-400/50 shadow-[0_0_8px_rgba(255,23,68,0.3)]'
                 : 'bg-slate-800/80 text-slate-500'
             }`}
           >
@@ -99,7 +99,7 @@ export default function PlatformToggle({ className = '', compact = false }: Plat
           <motion.div
             layoutId="platform-active-pill"
             transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-            className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-500/30 via-blue-600/40 to-cyan-500/30 border border-cyan-400 shadow-[0_0_14px_rgba(0,242,254,0.6)] -z-10"
+            className="absolute inset-0 rounded-lg bg-gradient-to-r from-red-600/40 via-rose-600/40 to-red-600/40 border border-rose-400 shadow-[0_0_14px_rgba(255,23,68,0.6)] -z-10"
           />
         )}
       </button>
