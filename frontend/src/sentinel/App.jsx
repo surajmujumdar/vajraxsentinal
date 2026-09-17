@@ -21,6 +21,7 @@ function SentinelMain() {
   const { user, loading } = useAuth();
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [selectedAssessmentId, setSelectedAssessmentId] = useState(null);
+  const [findingsFilter, setFindingsFilter] = useState({ source: '', severity: '' });
   
   // Live Active Assessment for Progress Modal
   const [activeRunningAssessment, setActiveRunningAssessment] = useState(null);
@@ -54,8 +55,6 @@ function SentinelMain() {
   if (!user) {
     return <Login />;
   }
-
-  const [findingsFilter, setFindingsFilter] = useState({ source: '', severity: '' });
 
   const handleAssessmentStarted = (newAssessment) => {
     setActiveRunningAssessment(newAssessment);
