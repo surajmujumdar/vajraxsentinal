@@ -23,10 +23,7 @@ def list_findings(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    if getattr(current_user, "role", "") == "admin":
-        query = db.query(Finding)
-    else:
-        query = db.query(Finding).join(Project).filter(Project.user_id == current_user.id)
+    query = db.query(Finding)
 
     if assessment_id:
         query = query.filter(Finding.assessment_id == assessment_id)
