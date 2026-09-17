@@ -64,9 +64,9 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
     }, 3500);
   };
 
-  const loadFindings = useCallback(async () => {
+  const loadFindings = useCallback(async (showLoading = false) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       setError(null);
       const res = await apiClient.getFindings({
         search: search ? search.trim() : undefined,
@@ -83,20 +83,19 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
       }
     } catch (err) {
       console.error('Error loading findings:', err);
-      setError(err.message || 'Failed to connect to security database.');
-      setFindings([]);
+      setError(err.response?.data?.detail || err.message || 'Failed to query findings');
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   }, [search, severity, source, statusFilter, limit]);
 
   useEffect(() => {
-    loadFindings();
+    loadFindings(true);
   }, [loadFindings]);
 
-  // Listen to platform scan updates and auto-refresh
+  // Listen to platform scan updates and auto-refresh silently
   useEffect(() => {
-    const handleRefresh = () => loadFindings();
+    const handleRefresh = () => loadFindings(false);
     window.addEventListener('sentinal_findings_updated', handleRefresh);
     return () => {
       window.removeEventListener('sentinal_findings_updated', handleRefresh);
@@ -105,7 +104,7 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    loadFindings();
+    loadFindings(true);
   };
 
   const handleResetFilters = () => {
@@ -151,33 +150,33 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
       {/* FLOATING HUD TOAST NOTIFICATION */}
       {toastMessage && (
         <div className="fixed top-20 right-8 z-50 animate-bounce-short">
-          <div className="bg-command-900/95 border border-emerald-400/80 rounded-xl px-4 py-3 shadow-[0_0_25px_rgba(16,185,129,0.4)] backdrop-blur-md flex items-center space-x-3 text-emerald-300 font-mono text-xs">
-            <div className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center flex-shrink-0">
-              <Check className="w-3.5 h-3.5 text-emerald-300" />
+          <div className="bg-command-900/95 border border-rose-400/80 rounded-xl px-4 py-3 shadow-[0_0_25px_rgba(255,23,68,0.4)] backdrop-blur-md flex items-center space-x-3 text-rose-300 font-mono text-xs">
+            <div className="w-6 h-6 rounded-full bg-rose-500/20 border border-rose-400 flex items-center justify-center flex-shrink-0">
+              <Check className="w-3.5 h-3.5 text-rose-300" />
             </div>
             <div>
               <div className="font-hud font-bold text-white tracking-wider text-[11px]">STATUS REFLECTED</div>
-              <div className="text-emerald-200/90 text-[10px] mt-0.5">{toastMessage}</div>
+              <div className="text-rose-200/90 text-[10px] mt-0.5">{toastMessage}</div>
             </div>
           </div>
         </div>
       )}
 
       {/* MASTER CYBER HUD BARS */}
-      <div className="tech-border-card rounded-xl bg-command-950/90 border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] p-5 backdrop-blur-md">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-cyan-900/40">
+      <div className="tech-border-card rounded-xl bg-command-950/90 border border-rose-500/30 shadow-[0_0_30px_rgba(255,23,68,0.15)] p-5 backdrop-blur-md">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-rose-900/40">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-lg bg-cyan-500/10 border border-cyan-500/40 flex items-center justify-center shadow-[0_0_12px_rgba(56,189,248,0.3)]">
-              <Compass className="w-6 h-6 text-cyan-400" />
+            <div className="w-10 h-10 rounded-lg bg-rose-500/10 border border-rose-500/40 flex items-center justify-center shadow-[0_0_12px_rgba(255,23,68,0.3)]">
+              <Compass className="w-6 h-6 text-rose-400" />
             </div>
-              <div>
-                <h1 className="font-hud font-bold text-xl text-white tracking-widest uppercase drop-shadow-[0_0_10px_rgba(56,189,248,0.5)]">
-                  FINDINGS EXPLORER
-                </h1>
-                <p className="text-xs text-slate-400 font-mono mt-0.5">
-                  Multi-engine vulnerability explorer • Automatic auto-purge on resolution
-                </p>
-              </div>
+            <div>
+              <h1 className="font-hud font-bold text-xl text-white tracking-widest uppercase drop-shadow-[0_0_10px_rgba(255,23,68,0.5)]">
+                FINDINGS EXPLORER
+              </h1>
+              <p className="text-xs text-slate-400 font-mono mt-0.5">
+                Multi-engine vulnerability explorer • Automatic auto-purge on resolution
+              </p>
+            </div>
           </div>
         </div>
 
@@ -189,39 +188,43 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
               <div className="text-lg font-hud font-bold text-rose-400 mt-0.5">
                 {statusFilter === 'resolved' 
                   ? `${findings.length} RESOLVED` 
-                  : `${displayOpenCount} OPEN FINDINGS`}
+                  : statusFilter === 'all'
+                    ? `${findings.length} TOTAL (ALL)`
+                    : `${displayOpenCount} OPEN FINDINGS`}
               </div>
             </div>
             <AlertTriangle className="w-6 h-6 text-rose-400/80" />
           </div>
 
-          <div className="p-3 rounded-lg bg-command-900/80 border border-cyan-500/30 flex items-center justify-between">
+          <div className="p-3 rounded-lg bg-command-900/80 border border-rose-500/30 flex items-center justify-between">
             <div>
               <div className="text-[10px] text-slate-400 uppercase tracking-wider">MONITORED ENGINES</div>
-              <div className="text-lg font-hud font-bold text-cyan-300 mt-0.5">6 ACTIVE ADAPTERS</div>
+              <div className="text-lg font-hud font-bold text-rose-300 mt-0.5">6 ACTIVE ADAPTERS</div>
             </div>
-            <Grid className="w-6 h-6 text-cyan-400/80" />
+            <Grid className="w-6 h-6 text-rose-400/80" />
           </div>
 
-          <div className="p-3 rounded-lg bg-command-900/80 border border-emerald-500/30 flex items-center justify-between">
+          <div className="p-3 rounded-lg bg-command-900/80 border border-rose-500/30 flex items-center justify-between">
             <div>
-              <div className="text-[10px] text-slate-400 uppercase tracking-wider">AUTO RESOLUTION ENGINE</div>
-              <div className="text-lg font-hud font-bold text-emerald-400 mt-0.5">AUTO-PURGE ON RESOLVE</div>
+              <div className="text-[10px] text-slate-400 uppercase tracking-wider">DISPLAYED / DATABASE</div>
+              <div className="text-lg font-hud font-bold text-rose-400 mt-0.5">
+                {findings.length} LOADED ({limit} CAP)
+              </div>
             </div>
-            <Trash2 className="w-6 h-6 text-emerald-400/80" />
+            <Trash2 className="w-6 h-6 text-rose-400/80" />
           </div>
         </div>
       </div>
 
       {/* SEARCH & HUD FILTERS TOOLBAR */}
-      <div className="tech-border-card rounded-xl bg-command-950/90 border border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.1)] p-4 backdrop-blur-md">
+      <div className="tech-border-card rounded-xl bg-command-950/90 border border-rose-500/30 shadow-[0_0_20px_rgba(255,23,68,0.1)] p-4 backdrop-blur-md">
         <form onSubmit={handleSearchSubmit} className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
-          <div className="md:col-span-4 relative">
+          <div className="md:col-span-3 relative">
             <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
             <input
               type="text"
-              className="w-full bg-command-900/90 border border-cyan-900/60 rounded-lg pl-9 pr-3 py-2 text-xs font-mono text-cyan-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400"
-              placeholder="Search title, file, CVE, CWE, endpoint..."
+              className="w-full bg-command-900/90 border border-rose-900/60 rounded-lg pl-9 pr-3 py-2 text-xs font-mono text-rose-100 placeholder-slate-500 focus:outline-none focus:border-rose-400"
+              placeholder="Search title, file, CVE, endpoint..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -229,7 +232,7 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
 
           <div className="md:col-span-2">
             <select
-              className="w-full bg-command-900/90 border border-cyan-900/60 rounded-lg px-3 py-2 text-xs font-mono text-cyan-200 focus:outline-none focus:border-cyan-400"
+              className="w-full bg-command-900/90 border border-rose-900/60 rounded-lg px-3 py-2 text-xs font-mono text-rose-200 focus:outline-none focus:border-rose-400"
               value={severity}
               onChange={(e) => setSeverity(e.target.value)}
             >
@@ -241,43 +244,57 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
             </select>
           </div>
 
-          <div className="md:col-span-3">
+          <div className="md:col-span-2">
             <select
-              className="w-full bg-command-900/90 border border-cyan-900/60 rounded-lg px-3 py-2 text-xs font-mono text-cyan-200 focus:outline-none focus:border-cyan-400"
+              className="w-full bg-command-900/90 border border-rose-900/60 rounded-lg px-3 py-2 text-xs font-mono text-rose-200 focus:outline-none focus:border-rose-400"
               value={source}
               onChange={(e) => setSource(e.target.value)}
             >
-              <option value="">ALL ENGINES & SOURCES</option>
-              <option value="SAST">SAST (Semgrep / Static)</option>
-              <option value="SCA">SCA (OSV Database)</option>
-              <option value="SECRETS">Secret Detection</option>
-              <option value="DAST">DAST (ZAP Spider)</option>
-              <option value="WEB">Web (Nuclei Templates)</option>
-              <option value="SSL">SSL / TLS Auditor</option>
+              <option value="">ALL ENGINES</option>
+              <option value="SAST">SAST (Semgrep)</option>
+              <option value="SCA">SCA (OSV DB)</option>
+              <option value="SECRETS">Secrets (Gitleaks)</option>
+              <option value="DAST">DAST (ZAP)</option>
+              <option value="WEB">Web (Nuclei)</option>
+              <option value="SSL">SSL / TLS</option>
             </select>
           </div>
 
           <div className="md:col-span-2">
             <select
-              className="w-full bg-command-900/90 border border-cyan-900/60 rounded-lg px-3 py-2 text-xs font-mono text-cyan-200 focus:outline-none focus:border-cyan-400"
+              className="w-full bg-command-900/90 border border-rose-900/60 rounded-lg px-3 py-2 text-xs font-mono text-rose-200 focus:outline-none focus:border-rose-400"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
-              <option value="open">OPEN STATUS ONLY</option>
+              <option value="open">OPEN ONLY</option>
               <option value="resolved">RESOLVED ONLY</option>
               <option value="all">ALL STATUSES</option>
+            </select>
+          </div>
+
+          <div className="md:col-span-1">
+            <select
+              className="w-full bg-command-900/90 border border-rose-900/60 rounded-lg px-2 py-2 text-xs font-mono text-rose-200 focus:outline-none focus:border-rose-400"
+              value={limit}
+              onChange={(e) => setLimit(Number(e.target.value))}
+              title="Page display limit"
+            >
+              <option value={50}>50</option>
+              <option value={100}>100</option>
+              <option value={250}>250</option>
+              <option value={500}>500</option>
             </select>
           </div>
 
           <div className="md:col-span-2 flex items-center space-x-2">
             <button
               type="submit"
-              className="flex-1 py-2 bg-cyan-500/20 border border-cyan-400/60 hover:bg-cyan-500 hover:text-black text-cyan-300 font-hud font-bold text-xs rounded-lg transition-colors shadow-[0_0_10px_rgba(56,189,248,0.3)] flex items-center justify-center space-x-1"
+              className="flex-1 py-2 bg-rose-500/20 border border-rose-400/60 hover:bg-rose-500 hover:text-white text-rose-300 font-hud font-bold text-xs rounded-lg transition-colors shadow-[0_0_10px_rgba(255,23,68,0.3)] flex items-center justify-center space-x-1"
             >
               <Search className="w-3.5 h-3.5" />
-              <span>SEARCH</span>
+              <span>FILTER</span>
             </button>
-            {(search || severity || source || statusFilter !== 'open') && (
+            {(search || severity || source || statusFilter !== 'open' || limit !== 250) && (
               <button
                 type="button"
                 onClick={handleResetFilters}
@@ -293,11 +310,11 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
       </div>
 
       {/* HUD DATA TABLE */}
-      <div className="tech-border-card rounded-xl bg-command-950/90 border border-cyan-500/30 shadow-[0_0_25px_rgba(6,182,212,0.15)] overflow-hidden">
+      <div className="tech-border-card rounded-xl bg-command-950/90 border border-rose-500/30 shadow-[0_0_25px_rgba(255,23,68,0.15)] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-command-900/90 border-b border-cyan-900/60 text-[11px] font-hud tracking-wider text-cyan-300 uppercase">
+              <tr className="bg-command-900/90 border-b border-rose-900/60 text-[11px] font-hud tracking-wider text-rose-300 uppercase">
                 <th className="py-3 px-4">SEVERITY</th>
                 <th className="py-3 px-4">ENGINE</th>
                 <th className="py-3 px-4">VULNERABILITY & CATEGORY</th>
@@ -306,12 +323,12 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
                 <th className="py-3 px-4 text-right">ACTION</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-cyan-900/30 text-xs font-mono">
+            <tbody className="divide-y divide-rose-900/30 text-xs font-mono">
               {loading ? (
                 <tr>
                   <td colSpan={6} className="text-center py-16 text-slate-400">
-                    <span className="inline-block w-6 h-6 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin mr-3 align-middle"></span>
-                    <span className="text-cyan-300 font-hud tracking-wider">Querying Unified Engine Database...</span>
+                    <span className="inline-block w-6 h-6 border-2 border-rose-400 border-t-transparent rounded-full animate-spin mr-3 align-middle"></span>
+                    <span className="text-rose-300 font-hud tracking-wider">Querying Unified Engine Database...</span>
                   </td>
                 </tr>
               ) : error ? (
@@ -322,7 +339,7 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
                     <p className="text-xs text-slate-400 mb-4">Ensure the unified backend is active on port 8000.</p>
                     <button
                       onClick={() => loadFindings()}
-                      className="px-4 py-1.5 rounded-lg bg-cyan-500/20 border border-cyan-400/60 text-cyan-300 hover:bg-cyan-500 hover:text-black font-hud text-xs font-bold transition-all shadow-[0_0_12px_rgba(56,189,248,0.3)] inline-flex items-center space-x-2"
+                      className="px-4 py-1.5 rounded-lg bg-rose-500/20 border border-rose-400/60 text-rose-300 hover:bg-rose-500 hover:text-white font-hud text-xs font-bold transition-all shadow-[0_0_12px_rgba(255,23,68,0.3)] inline-flex items-center space-x-2"
                     >
                       <RefreshCw className="w-3.5 h-3.5" />
                       <span>RETRY CONNECTION</span>
@@ -334,26 +351,26 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
                   <tr
                     key={f.id}
                     onClick={() => setSelectedFinding(f)}
-                    className="hover:bg-cyan-950/40 transition-colors cursor-pointer group"
+                    className="hover:bg-rose-950/40 transition-colors cursor-pointer group"
                   >
                     <td className="py-3 px-4">
                       <SeverityBadge severity={f.severity} size="small" />
                     </td>
                     <td className="py-3 px-4">
-                      <span className="px-2 py-0.5 rounded bg-command-900 border border-cyan-500/30 text-cyan-300 text-[10px]">
+                      <span className="px-2 py-0.5 rounded bg-command-900 border border-rose-500/30 text-rose-300 text-[10px]">
                         {f.source}
                       </span>
                     </td>
                     <td className="py-3 px-4">
-                      <div className="font-hud font-bold text-slate-200 group-hover:text-cyan-200 transition-colors">
+                      <div className="font-hud font-bold text-slate-200 group-hover:text-rose-200 transition-colors">
                         {f.title}
                       </div>
                       <div className="text-[10px] text-slate-400 mt-0.5">{f.category}</div>
                     </td>
-                    <td className="py-3 px-4 text-cyan-300 text-[11px]">
+                    <td className="py-3 px-4 text-rose-300 text-[11px]">
                       {f.file ? `${f.file}:${f.line || 1}` : (f.endpoint || '-')}
                     </td>
-                    <td className="py-3 px-4 font-bold text-cyan-400">
+                    <td className="py-3 px-4 font-bold text-rose-400">
                       {f.risk_score} / 100
                     </td>
                     <td className="py-3 px-4 text-right space-x-2">
@@ -362,7 +379,7 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
                           e.stopPropagation();
                           setSelectedFinding(f);
                         }}
-                        className="px-2.5 py-1 rounded bg-purple-500/20 border border-purple-400/50 text-[10px] font-bold text-purple-300 hover:bg-purple-500 hover:text-white transition-all shadow-[0_0_8px_rgba(168,85,247,0.3)] flex items-center space-x-1 inline-flex"
+                        className="px-2.5 py-1 rounded bg-rose-500/20 border border-rose-400/50 text-[10px] font-bold text-rose-300 hover:bg-rose-500 hover:text-white transition-all shadow-[0_0_8px_rgba(255,23,68,0.3)] flex items-center space-x-1 inline-flex"
                       >
                         <Wand2 className="w-3.5 h-3.5" />
                         <span>AI REMEDY</span>
@@ -371,7 +388,7 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
                       <button
                         onClick={(e) => handleQuickResolve(e, f)}
                         disabled={resolvingId === f.id}
-                        className="px-2.5 py-1 rounded bg-emerald-500/20 border border-emerald-400/50 text-[10px] font-bold text-emerald-300 hover:bg-emerald-500 hover:text-black transition-all shadow-[0_0_8px_rgba(16,185,129,0.3)] flex items-center space-x-1 inline-flex cursor-pointer"
+                        className="px-2.5 py-1 rounded bg-red-900/40 border border-rose-500/50 text-[10px] font-bold text-rose-300 hover:bg-rose-600 hover:text-white transition-all shadow-[0_0_8px_rgba(255,23,68,0.3)] flex items-center space-x-1 inline-flex cursor-pointer"
                       >
                         <CheckCircle size={12} />
                         <span>{resolvingId === f.id ? 'RESOLVING...' : 'RESOLVE & DELETE'}</span>
@@ -382,7 +399,7 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
               ) : (
                 <tr>
                   <td colSpan={6} className="text-center py-12 text-slate-400 font-mono">
-                    <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto mb-2" />
+                    <CheckCircle2 className="w-8 h-8 text-rose-400 mx-auto mb-2" />
                     <div className="text-sm font-hud text-slate-300 mb-1">No findings matching active filter</div>
                     <p className="text-xs text-slate-500 mb-4">
                       {statusFilter === 'resolved' 
@@ -394,7 +411,7 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
                     {(search || severity || source || statusFilter !== 'open') && (
                       <button
                         onClick={handleResetFilters}
-                        className="px-4 py-1.5 rounded-lg bg-cyan-500/20 border border-cyan-400/60 text-cyan-300 hover:bg-cyan-500 hover:text-black font-hud text-xs font-bold transition-all shadow-[0_0_10px_rgba(56,189,248,0.2)] inline-flex items-center space-x-2"
+                        className="px-4 py-1.5 rounded-lg bg-rose-500/20 border border-rose-400/60 text-rose-300 hover:bg-rose-500 hover:text-white font-hud text-xs font-bold transition-all shadow-[0_0_10px_rgba(255,23,68,0.2)] inline-flex items-center space-x-2"
                       >
                         <RotateCcw className="w-3.5 h-3.5" />
                         <span>RESET ALL FILTERS</span>
@@ -407,7 +424,6 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
           </table>
         </div>
       </div>
-
 
       {/* Detail Drawer */}
       <FindingDrawer
