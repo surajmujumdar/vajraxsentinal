@@ -46,12 +46,14 @@ Thumbs.db
 *.db-wal
 
 # Temporary workspace scan outputs
-workspaces/
-backend/workspaces/
-backend/uploads/
-backend/reports/
-uploads/
-reports/
+/workspaces/
+/backend/workspaces/*
+/backend/uploads/*
+/backend/reports/*.html
+/backend/reports/*.pdf
+/backend/reports/*.json
+!backend/app/reports/**
+!backend/sentinel/reports/**
 
 # Environment Variables
 .env.local
