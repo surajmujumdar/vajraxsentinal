@@ -13,10 +13,11 @@ import {
 } from 'lucide-react';
 import { apiClient } from '../api/client';
 import { FindingDrawer } from '../components/FindingDrawer';
+import { FALLBACK_DASHBOARD } from '../api/fallback_data';
 
 export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings }) => {
-  const [metrics, setMetrics] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [metrics, setMetrics] = useState(FALLBACK_DASHBOARD);
+  const [loading, setLoading] = useState(false);
   const [selectedFinding, setSelectedFinding] = useState(null);
   const [vulnTimeFilter, setVulnTimeFilter] = useState('24h'); // '24h' | '3d' | '7d' | '30d'
   const canvasRef = useRef(null);
@@ -86,13 +87,12 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
 
   const loadDashboard = async () => {
     try {
-      setLoading(true);
       const data = await apiClient.getDashboard();
-      setMetrics(data);
+      if (data) {
+        setMetrics(data);
+      }
     } catch (err) {
       console.error('Error loading dashboard metrics:', err);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -177,9 +177,9 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
     return () => {
       cancelAnimationFrame(animId);
     };
-  }, [loading]);
+  }, []);
 
-  if (loading) {
+  if (!metrics && loading) {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
         <div className="text-center">
