@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
   Radar, 
   AlertTriangle, 
-  Network, 
-  ShieldCheck, 
   ExternalLink, 
   CheckCircle2, 
   XCircle, 
@@ -263,47 +261,6 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                 <button onClick={() => onViewFindings && onViewFindings()} className="text-emerald-400 font-bold hover:underline cursor-pointer">
                   {metrics?.open_findings ?? 359} ACTIVE
                 </button>
-              </div>
-            </div>
-
-            <div className="tech-border-card rounded-lg bg-command-950/80 border border-cyan-500/25 shadow-[0_0_15px_rgba(6,182,212,0.15)] px-2.5 py-1.5">
-              <div className="flex items-center justify-between pb-1 border-b border-cyan-900/40 mb-1">
-                <div className="flex items-center space-x-2">
-                  <Network className="w-4 h-4 text-cyan-300" />
-                  <span className="font-hud font-bold tracking-widest text-[11px] uppercase text-cyan-200">ASSET MONITORED</span>
-                </div>
-                <span className="px-1.5 py-0.2 rounded bg-emerald-400/10 border border-cyan-500/30 text-[9px] font-mono text-emerald-400">96.9% COV</span>
-              </div>
-              <div className="flex items-baseline justify-between mb-0.5">
-                <div className="text-2xl font-hud font-black text-cyan-300 drop-shadow-[0_0_8px_rgba(56,189,248,0.4)] leading-none">24,650</div>
-                <span className="text-[9px] font-mono text-cyan-400/70 uppercase">ENDPOINTS & CLOUD</span>
-              </div>
-              <div className="flex items-center space-x-2 text-[9px] font-mono text-slate-400 mt-1 pt-1 border-t border-cyan-900/40">
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#38bdf8]"></span>
-                <span className="text-slate-300 truncate">K8s: 1,840 Nodes</span>
-                <span className="text-cyan-400/60">•</span>
-                <span className="text-slate-300 truncate">VPC: 48</span>
-              </div>
-            </div>
-
-            <div className="tech-border-card rounded-lg bg-command-950/80 border border-cyan-500/25 shadow-[0_0_15px_rgba(6,182,212,0.15)] px-2.5 py-1.5">
-              <div className="flex items-center justify-between pb-1 border-b border-cyan-900/40 mb-1">
-                <div className="flex items-center space-x-2">
-                  <ShieldCheck className="w-4 h-4 text-purple-400" />
-                  <span className="font-hud font-bold tracking-widest text-[11px] uppercase text-slate-200">PORTFOLIO SCOPE</span>
-                </div>
-                <span className="px-1.5 py-0.2 rounded bg-purple-500/20 border border-purple-400/50 text-[9px] font-bold text-purple-300 shadow-[0_0_8px_rgba(168,85,247,0.4)]">GRADE A+</span>
-              </div>
-              <div className="flex items-center justify-between text-xs font-mono my-0.5">
-                <span className="text-slate-400 text-[10px]">BUSINESS UNITS</span>
-                <span className="text-white font-hud font-bold text-sm leading-none">18 UNITS</span>
-              </div>
-              <div className="flex items-center justify-between text-xs font-mono mb-1">
-                <span className="text-slate-400 text-[10px]">ACTIVE MICROSERVICES</span>
-                <span className="text-cyan-300 font-hud font-bold text-sm leading-none">142 SERVICES</span>
-              </div>
-              <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-cyan-900/60">
-                <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-400 h-full w-[92%]"></div>
               </div>
             </div>
           </div>
