@@ -43,8 +43,8 @@ export const Sidebar = ({ currentTab, onTabChange }) => {
       : 'bg-gradient-to-r from-rose-600/25 via-rose-500/15 to-transparent';
 
     const containerClasses = isActive
-      ? `group flex items-center justify-between px-3.5 py-2 sm:py-2.5 rounded-xl ${activeBg} border-l-4 border-y border-r ${activeBorderColor} text-white shadow-[inset_0_0_18px_rgba(255,23,68,0.25)] transition-all cursor-pointer`
-      : "group flex items-center justify-between px-3.5 py-2 sm:py-2.5 rounded-xl text-slate-300 hover:text-rose-200 hover:bg-rose-950/40 border border-transparent hover:border-rose-500/25 transition-all cursor-pointer";
+      ? `group flex items-center justify-between px-4 py-2.5 rounded-xl ${activeBg} border-l-4 border-y border-r ${activeBorderColor} text-white shadow-[inset_0_0_18px_rgba(255,23,68,0.25)] transition-all cursor-pointer`
+      : "group flex items-center justify-between px-4 py-2.5 rounded-xl text-slate-300 hover:text-rose-200 hover:bg-rose-950/40 border border-transparent hover:border-rose-500/25 transition-all cursor-pointer";
       
     const iconColor = isActive 
       ? (item.activeColor === 'amber' ? 'text-amber-400' : item.activeColor === 'purple' ? 'text-purple-400' : 'text-rose-400')
@@ -54,7 +54,7 @@ export const Sidebar = ({ currentTab, onTabChange }) => {
 
     return (
       <a key={item.id + (isEngine ? '-eng' : '')} onClick={() => onTabChange(item.id)} className={containerClasses}>
-        <div className="flex items-center space-x-3 min-w-0">
+        <div className="flex items-center space-x-3.5 min-w-0">
           <Icon className={`w-5 h-5 flex-shrink-0 transition-colors ${iconColor}`} />
           <span className={`${textClasses} text-[13.5px]`}>{item.label}</span>
         </div>
@@ -78,9 +78,12 @@ export const Sidebar = ({ currentTab, onTabChange }) => {
   };
 
   return (
-    <aside className="w-full lg:w-[350px] xl:w-[375px] 2xl:w-[400px] flex-shrink-0 tech-border-card rounded-2xl border border-rose-500/30 bg-command-900/95 backdrop-blur-md shadow-[0_0_45px_rgba(7,1,4,0.95)] sticky top-20 z-30 p-4 sm:p-5 select-none overflow-hidden" data-purpose="platform-modules-sidebar">
+    <aside 
+      className="w-full lg:w-[360px] xl:w-[380px] 2xl:w-[410px] flex-shrink-0 tech-border-card rounded-2xl border border-rose-500/30 bg-command-900/95 backdrop-blur-md shadow-[0_0_45px_rgba(7,1,4,0.95)] sticky top-[84px] h-[calc(100vh-104px)] max-h-[calc(100vh-104px)] z-30 p-4 sm:p-5 select-none overflow-hidden flex flex-col justify-between"
+      data-purpose="platform-modules-sidebar"
+    >
       {/* Sidebar Header / Module Crest */}
-      <div className="flex items-center justify-between pb-3 border-b border-rose-900/50 mb-3">
+      <div className="flex items-center justify-between pb-3 border-b border-rose-900/50 flex-shrink-0">
         <div className="flex items-center space-x-3">
           <div className="w-3 h-3 bg-rose-500 rounded-sm shadow-[0_0_12px_#ff1744]"></div>
           <div>
@@ -92,17 +95,17 @@ export const Sidebar = ({ currentTab, onTabChange }) => {
             </span>
           </div>
         </div>
-        <span className="px-2 py-0.5 rounded-md bg-rose-500/15 border border-rose-500/30 text-[10px] font-mono text-rose-300 font-bold tracking-wider shadow-[0_0_8px_rgba(255,23,68,0.25)]">
+        <span className="px-2.5 py-0.5 rounded-md bg-rose-500/15 border border-rose-500/30 text-[10px] font-mono text-rose-300 font-bold tracking-wider shadow-[0_0_8px_rgba(255,23,68,0.25)]">
           ONLINE
         </span>
       </div>
 
-      {/* Module Navigation List - Fixed & Non-Scrolling */}
-      <nav className="space-y-1.5 font-mono text-xs">
+      {/* Module Navigation List - Vertically Expanded, Non-Scrolling */}
+      <nav className="flex-1 flex flex-col justify-evenly py-2 font-mono text-xs overflow-hidden">
         {menuItems.map(item => renderItem(item, false))}
 
         {/* Category Divider */}
-        <div className="pt-2 pb-1 px-2.5">
+        <div className="py-1 px-3">
           <div className="flex items-center justify-between text-[10px] text-rose-400/70 uppercase tracking-widest border-t border-rose-900/40 pt-2 font-hud">
             <span className="font-bold">ANALYSIS ENGINES</span>
             <span className="text-[9px] text-slate-400 font-mono">AUTO-SCAN</span>
@@ -112,8 +115,8 @@ export const Sidebar = ({ currentTab, onTabChange }) => {
         {engineItems.map(item => renderItem(item, true))}
       </nav>
 
-      {/* Sidebar Mini Telemetry Pod */}
-      <div className="mt-3.5 pt-3 border-t border-rose-900/50 bg-command-950/70 rounded-xl p-3 border border-rose-900/40">
+      {/* Sidebar Mini Telemetry Pod - Anchored at Bottom */}
+      <div className="pt-3 border-t border-rose-900/50 bg-command-950/70 rounded-xl p-3 border border-rose-900/40 flex-shrink-0">
         <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-1.5">
           <span className="font-semibold text-slate-300 font-hud">PIPELINE HEALTH</span>
           <span className="text-rose-400 font-bold font-hud text-sm">99.8%</span>
