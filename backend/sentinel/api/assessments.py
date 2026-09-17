@@ -162,10 +162,7 @@ def list_assessments(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    if getattr(current_user, "role", "") == "admin":
-        query = db.query(Assessment)
-    else:
-        query = db.query(Assessment).join(Project).filter(Project.user_id == current_user.id)
+    query = db.query(Assessment)
     if project_id:
         query = query.filter(Assessment.project_id == project_id)
     
