@@ -678,11 +678,11 @@ export default function VajraHeroCockpit() {
         border: '1px solid rgba(56, 189, 248, 0.3)',
         borderRadius: '14px',
         padding: '18px 20px',
-        boxShadow: '0 0 35px rgba(6, 182, 212, 0.15)',
+        boxShadow: '0 0 35px rgba(255, 23, 68, 0.15)',
         position: 'relative',
         overflow: 'hidden'
       }}
-      className="tech-border-card hover:border-cyan-400 hover:shadow-[0_0_30px_rgba(0,242,254,0.25)] transition-all duration-300 font-hud"
+      className="tech-border-card hover:border-rose-400 hover:shadow-[0_0_30px_rgba(255,23,68,0.25)] transition-all duration-300 font-hud"
     >
       {/* Background Cybernetic Grid Texture */}
       <div
@@ -690,7 +690,7 @@ export default function VajraHeroCockpit() {
           position: 'absolute',
           inset: 0,
           backgroundImage:
-            'radial-gradient(circle at 18% 50%, rgba(6, 182, 212, 0.08) 0%, transparent 60%), radial-gradient(circle at 85% 20%, rgba(37, 99, 235, 0.06) 0%, transparent 50%), linear-gradient(to right, rgba(56, 189, 248, 0.02) 1px, transparent 1px), linear-gradient(to bottom, rgba(56, 189, 248, 0.02) 1px, transparent 1px)',
+            'radial-gradient(circle at 18% 50%, rgba(255, 23, 68, 0.08) 0%, transparent 60%), radial-gradient(circle at 85% 20%, rgba(225, 29, 72, 0.06) 0%, transparent 50%), linear-gradient(to right, rgba(255, 23, 68, 0.02) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 23, 68, 0.02) 1px, transparent 1px)',
           backgroundSize: '100% 100%, 100% 100%, 28px 28px, 28px 28px',
           pointerEvents: 'none'
         }}
@@ -700,16 +700,16 @@ export default function VajraHeroCockpit() {
         {/* ================================================================= */}
         {/* LEFT COLUMN: 3D HOLOGRAPHIC THREAT RADAR & HUD POSTURE GAUGE      */}
         {/* ================================================================= */}
-        <div className="lg:col-span-5 flex flex-col items-center justify-between p-3 border-b lg:border-b-0 lg:border-r border-cyan-900/40 relative bg-command-900/60 rounded-xl">
+        <div className="lg:col-span-5 flex flex-col items-center justify-between p-3 border-b lg:border-b-0 lg:border-r border-rose-900/40 relative bg-command-900/60 rounded-xl">
           {/* Top Title Bar of Radar */}
           <div className="w-full flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <span className="flex h-2.5 w-2.5 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400 shadow-[0_0_8px_#00f2fe]"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500 shadow-[0_0_8px_#ff1744]"></span>
               </span>
               <span className="text-[12px] font-bold uppercase tracking-widest text-white font-mono flex items-center gap-1.5">
-                <Crosshair size={14} className="text-cyan-400 animate-spin" style={{ animationDuration: '8s' }} />
+                <Crosshair size={14} className="text-rose-400 animate-spin" style={{ animationDuration: '8s' }} />
                 AI THREAT RADAR
               </span>
             </div>
@@ -742,18 +742,18 @@ export default function VajraHeroCockpit() {
             >
               <div
                 style={{
-                  backgroundColor: 'rgba(4, 8, 20, 0.94)',
-                  border: '1px solid rgba(56, 189, 248, 0.7)',
+                  backgroundColor: 'rgba(12, 2, 7, 0.94)',
+                  border: '1px solid rgba(255, 23, 68, 0.7)',
                   borderRadius: '16px',
                   padding: '10px 18px',
                   backdropFilter: 'blur(12px)',
-                  boxShadow: '0 0 25px rgba(6, 182, 212, 0.4), inset 0 0 16px rgba(37, 99, 235, 0.2)'
+                  boxShadow: '0 0 25px rgba(255, 23, 68, 0.45), inset 0 0 16px rgba(225, 29, 72, 0.2)'
                 }}
                 className="flex flex-col items-center"
               >
                 <div className="flex items-center gap-1.5 mb-0.5">
-                  <Flame size={13} color="#00f2fe" className="animate-pulse" />
-                  <span className="text-[9.5px] font-mono font-bold text-cyan-300 uppercase tracking-widest">
+                  <Flame size={13} color="#ff1744" className="animate-pulse" />
+                  <span className="text-[9.5px] font-mono font-bold text-rose-300 uppercase tracking-widest">
                     AI DEFENSE POSTURE
                   </span>
                 </div>
@@ -765,12 +765,12 @@ export default function VajraHeroCockpit() {
                     color: '#ffffff',
                     lineHeight: 1,
                     letterSpacing: '-0.5px',
-                    textShadow: '0 0 18px rgba(0, 242, 254, 0.9), 0 0 32px rgba(56, 189, 248, 0.6)'
+                    textShadow: '0 0 18px rgba(255, 23, 68, 0.95), 0 0 32px rgba(255, 82, 82, 0.6)'
                   }}
                   className="font-mono my-1"
                 >
                   {displayScore || 89}
-                  <span style={{ fontSize: '18px', color: '#00f2fe', marginLeft: '2px' }}>%</span>
+                  <span style={{ fontSize: '18px', color: '#ff1744', marginLeft: '2px' }}>%</span>
                 </div>
 
                 <div
@@ -804,15 +804,15 @@ export default function VajraHeroCockpit() {
               <div
                 key={idx}
                 style={{
-                  backgroundColor: 'rgba(7, 15, 36, 0.9)',
-                  border: '1px solid rgba(56, 189, 248, 0.2)',
+                  backgroundColor: 'rgba(17, 2, 7, 0.9)',
+                  border: '1px solid rgba(255, 23, 68, 0.25)',
                   borderRadius: '6px',
                   padding: '3px 7px',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '4px'
                 }}
-                className="hover:border-cyan-400 hover:shadow-[0_0_8px_rgba(0,242,254,0.3)] transition-all"
+                className="hover:border-rose-400 hover:shadow-[0_0_8px_rgba(255,23,68,0.3)] transition-all"
               >
                 <span
                   style={{
@@ -832,30 +832,30 @@ export default function VajraHeroCockpit() {
           </div>
 
           {/* Bottom Label with Animated Waveform */}
-          <div className="w-full flex items-center justify-between mt-2 pt-2 border-t border-cyan-900/40">
+          <div className="w-full flex items-center justify-between mt-2 pt-2 border-t border-rose-900/40">
             <div className="flex items-center gap-2">
-              <Activity size={13} className="text-cyan-400 animate-pulse" />
+              <Activity size={13} className="text-rose-400 animate-pulse" />
               <span className="text-[10px] font-bold uppercase tracking-widest text-slate-300 font-mono">
                 REAL-TIME SOC SURVEILLANCE
               </span>
             </div>
-            <LiveSignalWaveform width={85} height={16} color="#00f2fe" />
+            <LiveSignalWaveform width={85} height={16} color="#ff1744" />
           </div>
         </div>
 
         {/* ================================================================= */}
         {/* RIGHT COLUMN: 4 CLEAN, SPACIOUS & HIGH-TECH METRIC CARDS          */}
         {/* ================================================================= */}
-        <div className="lg:col-span-7 flex flex-col justify-between gap-4 bg-command-900/60 p-4 rounded-xl border border-cyan-900/40">
+        <div className="lg:col-span-7 flex flex-col justify-between gap-4 bg-command-900/60 p-4 rounded-xl border border-rose-900/40">
           {/* Header Row */}
-          <div className="flex items-center justify-between pb-3 border-b border-cyan-900/40">
+          <div className="flex items-center justify-between pb-3 border-b border-rose-900/40">
             <div className="flex items-center gap-2.5">
-              <Radio className="w-4 h-4 text-cyan-400 animate-pulse" />
+              <Radio className="w-4 h-4 text-rose-400 animate-pulse" />
               <h2 className="text-sm font-bold uppercase tracking-widest text-white">
                 VAJRA TELEMETRY & ATTACK RADAR
               </h2>
             </div>
-            <span className="text-[9.5px] font-mono font-bold text-cyan-300 bg-cyan-500/15 border border-cyan-400/50 px-3 py-1 rounded-full shadow-[0_0_10px_rgba(0,242,254,0.3)]">
+            <span className="text-[9.5px] font-mono font-bold text-rose-300 bg-rose-500/15 border border-rose-400/50 px-3 py-1 rounded-full shadow-[0_0_10px_rgba(255,23,68,0.3)]">
               AI COCKPIT ACTIVE
             </span>
           </div>
@@ -868,8 +868,8 @@ export default function VajraHeroCockpit() {
                 href={m.path}
                 prefetch={true}
                 style={{
-                  backgroundColor: 'rgba(7, 15, 36, 0.85)',
-                  border: '1px solid rgba(56, 189, 248, 0.25)',
+                  backgroundColor: 'rgba(17, 2, 7, 0.85)',
+                  border: '1px solid rgba(255, 23, 68, 0.25)',
                   borderRadius: '12px',
                   padding: '14px 16px',
                   cursor: 'pointer',
@@ -882,7 +882,7 @@ export default function VajraHeroCockpit() {
                   overflow: 'hidden',
                   textDecoration: 'none'
                 }}
-                className="hover:border-cyan-400 hover:shadow-[0_0_24px_rgba(6,182,212,0.25)] hover:-translate-y-0.5 group"
+                className="hover:border-rose-400 hover:shadow-[0_0_24px_rgba(255,23,68,0.25)] hover:-translate-y-0.5 group"
               >
                 {/* Background Watermark Accent */}
                 <div
@@ -914,7 +914,7 @@ export default function VajraHeroCockpit() {
                             letterSpacing: '-0.3px',
                             color: '#ffffff'
                           }}
-                          className="font-mono group-hover:text-cyan-200 transition-colors mt-0.5"
+                          className="font-mono group-hover:text-rose-200 transition-colors mt-0.5"
                         >
                           {m.value}
                         </div>
@@ -924,7 +924,7 @@ export default function VajraHeroCockpit() {
                 </div>
 
                 {/* Bottom Row: Delta Trend + Animated Sparkline */}
-                <div className="flex items-center justify-between pt-2.5 border-t border-cyan-900/30">
+                <div className="flex items-center justify-between pt-2.5 border-t border-rose-900/30">
                   <div className="text-[10px] font-bold">
                     <span style={{ color: m.color, fontWeight: 800 }} className="mr-1.5 font-mono">
                       {m.delta}
@@ -940,18 +940,18 @@ export default function VajraHeroCockpit() {
           {/* Bottom Full-Width Threat Mitigation Action Bar */}
           <div
             style={{
-              backgroundColor: '#040814',
-              border: '1px solid rgba(56, 189, 248, 0.25)',
+              backgroundColor: '#070104',
+              border: '1px solid rgba(255, 23, 68, 0.25)',
               borderRadius: '10px',
               padding: '12px 16px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              boxShadow: '0 0 16px rgba(6, 182, 212, 0.15)',
+              boxShadow: '0 0 16px rgba(255, 23, 68, 0.15)',
               position: 'relative',
               overflow: 'hidden'
             }}
-            className="hover:border-cyan-400 transition-all"
+            className="hover:border-rose-400 transition-all"
           >
             <div
               style={{
@@ -960,16 +960,16 @@ export default function VajraHeroCockpit() {
                 top: 0,
                 bottom: 0,
                 width: '4px',
-                background: 'linear-gradient(180deg, #00f2fe 0%, #2563eb 100%)',
-                boxShadow: '0 0 8px #00f2fe'
+                background: 'linear-gradient(180deg, #ff1744 0%, #b7092b 100%)',
+                boxShadow: '0 0 8px #ff1744'
               }}
             />
 
             <div className="flex items-center gap-3 pl-2">
-              <Zap className="w-4 h-4 text-cyan-400 animate-pulse flex-shrink-0" />
+              <Zap className="w-4 h-4 text-rose-400 animate-pulse flex-shrink-0" />
               <div>
                 <div className="text-[11px] font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
-                  THREAT MITIGATION: <span className="text-cyan-400">MAXIMUM LOCKDOWN</span>
+                  THREAT MITIGATION: <span className="text-rose-400">MAXIMUM LOCKDOWN</span>
                 </div>
                 <div className="text-[10px] text-slate-400 font-medium">
                   Automated defenses active across all monitored assets
@@ -981,15 +981,15 @@ export default function VajraHeroCockpit() {
               href="/threat-intelligence"
               prefetch={true}
               style={{
-                background: 'linear-gradient(90deg, rgba(6, 182, 212, 0.25) 0%, rgba(37, 99, 235, 0.2) 100%)',
-                border: '1px solid rgba(56, 189, 248, 0.5)',
+                background: 'linear-gradient(90deg, rgba(255, 23, 68, 0.25) 0%, rgba(225, 29, 72, 0.2) 100%)',
+                border: '1px solid rgba(255, 23, 68, 0.5)',
                 color: '#ffffff',
-                boxShadow: '0 0 12px rgba(6, 182, 212, 0.35)'
+                boxShadow: '0 0 12px rgba(255, 23, 68, 0.35)'
               }}
               className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider hover:brightness-125 transition-all flex-shrink-0"
             >
               <span>EXPLORE INTEL GRID</span>
-              <ChevronRight className="w-4 h-4 text-cyan-400" />
+              <ChevronRight className="w-4 h-4 text-rose-400" />
             </Link>
           </div>
         </div>
