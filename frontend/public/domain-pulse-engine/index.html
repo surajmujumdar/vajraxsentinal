@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAJRA DOMAIN PULSE | Deep Attack Surface & Threat Telemetry</title>
+    <meta name="description" content="Real-time domain threat intelligence, WHOIS telemetry, DNS matrix, SSL/TLS certificate audit, and security posture analysis powered by VAJRA.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- App Container -->
+    <div class="app-wrapper">
+        <!-- In-Module HUD / Top Bar -->
+        <header class="navbar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <img src="/logo.png" alt="VAJRA" onerror="this.outerHTML='<i class=\'fa-solid fa-shield-halved\'></i>'">
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">VAJRA <span class="highlight">DOMAIN PULSE</span></span>
+                    <span class="brand-tag">Deep Attack Surface & Threat Telemetry</span>
+                </div>
+            </div>
+
+            <div class="nav-presets">
+                <span class="preset-label"><i class="fa-solid fa-crosshairs" style="color:var(--accent-crimson);"></i> Quick Targets:</span>
+                <button class="btn-preset preset-chip" data-domain="github.com">github.com</button>
+                <button class="btn-preset preset-chip" data-domain="cloudflare.com">cloudflare.com</button>
+                <button class="btn-preset preset-chip" data-domain="tesla.com">tesla.com</button>
+                <button class="btn-preset preset-chip" data-domain="binance.com">binance.com</button>
+                <button class="btn-preset preset-chip" data-domain="microsoft.com">microsoft.com</button>
+            </div>
+
+            <div class="nav-controls">
+                <button class="btn-icon" id="theme-toggle" title="Toggle Theme Atmosphere">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <button class="btn-icon" id="btn-settings" title="API Keys & Telemetry Settings">
+                    <i class="fa-solid fa-sliders"></i>
+                </button>
+                <div class="status-indicator">
+                    <span class="pulse-dot"></span>
+                    <span class="status-text">VAJRA Engines Online</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Hero & Search Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Deep Domain Telemetry & Attack Surface Analysis</h1>
+                <p class="hero-subtitle">Instantly query live DNS, WHOIS lifecycle, SSL trust chain, IP infrastructure, exposed ports, and multi-source threat posture.</p>
+                
+                <!-- Search Form -->
+                <div id="search-form" class="search-box">
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="domain-input" placeholder="Enter target domain (e.g., target.com, api.infra.org)" autocomplete="off" spellcheck="false" required>
+                        <button type="button" id="btn-clear-input" class="btn-clear hidden" title="Clear target input">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <button type="button" id="btn-search" class="btn-primary">
+                        <span class="btn-text">Analyze Target</span>
+                        <i class="fa-solid fa-bolt icon-arrow"></i>
+                        <div class="spinner hidden" id="loading-spinner"></div>
+                    </button>
+                </div>
+
+                <!-- Search History Pills -->
+                <div class="search-history" id="history-container">
+                    <span class="history-label"><i class="fa-solid fa-clock-rotate-left" style="color:var(--accent-crimson);"></i> Recent Targets:</span>
+                    <div class="history-tags" id="history-tags">
+                        <span class="empty-history">No recent searches</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Connected Telemetry & Repositories Strip -->
+        <div class="data-sources-strip">
+            <span style="font-weight:700; color:var(--text-highlight); font-family:'Outfit', sans-serif;"><i class="fa-solid fa-satellite-dish" style="color:var(--accent-crimson);"></i> Live Telemetry Feeds:</span>
+            <span class="data-source-pill online"><i class="fa-solid fa-circle text-success" style="font-size:6px;"></i> Google DoH DNS</span>
+            <span class="data-source-pill online"><i class="fa-solid fa-circle text-success" style="font-size:6px;"></i> ICANN RDAP</span>
+            <span class="data-source-pill online"><i class="fa-solid fa-circle text-success" style="font-size:6px;"></i> crt.sh SSL</span>
+            <span class="data-source-pill online"><i class="fa-solid fa-circle text-success" style="font-size:6px;"></i> VirusTotal v3</span>
+            <span class="data-source-pill online"><i class="fa-solid fa-circle text-success" style="font-size:6px;"></i> AbuseIPDB</span>
+            <span class="data-source-pill online"><i class="fa-solid fa-circle text-success" style="font-size:6px;"></i> AlienVault OTX</span>
+            <span class="data-source-pill online"><i class="fa-solid fa-circle text-success" style="font-size:6px;"></i> ThreatFox IOCs</span>
+            <span class="data-source-pill online"><i class="fa-solid fa-circle text-success" style="font-size:6px;"></i> Nuclei / NVD</span>
+            <span class="data-source-pill online"><i class="fa-solid fa-circle text-success" style="font-size:6px;"></i> Nmap / Shodan</span>
+            <span class="data-source-pill online"><i class="fa-solid fa-circle text-success" style="font-size:6px;"></i> Google OSV</span>
+        </div>
+
+        <!-- Error State Banner (Hidden by default) -->
+        <div id="error-state-banner" class="card error-card hidden" style="border: 2px solid var(--accent-crimson); background: linear-gradient(135deg, rgba(255, 23, 68, 0.12) 0%, rgba(14, 2, 18, 0.95) 100%); padding: 1.1rem 1.25rem; margin-bottom: 0.65rem; border-radius: var(--radius-md); box-shadow: 0 0 20px rgba(255, 23, 68, 0.25);">
+            <div style="display:flex; align-items:flex-start; gap:0.9rem;">
+                <div style="width:38px; height:38px; border-radius:8px; background:rgba(255,23,68,0.2); border:1px solid var(--accent-crimson); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1.15rem; color:var(--accent-crimson); box-shadow:0 0 12px rgba(255,23,68,0.4);">
+                    <i id="error-icon" class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div style="flex:1;">
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.25rem;">
+                        <h3 id="error-title" style="font-family:'Outfit',sans-serif; font-size:1.02rem; font-weight:800; color:#ff1744; margin:0;">Domain Resolution / Format Error</h3>
+                        <span id="error-badge" class="badge badge-danger">INVALID TARGET</span>
+                    </div>
+                    <p id="error-message" style="color:var(--text-primary); font-size:0.8rem; line-height:1.45; margin-bottom:0.6rem;">
+                        The target domain could not be analyzed.
+                    </p>
+                    <div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">
+                        <span style="font-size:0.7rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Quick Valid Targets:</span>
+                        <button class="btn-preset preset-chip" data-domain="github.com">github.com</button>
+                        <button class="btn-preset preset-chip" data-domain="cloudflare.com">cloudflare.com</button>
+                        <button class="btn-preset preset-chip" data-domain="microsoft.com">microsoft.com</button>
+                        <button type="button" id="btn-dismiss-error" class="btn-secondary btn-sm" style="margin-left:auto; font-size:0.7rem; padding:0.2rem 0.55rem;">Dismiss</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analysis Dashboard -->
+        <main class="dashboard" id="dashboard">
+            <!-- Domain Overview Header Card -->
+            <div class="card overview-card">
+                <div class="overview-header">
+                    <div class="domain-identity">
+                        <img id="domain-favicon" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='%2364748b'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/%3E%3C/svg%3E" alt="Favicon" class="domain-favicon" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' width=\'24\' height=\'24\' fill=\'%2364748b\'%3E%3Cpath d=\'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z\'/%3E%3C/svg%3E'">
+                        <div>
+                            <div class="domain-title-wrap">
+                                <h2 id="display-domain" class="display-domain">example.com</h2>
+                                <span id="badge-status" class="badge badge-success">ACTIVE</span>
+                                <span id="badge-dnssec" class="badge badge-info">DNSSEC VALIDATED</span>
+                            </div>
+                            <p class="domain-meta">
+                                <span id="display-ip"><i class="fa-solid fa-server"></i> IP: --</span> &bull; 
+                                <span id="display-country"><i class="fa-solid fa-location-dot"></i> Country: --</span> &bull; 
+                                <span id="display-age"><i class="fa-solid fa-calendar"></i> Age: --</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="overview-actions">
+                        <button id="btn-copy-summary" class="btn-secondary btn-sm" title="Copy domain telemetry summary">
+                            <i class="fa-solid fa-copy"></i> Copy Summary
+                        </button>
+                        <button id="btn-export-stix" class="btn-secondary btn-sm" title="Download OASIS STIX 2.1 JSON Threat Bundle">
+                            <i class="fa-solid fa-file-shield" style="color:var(--accent-purple);"></i> STIX 2.1
+                        </button>
+                        <button id="btn-export-json" class="btn-secondary btn-sm" title="Download Full JSON Intelligence Report">
+                            <i class="fa-solid fa-file-code" style="color:var(--accent-cyan);"></i> JSON Report
+                        </button>
+                        <button id="btn-export-pdf" class="btn-secondary btn-sm" title="Print/Export PDF Report">
+                            <i class="fa-solid fa-file-pdf" style="color:var(--accent-crimson);"></i> PDF
+                        </button>
+                        <button id="btn-add-company" class="btn-primary btn-sm" title="Register this domain in VAJRA Monitored Assets">
+                            <i class="fa-solid fa-building-shield"></i> Promote to Monitored Assets
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Metrics Ribbon -->
+                <div class="metrics-grid">
+                    <!-- Security Score Gauge -->
+                    <div class="metric-box score-box">
+                        <div class="score-gauge-container">
+                            <svg class="score-gauge" viewBox="0 0 100 100">
+                                <circle class="gauge-bg" cx="50" cy="50" r="42"></circle>
+                                <circle class="gauge-fill" id="score-circle" cx="50" cy="50" r="42" stroke-dasharray="264" stroke-dashoffset="264"></circle>
+                            </svg>
+                            <div class="score-center">
+                                <span class="score-value" id="score-value">0</span>
+                                <span class="score-max">/100</span>
+                            </div>
+                        </div>
+                        <div class="score-label">
+                            <h4>Security Posture</h4>
+                            <span id="score-rating" class="rating-text">Analyzing...</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-box">
+                        <div class="metric-icon icon-cyan"><i class="fa-solid fa-clock"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-title">Domain Age</span>
+                            <span class="metric-value" id="metric-age">-- yrs</span>
+                            <span class="metric-sub" id="metric-created">Created: --</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-box">
+                        <div class="metric-icon icon-purple"><i class="fa-solid fa-hourglass-half"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-title">Days To Expiry</span>
+                            <span class="metric-value" id="metric-expiry-days">-- days</span>
+                            <span class="metric-sub" id="metric-expires">Expires: --</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-box">
+                        <div class="metric-icon icon-emerald"><i class="fa-solid fa-lock"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-title">SSL Certificate</span>
+                            <span class="metric-value" id="metric-ssl-status">Valid</span>
+                            <span class="metric-sub" id="metric-ssl-issuer">Issuer: --</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-box">
+                        <div class="metric-icon icon-rose"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-title">Threat Rating</span>
+                            <span class="metric-value" id="metric-threat">Clean</span>
+                            <span class="metric-sub" id="metric-threat-sources">0 / 5 Blacklists</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <div class="tabs-header">
+                <button class="tab-btn active" data-tab="tab-overview">
+                    <i class="fa-solid fa-chart-pie"></i> Overview & Infra
+                </button>
+                <button class="tab-btn" data-tab="tab-dns">
+                    <i class="fa-solid fa-network-wired"></i> DNS Matrix <span class="tab-count" id="count-dns">0</span>
+                </button>
+                <button class="tab-btn" data-tab="tab-whois">
+                    <i class="fa-solid fa-id-card"></i> WHOIS & Lifecycle
+                </button>
+                <button class="tab-btn" data-tab="tab-ssl">
+                    <i class="fa-solid fa-certificate"></i> SSL/TLS Audit
+                </button>
+                <button class="tab-btn" data-tab="tab-threats">
+                    <i class="fa-solid fa-shield-virus"></i> Threat Intel <span class="tab-count" id="count-threats">0</span>
+                </button>
+                <button class="tab-btn" data-tab="tab-ports">
+                    <i class="fa-solid fa-ethernet"></i> Open Ports <span class="tab-count" id="count-ports">0</span>
+                </button>
+                <button class="tab-btn" data-tab="tab-vulns">
+                    <i class="fa-solid fa-bug"></i> Vulnerabilities & CVEs <span class="tab-count" id="count-vulns">0</span>
+                </button>
+                <button class="tab-btn" data-tab="tab-raw">
+                    <i class="fa-solid fa-code"></i> Raw JSON & STIX
+                </button>
+            </div>
+
+            <!-- Tab Content Area -->
+            <div class="tab-content-container">
+                <!-- TAB 1: OVERVIEW & INFRASTRUCTURE -->
+                <div class="tab-panel active" id="tab-overview">
+                    <div class="grid-2col">
+                        <!-- Infrastructure Card -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-server"></i> Server Infrastructure & Geo</h3>
+                                <span class="badge badge-accent" id="infra-asn">ASN: --</span>
+                            </div>
+                            <div class="info-list">
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-network-wired"></i> Primary IPv4 Address</span>
+                                    <span class="info-val font-mono" id="infra-ip">--</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-globe"></i> IPv6 Address</span>
+                                    <span class="info-val font-mono" id="infra-ipv6">--</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-cloud"></i> Hosting Provider / ISP</span>
+                                    <span class="info-val" id="infra-isp">--</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-building"></i> Organization</span>
+                                    <span class="info-val" id="infra-org">--</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-location-dot"></i> Location</span>
+                                    <span class="info-val" id="infra-location"><i class="fa-solid fa-earth-americas"></i> --</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-bolt"></i> Server Latency / Response</span>
+                                    <span class="info-val" id="infra-latency"><span class="pulse-dot-green"></span> -- ms</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Security Checklist -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-clipboard-check"></i> Security Health Check</h3>
+                                <span class="badge badge-neutral" id="checklist-summary">0/5 Passed</span>
+                            </div>
+                            <div class="checklist" id="security-checklist">
+                                <div class="check-item" id="chk-ssl">
+                                    <i class="fa-solid fa-circle-notch fa-spin check-icon"></i>
+                                    <div class="check-details">
+                                        <strong>Valid HTTPS / SSL Certificate</strong>
+                                        <p>Checks if TLS certificate is active, trusted, and verified.</p>
+                                    </div>
+                                </div>
+                                <div class="check-item" id="chk-hsts">
+                                    <i class="fa-solid fa-circle-notch fa-spin check-icon"></i>
+                                    <div class="check-details">
+                                        <strong>HTTP Strict Transport Security (HSTS)</strong>
+                                        <p>Prevents SSL stripping & protocol downgrade attacks.</p>
+                                    </div>
+                                </div>
+                                <div class="check-item" id="chk-spf">
+                                    <i class="fa-solid fa-circle-notch fa-spin check-icon"></i>
+                                    <div class="check-details">
+                                        <strong>SPF (Sender Policy Framework)</strong>
+                                        <p>Prevents unauthorized email spoofing for this domain.</p>
+                                    </div>
+                                </div>
+                                <div class="check-item" id="chk-dmarc">
+                                    <i class="fa-solid fa-circle-notch fa-spin check-icon"></i>
+                                    <div class="check-details">
+                                        <strong>DMARC Email Protection</strong>
+                                        <p>Enforces strict email authentication policies.</p>
+                                    </div>
+                                </div>
+                                <div class="check-item" id="chk-dnssec">
+                                    <i class="fa-solid fa-circle-notch fa-spin check-icon"></i>
+                                    <div class="check-details">
+                                        <strong>DNSSEC Signature Validation</strong>
+                                        <p>Protects DNS queries against forgery and cache poisoning.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: DNS MATRIX -->
+                <div class="tab-panel" id="tab-dns">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="dns-filter-bar">
+                                <button class="dns-chip active" data-dns-type="ALL">ALL RECORDS</button>
+                                <button class="dns-chip" data-dns-type="A">A</button>
+                                <button class="dns-chip" data-dns-type="AAAA">AAAA</button>
+                                <button class="dns-chip" data-dns-type="MX">MX</button>
+                                <button class="dns-chip" data-dns-type="TXT">TXT</button>
+                                <button class="dns-chip" data-dns-type="NS">NS</button>
+                                <button class="dns-chip" data-dns-type="CNAME">CNAME</button>
+                                <button class="dns-chip" data-dns-type="SOA">SOA</button>
+                                <button class="dns-chip" data-dns-type="CAA">CAA</button>
+                            </div>
+                            <div class="dns-actions">
+                                <button id="btn-refresh-dns" class="btn-secondary btn-sm" title="Refresh DNS via Google DNS REST API">
+                                    <i class="fa-solid fa-arrows-rotate"></i> Query Live DNS
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- DNS Records Table -->
+                        <div class="table-responsive">
+                            <table class="data-table" id="dns-table">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Name / Subdomain</th>
+                                        <th>Value / Target</th>
+                                        <th>TTL (sec)</th>
+                                        <th>Status / Info</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dns-tbody">
+                                    <tr>
+                                        <td colspan="5" class="table-loading">Querying DNS records...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: WHOIS & LIFECYCLE -->
+                <div class="tab-panel" id="tab-whois">
+                    <div class="grid-2col">
+                        <!-- Lifecycle Bar Card -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-timeline"></i> Domain Lifecycle & Timeline</h3>
+                            </div>
+                            <div class="lifecycle-container">
+                                <div class="lifecycle-bar-wrapper">
+                                    <div class="lifecycle-bar" id="lifecycle-progress" style="width: 0%;"></div>
+                                </div>
+                                <div class="lifecycle-dates">
+                                    <div>
+                                        <span class="date-label">Created Date</span>
+                                        <strong id="whois-created">--</strong>
+                                    </div>
+                                    <div class="text-center">
+                                        <span class="date-label">Updated Date</span>
+                                        <strong id="whois-updated">--</strong>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="date-label">Expiration Date</span>
+                                        <strong id="whois-expires">--</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-list margin-top">
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-signature"></i> Registrar Name</span>
+                                    <span class="info-val" id="whois-registrar">--</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-hashtag"></i> IANA Registrar ID</span>
+                                    <span class="info-val font-mono" id="whois-iana">--</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-server"></i> Registrar WHOIS Server</span>
+                                    <span class="info-val font-mono" id="whois-server">--</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-envelope"></i> Abuse Contact Email</span>
+                                    <span class="info-val" id="whois-abuse-email">--</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-phone"></i> Abuse Contact Phone</span>
+                                    <span class="info-val" id="whois-abuse-phone">--</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- EPP Status Flags & Nameservers -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-shield"></i> Domain Status Flags (EPP)</h3>
+                            </div>
+                            <div class="epp-tags" id="whois-epp-tags">
+                                <span class="badge badge-neutral">Loading status...</span>
+                            </div>
+
+                            <div class="card-header margin-top">
+                                <h3><i class="fa-solid fa-server"></i> Authoritative Nameservers</h3>
+                            </div>
+                            <ul class="ns-list" id="whois-ns-list">
+                                <li class="font-mono">Loading nameservers...</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: SSL/TLS AUDIT -->
+                <div class="tab-panel" id="tab-ssl">
+                    <div class="grid-2col">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-lock"></i> SSL Certificate Details</h3>
+                                <span class="badge badge-success" id="ssl-badge">VALID</span>
+                            </div>
+                            <div class="info-list">
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-tag"></i> Subject / Common Name</span>
+                                    <span class="info-val font-mono" id="ssl-subject">--</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-certificate"></i> Issuer Organization</span>
+                                    <span class="info-val font-bold" id="ssl-issuer">--</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-calendar-check"></i> Valid From</span>
+                                    <span class="info-val" id="ssl-valid-from">--</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-calendar-xmark"></i> Valid To (Expiration)</span>
+                                    <span class="info-val" id="ssl-valid-to">--</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-shield-heart"></i> TLS Security Grade</span>
+                                    <span class="info-val font-bold" id="ssl-grade"><span class="badge badge-success">GRADE A</span></span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-code-branch"></i> Supported Protocols</span>
+                                    <span class="info-val font-mono" id="ssl-protocols">TLS 1.3, TLS 1.2</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-tags"></i> Subject Alternative Names (SANs)</h3>
+                                <span class="badge badge-info" id="ssl-san-count">0 Domains</span>
+                            </div>
+                            <div class="san-container" id="ssl-san-tags">
+                                <span class="badge badge-neutral">Loading SANs...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 5: MULTI-SOURCE THREAT INTEL -->
+                <div class="tab-panel" id="tab-threats">
+                    <div class="grid-2col">
+                        <!-- HTTP Security Headers -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-shield-halved"></i> HTTP Security Headers Audit</h3>
+                            </div>
+                            <div class="headers-list" id="headers-audit-list">
+                                <div class="header-item">
+                                    <div class="header-name font-mono">Strict-Transport-Security (HSTS)</div>
+                                    <span class="badge badge-success">CONFIGURED</span>
+                                </div>
+                                <div class="header-item">
+                                    <div class="header-name font-mono">Content-Security-Policy (CSP)</div>
+                                    <span class="badge badge-warning">PARTIAL</span>
+                                </div>
+                                <div class="header-item">
+                                    <div class="header-name font-mono">X-Frame-Options</div>
+                                    <span class="badge badge-success">DENY / SAMEORIGIN</span>
+                                </div>
+                                <div class="header-item">
+                                    <div class="header-name font-mono">X-Content-Type-Options</div>
+                                    <span class="badge badge-success">nosniff</span>
+                                </div>
+                                <div class="header-item">
+                                    <div class="header-name font-mono">Referrer-Policy</div>
+                                    <span class="badge badge-info">strict-origin-when-cross-origin</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Threat Intelligence & Blacklists Feed -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-shield-virus"></i> Multi-Source Threat Intelligence</h3>
+                                <span class="badge badge-accent" id="threat-backend-badge">LIVE FEEDS</span>
+                            </div>
+                            <div class="info-list">
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-virus"></i> VirusTotal Detections</span>
+                                    <span class="info-val font-bold" id="threat-vt-stat">0 / 70 Engines Clean</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-triangle-exclamation"></i> AbuseIPDB Confidence</span>
+                                    <span class="info-val font-mono" id="threat-abuse-score">0% (0 Reports)</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-radar"></i> AlienVault OTX Pulses</span>
+                                    <span class="info-val font-mono" id="threat-alienvault-pulses">0 Threat Pulses</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-skull-crossbones"></i> ThreatFox Malware IOCs</span>
+                                    <span class="info-val font-mono" id="threat-threatfox-iocs">0 Active Indicators</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-key"><i class="fa-solid fa-network-wired"></i> Open Ports / Exposed Services</span>
+                                    <span class="info-val font-mono" id="threat-open-ports">80, 443 (Standard Web)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 6: OPEN PORTS & EXPOSED SERVICES -->
+                <div class="tab-panel" id="tab-ports">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-ethernet"></i> Network Perimeter & Port Exposure (Nmap & Shodan)</h3>
+                            <span class="badge badge-info" id="badge-ports-total">0 Open Ports Discovered</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table ports-table">
+                                <thead>
+                                    <tr>
+                                        <th>Port</th>
+                                        <th>Service</th>
+                                        <th>Protocol</th>
+                                        <th>State</th>
+                                        <th>Service Banner / Description</th>
+                                        <th>Exposure Level</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ports-tbody">
+                                    <tr>
+                                        <td colspan="6" class="table-loading">Inspecting open ports and perimeter services...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 7: VULNERABILITIES & CVES -->
+                <div class="tab-panel" id="tab-vulns">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-bug"></i> Vulnerability & Exploit Telemetry (Nuclei, NVD, OSV, testssl)</h3>
+                            <div class="dns-filter-bar" id="vuln-filter-bar">
+                                <button class="dns-chip active" data-vuln-sev="ALL">ALL</button>
+                                <button class="dns-chip" data-vuln-sev="CRITICAL">CRITICAL</button>
+                                <button class="dns-chip" data-vuln-sev="HIGH">HIGH</button>
+                                <button class="dns-chip" data-vuln-sev="MEDIUM">MEDIUM</button>
+                                <button class="dns-chip" data-vuln-sev="LOW">LOW</button>
+                            </div>
+                        </div>
+                        <div class="vuln-grid" id="vuln-container">
+                            <div class="table-loading">Loading vulnerability intelligence...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 8: RAW JSON & STIX 2.1 -->
+                <div class="tab-panel" id="tab-raw">
+                    <div class="grid-2col">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-code"></i> Consolidated JSON Response</h3>
+                                <button id="btn-copy-json" class="btn-secondary btn-sm">
+                                    <i class="fa-solid fa-clipboard"></i> Copy JSON
+                                </button>
+                            </div>
+                            <pre class="json-viewer" id="json-output">// Domain analysis JSON telemetry output will appear here...</pre>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-file-shield"></i> OASIS STIX 2.1 Threat Bundle</h3>
+                                <button id="btn-copy-stix-json" class="btn-secondary btn-sm">
+                                    <i class="fa-solid fa-clipboard"></i> Copy STIX
+                                </button>
+                            </div>
+                            <pre class="stix-box" id="stix-output">// STIX 2.1 Threat Intelligence Bundle...</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>VAJRA Domain Pulse &bull; Real-time Domain Intelligence & Attack Surface Telemetry &bull; Powered by ICANN RDAP, Google DNS, & crt.sh</p>
+        </footer>
+    </div>
+
+    <!-- Settings & API Modal -->
+    <div class="modal-overlay hidden" id="modal-settings">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-sliders" style="color:var(--accent-crimson);"></i> Domain Pulse Settings</h3>
+                <button class="btn-icon" id="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-desc">Configure custom API keys or toggle telemetry modes for premium integrations (VirusTotal, SecurityTrails, AlienVault OTX).</p>
+
+                <div class="form-group">
+                    <label for="key-virustotal"><i class="fa-solid fa-key" style="color:var(--accent-crimson);"></i> VirusTotal API Key (Optional)</label>
+                    <input type="password" id="key-virustotal" class="form-input" placeholder="Paste VT API Key here">
+                </div>
+
+                <div class="form-group">
+                    <label for="key-securitytrails"><i class="fa-solid fa-key" style="color:var(--accent-cyan);"></i> SecurityTrails Key (Optional)</label>
+                    <input type="password" id="key-securitytrails" class="form-input" placeholder="Paste SecurityTrails API Key here">
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fa-solid fa-bolt" style="color:var(--accent-amber);"></i> Telemetry Engine Mode</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="engine-mode" value="hybrid" checked> Live APIs with Auto-Fallback (Recommended)
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="engine-mode" value="strict-live"> Strict Live APIs Only
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="btn-cancel-settings">Cancel</button>
+                <button class="btn-primary" id="btn-save-settings">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Custom JS -->
+    <script src="app.js"></script>
+</body>
+</html>

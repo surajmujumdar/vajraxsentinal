@@ -13,8 +13,8 @@ function DomainAnalysisContent() {
   const domainQuery = searchParams.get('domain') || ''
 
   const iframeSrc = domainQuery 
-    ? `/domain-analysis/index.html?domain=${encodeURIComponent(domainQuery)}`
-    : '/domain-analysis/index.html'
+    ? `/domain-pulse-engine/index.html?domain=${encodeURIComponent(domainQuery)}`
+    : '/domain-pulse-engine/index.html'
 
   useEffect(() => {
     // Safety fallback: ensure iframe becomes visible even if browser onLoad was missed or cached
