@@ -253,14 +253,14 @@ export default function CriticalAlerts() {
     <div className="mt-2 font-hud">
       <div className="flex items-center justify-between mb-2.5">
         <div className="flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 text-rose-400" />
-          <h2 className="text-xs font-bold text-white uppercase tracking-widest text-glow-cyan">RECENT CRITICAL ALERTS</h2>
-          <span className="text-[9.5px] font-mono font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 px-2 py-0.5 rounded-full shadow-[0_0_8px_rgba(6,182,212,0.2)]">LIVE TELEMETRY</span>
+          <AlertTriangle className="w-4 h-4 text-rose-500" />
+          <h2 className="text-xs font-bold text-white uppercase tracking-widest text-glow-red">RECENT CRITICAL ALERTS</h2>
+          <span className="text-[9.5px] font-mono font-bold text-rose-400 bg-rose-500/10 border border-rose-500/30 px-2 py-0.5 rounded-full shadow-[0_0_8px_rgba(255,23,68,0.25)]">LIVE TELEMETRY</span>
         </div>
         <button
           onClick={handleDownloadReport}
           disabled={downloading}
-          className="flex items-center gap-1.5 px-2.5 py-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:brightness-110 text-black font-hud font-bold text-[10.5px] uppercase tracking-wider rounded-lg shadow-[0_0_12px_rgba(0,242,254,0.4)] transition-all disabled:opacity-50 cursor-pointer"
+          className="flex items-center gap-1.5 px-2.5 py-1 bg-gradient-to-r from-rose-600 to-red-700 hover:brightness-110 text-white font-hud font-bold text-[10.5px] uppercase tracking-wider rounded-lg shadow-[0_0_12px_rgba(255,23,68,0.5)] transition-all disabled:opacity-50 cursor-pointer border border-rose-500/40"
           title="Download PDF Report"
         >
           <Download className="w-3.5 h-3.5" />
@@ -274,21 +274,21 @@ export default function CriticalAlerts() {
             key={alert.id || index}
             href="/alerts"
             prefetch={true}
-            className="tech-border-card bg-command-900/85 border border-cyan-900/50 rounded-xl p-3 hover:border-cyan-400 hover:shadow-[0_0_20px_rgba(6,182,212,0.2)] transition-all duration-200 cursor-pointer flex flex-col justify-between h-[145px] group"
+            className="tech-border-card bg-command-900/85 border border-rose-900/40 rounded-xl p-3 hover:border-rose-500 hover:shadow-[0_0_20px_rgba(255,23,68,0.25)] transition-all duration-200 cursor-pointer flex flex-col justify-between h-[145px] group"
           >
             <div>
               <div className="flex items-start justify-between mb-1.5">
                 <div className="flex items-center gap-1.5 font-mono">
                   <AlertTriangle className={`w-3.5 h-3.5 ${getSeverityColor(alert.severity).split(' ')[0]}`} />
-                  <span className={`text-[8.5px] font-bold uppercase tracking-wider ${getSeverityColor(alert.severity)} px-1.5 py-0.5 rounded border border-cyan-900/40`}>
+                  <span className={`text-[8.5px] font-bold uppercase tracking-wider ${getSeverityColor(alert.severity)} px-1.5 py-0.5 rounded border border-rose-900/40`}>
                     {alert.severity || 'CRITICAL'}
                   </span>
                 </div>
                 <span className="text-[9.5px] text-slate-400 font-mono font-bold">{formatAlertTime(alert.time)}</span>
               </div>
-              <h3 className="text-[11px] font-bold text-white mb-1 line-clamp-1 leading-tight tracking-wide group-hover:text-cyan-300 transition-colors">{alert.title}</h3>
+              <h3 className="text-[11px] font-bold text-white mb-1 line-clamp-1 leading-tight tracking-wide group-hover:text-rose-300 transition-colors">{alert.title}</h3>
               <div className="flex items-center gap-1.5 mb-1">
-                <span className="text-[8.5px] font-bold text-slate-300 bg-command-950/80 border border-cyan-900/50 px-1.5 py-0.5 rounded">{alert.source || 'Unknown'}</span>
+                <span className="text-[8.5px] font-bold text-slate-300 bg-command-950/80 border border-rose-900/50 px-1.5 py-0.5 rounded">{alert.source || 'Unknown'}</span>
                 {alert.affectedSystems && (
                   <span className="text-[8.5px] font-bold text-rose-300 bg-rose-950/40 border border-rose-500/30 px-1.5 py-0.5 rounded">{alert.affectedSystems} Systems</span>
                 )}
@@ -296,10 +296,10 @@ export default function CriticalAlerts() {
             </div>
             <p className="text-[9.5px] text-slate-400 font-medium line-clamp-2 mt-auto leading-relaxed">{alert.description}</p>
             {alert.status && (
-              <div className="mt-1 pt-1 border-t border-cyan-900/30">
+              <div className="mt-1 pt-1 border-t border-rose-900/30">
                 <span className={`text-[8.5px] font-bold uppercase tracking-wider ${
                   alert.status === 'Active' ? 'text-rose-400' :
-                  alert.status === 'Blocked' ? 'text-cyan-400' :
+                  alert.status === 'Blocked' ? 'text-rose-300' :
                   'text-amber-400'
                 }`}>
                   STATUS: {alert.status}
@@ -311,10 +311,10 @@ export default function CriticalAlerts() {
         <Link 
           href="/alerts"
           prefetch={true}
-          className="tech-border-card bg-command-900/85 border border-cyan-900/50 rounded-xl p-3 flex flex-col items-center justify-center gap-1.5 hover:border-cyan-400 transition-all duration-200 hover:shadow-[0_0_18px_rgba(6,182,212,0.3)] group h-[145px]"
+          className="tech-border-card bg-command-900/85 border border-rose-900/40 rounded-xl p-3 flex flex-col items-center justify-center gap-1.5 hover:border-rose-500 transition-all duration-200 hover:shadow-[0_0_18px_rgba(255,23,68,0.3)] group h-[145px]"
         >
-          <span className="text-xs font-bold uppercase tracking-widest text-cyan-400 group-hover:text-white transition-colors">VIEW ALL ALERTS</span>
-          <ArrowRight className="w-4 h-4 text-cyan-400 group-hover:translate-x-1 transition-transform" />
+          <span className="text-xs font-bold uppercase tracking-widest text-rose-400 group-hover:text-white transition-colors">VIEW ALL ALERTS</span>
+          <ArrowRight className="w-4 h-4 text-rose-400 group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>
     </div>

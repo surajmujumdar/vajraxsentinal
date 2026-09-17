@@ -9,10 +9,10 @@ export const RiskGauge = ({ score = 0, size = 180 }) => {
   const strokeDashoffset = circumference - (cleanScore / 100) * circumference;
 
   const getColor = (s) => {
-    if (s >= 75) return '#ff3366'; // Critical Red
+    if (s >= 75) return '#ff1744'; // Critical Red
     if (s >= 50) return '#f59e0b'; // High Amber
     if (s >= 25) return '#eab308'; // Medium Yellow
-    if (s > 0) return '#38bdf8';   // Low Blue
+    if (s > 0) return '#ff5252';   // Low Red-Orange
     return '#10b981';              // Safe Green
   };
 
@@ -31,7 +31,7 @@ export const RiskGauge = ({ score = 0, size = 180 }) => {
       <div style={{ position: 'relative', width: size, height: size }}>
         <svg height={size} width={size} viewBox="0 0 160 160">
           <circle
-            stroke="#1e293b"
+            stroke="rgba(255, 23, 68, 0.18)"
             fill="transparent"
             strokeWidth={stroke}
             r={normalizedRadius}
