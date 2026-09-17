@@ -15,16 +15,9 @@ def get_dashboard_metrics(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    if getattr(current_user, "role", "") == "admin":
-        projects = db.query(Project).all()
-        project_ids = [p.id for p in projects]
-        assessments = db.query(Assessment).order_by(Assessment.created_at.desc()).all()
-        all_findings = db.query(Finding).all()
-    else:
-        projects = db.query(Project).filter(Project.user_id == current_user.id).all()
-        project_ids = [p.id for p in projects]
-        assessments = db.query(Assessment).filter(Assessment.project_id.in_(project_ids)).order_by(Assessment.created_at.desc()).all() if project_ids else []
-        all_findings = db.query(Finding).filter(Finding.project_id.in_(project_ids)).all() if project_ids else []
+    projects = db.query(Project).all()
+    assessments = db.query(Assessment).order_by(Assessment.created_at.desc()).all()
+    all_findings = db.query(Finding).all()
 
     findings = [f for f in all_findings if (f.status or "").lower() != "resolved"]
 
