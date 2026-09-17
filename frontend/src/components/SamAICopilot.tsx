@@ -300,29 +300,29 @@ function renderMarkdown(text: string): React.ReactNode {
   while (i < lines.length) {
     const line = lines[i]
     if (line.trim() === '') { elements.push(<div key={`gap-${i}`} className="h-1" />); i++; continue }
-    if (line.startsWith('# ')) { elements.push(<h1 key={i} className="text-sm font-hud font-bold text-white mb-1 mt-1 border-b border-cyan-900/50 pb-1">{inlineFormat(line.slice(2))}</h1>); i++; continue }
-    if (line.startsWith('## ')) { elements.push(<h2 key={i} className="text-xs font-hud font-bold text-cyan-400 mb-1 mt-2">{inlineFormat(line.slice(3))}</h2>); i++; continue }
-    if (line.startsWith('### ')) { elements.push(<h3 key={i} className="text-xs font-hud font-semibold text-sky-300 mb-0.5 mt-1.5">{inlineFormat(line.slice(4))}</h3>); i++; continue }
+    if (line.startsWith('# ')) { elements.push(<h1 key={i} className="text-sm font-hud font-bold text-white mb-1 mt-1 border-b border-rose-900/50 pb-1">{inlineFormat(line.slice(2))}</h1>); i++; continue }
+    if (line.startsWith('## ')) { elements.push(<h2 key={i} className="text-xs font-hud font-bold text-rose-400 mb-1 mt-2">{inlineFormat(line.slice(3))}</h2>); i++; continue }
+    if (line.startsWith('### ')) { elements.push(<h3 key={i} className="text-xs font-hud font-semibold text-rose-300 mb-0.5 mt-1.5">{inlineFormat(line.slice(4))}</h3>); i++; continue }
     if (line.startsWith('```')) {
       const codeLines: string[] = []; i++
       while (i < lines.length && !lines[i].startsWith('```')) { codeLines.push(lines[i]); i++ }
-      elements.push(<pre key={`code-${i}`} className="bg-command-900 border border-cyan-900/50 rounded-lg p-2.5 my-1.5 overflow-x-auto"><code className="text-[10px] font-mono text-cyan-300 leading-relaxed">{codeLines.join('\n')}</code></pre>)
+      elements.push(<pre key={`code-${i}`} className="bg-command-900 border border-rose-900/50 rounded-lg p-2.5 my-1.5 overflow-x-auto"><code className="text-[10px] font-mono text-rose-300 leading-relaxed">{codeLines.join('\n')}</code></pre>)
       i++; continue
     }
     if (/^[-*•] /.test(line)) {
       const bullets: string[] = []
       while (i < lines.length && /^[-*•] /.test(lines[i])) { bullets.push(lines[i].replace(/^[-*•] /, '')); i++ }
-      elements.push(<ul key={`ul-${i}`} className="space-y-0.5 my-1 pl-1">{bullets.map((b, bi) => (<li key={bi} className="flex items-start gap-1.5 text-[11.5px] text-slate-300 leading-relaxed"><span className="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-1.5 flex-shrink-0" /><span>{inlineFormat(b)}</span></li>))}</ul>)
+      elements.push(<ul key={`ul-${i}`} className="space-y-0.5 my-1 pl-1">{bullets.map((b, bi) => (<li key={bi} className="flex items-start gap-1.5 text-[11.5px] text-slate-300 leading-relaxed"><span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 flex-shrink-0" /><span>{inlineFormat(b)}</span></li>))}</ul>)
       continue
     }
     if (/^\d+\. /.test(line)) {
       const items: string[] = []
       while (i < lines.length && /^\d+\. /.test(lines[i])) { items.push(lines[i].replace(/^\d+\. /, '')); i++ }
-      elements.push(<ol key={`ol-${i}`} className="space-y-0.5 my-1 pl-1">{items.map((item, idx) => (<li key={idx} className="flex items-start gap-2 text-[11.5px] text-slate-300 leading-relaxed"><span className="text-[9px] font-bold text-white bg-cyan-950/60 border border-cyan-500/40 rounded w-4 h-4 flex items-center justify-center flex-shrink-0 mt-0.5">{idx + 1}</span><span>{inlineFormat(item)}</span></li>))}</ol>)
+      elements.push(<ol key={`ol-${i}`} className="space-y-0.5 my-1 pl-1">{items.map((item, idx) => (<li key={idx} className="flex items-start gap-2 text-[11.5px] text-slate-300 leading-relaxed"><span className="text-[9px] font-bold text-white bg-rose-950/60 border border-rose-500/40 rounded w-4 h-4 flex items-center justify-center flex-shrink-0 mt-0.5">{idx + 1}</span><span>{inlineFormat(item)}</span></li>))}</ol>)
       continue
     }
-    if (line.startsWith('> ')) { elements.push(<blockquote key={i} className="border-l-2 border-cyan-400 pl-2.5 my-1 text-[11px] text-slate-400 italic bg-command-900/60 py-0.5">{inlineFormat(line.slice(2))}</blockquote>); i++; continue }
-    if (/^---+$/.test(line.trim())) { elements.push(<hr key={i} className="border-cyan-900/50 my-2" />); i++; continue }
+    if (line.startsWith('> ')) { elements.push(<blockquote key={i} className="border-l-2 border-rose-500 pl-2.5 my-1 text-[11px] text-slate-400 italic bg-command-900/60 py-0.5">{inlineFormat(line.slice(2))}</blockquote>); i++; continue }
+    if (/^---+$/.test(line.trim())) { elements.push(<hr key={i} className="border-rose-900/50 my-2" />); i++; continue }
     elements.push(<p key={i} className="text-[11.5px] text-slate-300 leading-relaxed">{inlineFormat(line)}</p>)
     i++
   }
@@ -337,7 +337,7 @@ function inlineFormat(text: string): React.ReactNode {
     if (match.index > last) parts.push(text.slice(last, match.index))
     const token = match[0]
     if (token.startsWith('**')) parts.push(<strong key={match.index} className="font-bold text-white">{token.slice(2, -2)}</strong>)
-    else if (token.startsWith('`')) parts.push(<code key={match.index} className="bg-command-900 border border-cyan-900/50 px-1.5 py-0.5 rounded text-[10.5px] font-mono text-cyan-300">{token.slice(1, -1)}</code>)
+    else if (token.startsWith('`')) parts.push(<code key={match.index} className="bg-command-900 border border-rose-900/50 px-1.5 py-0.5 rounded text-[10.5px] font-mono text-rose-300">{token.slice(1, -1)}</code>)
     else if (token.startsWith('*')) parts.push(<em key={match.index} className="italic text-slate-400">{token.slice(1, -1)}</em>)
     last = match.index + token.length
   }
