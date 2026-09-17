@@ -930,7 +930,7 @@ export default function SamAICopilot() {
             requestMicAndActivate()
           }
         }}
-        className={`fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-cyan-500 via-sky-600 to-blue-700 rounded-full flex items-center justify-center shadow-[0_0_24px_rgba(0,242,254,0.45)] z-50 transition-all border border-cyan-400/40 ${fabRing}`}
+        className={`fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-rose-600 via-rose-700 to-red-800 rounded-full flex items-center justify-center shadow-[0_0_24px_rgba(255,23,68,0.5)] z-50 transition-all border border-rose-400/40 ${fabRing}`}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.94 }}
         title="SAM - Strategic Autonomous Security Copilot (Say 'Hey SAM' or click to open)"
@@ -944,7 +944,7 @@ export default function SamAICopilot() {
         ) : (
           <div className="relative flex items-center justify-center">
             <Bot className="w-6 h-6 text-white" />
-            <span className="absolute -top-1.5 -right-2 text-[8px] font-hud font-bold px-1 py-0.2 bg-cyan-300 text-black rounded-full shadow-sm">
+            <span className="absolute -top-1.5 -right-2 text-[8px] font-hud font-bold px-1 py-0.2 bg-rose-400 text-white rounded-full shadow-sm">
               SAM
             </span>
           </div>
@@ -959,15 +959,15 @@ export default function SamAICopilot() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 20 }}
             transition={{ duration: 0.22, ease: 'easeOut' }}
-            className="fixed bottom-24 right-4 sm:right-6 w-[calc(100vw-2rem)] sm:w-[500px] h-[640px] max-h-[85vh] tech-border-card bg-command-950/95 backdrop-blur-2xl border border-cyan-500/40 rounded-2xl shadow-[0_16px_50px_rgba(0,0,0,0.95),0_0_30px_rgba(0,242,254,0.2)] z-50 flex flex-col overflow-hidden text-white"
+            className="fixed bottom-24 right-4 sm:right-6 w-[calc(100vw-2rem)] sm:w-[500px] h-[640px] max-h-[85vh] tech-border-card bg-command-950/95 backdrop-blur-2xl border border-rose-500/40 rounded-2xl shadow-[0_16px_50px_rgba(0,0,0,0.95),0_0_30px_rgba(255,23,68,0.25)] z-50 flex flex-col overflow-hidden text-white"
           >
             {/* 1. Header (Fixed Height) */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-cyan-900/50 bg-command-900/90 backdrop-blur-md flex-shrink-0">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-rose-900/50 bg-command-900/90 backdrop-blur-md flex-shrink-0">
               <div className="flex items-center gap-2.5">
                 <div className="relative">
                   <motion.div
-                    className="w-8 h-8 bg-gradient-to-br from-cyan-500 via-sky-600 to-blue-700 rounded-xl flex items-center justify-center shadow-[0_0_14px_rgba(0,242,254,0.4)] border border-cyan-400/40"
-                    animate={isSpeaking ? { boxShadow: ['0 0 0px rgba(0,242,254,0.4)', '0 0 20px rgba(0,242,254,0.8)', '0 0 0px rgba(0,242,254,0.4)'] } : {}}
+                    className="w-8 h-8 bg-gradient-to-br from-rose-600 via-rose-700 to-red-800 rounded-xl flex items-center justify-center shadow-[0_0_14px_rgba(255,23,68,0.4)] border border-rose-400/40"
+                    animate={isSpeaking ? { boxShadow: ['0 0 0px rgba(255,23,68,0.4)', '0 0 20px rgba(255,23,68,0.8)', '0 0 0px rgba(255,23,68,0.4)'] } : {}}
                     transition={{ duration: 1, repeat: Infinity }}
                   >
                     {isSpeaking ? (
@@ -979,14 +979,14 @@ export default function SamAICopilot() {
                     )}
                   </motion.div>
                   <span className={`absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full border border-command-950 ${
-                    isSpeaking ? 'bg-cyan-400' : voiceState === 'awake' || voiceState === 'command-listening' ? 'bg-rose-400' : 'bg-emerald-400'
+                    isSpeaking ? 'bg-rose-400' : voiceState === 'awake' || voiceState === 'command-listening' ? 'bg-rose-400' : 'bg-emerald-400'
                   } animate-pulse`} />
                 </div>
 
                 <div>
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <h3 className="text-sm font-hud font-bold text-white tracking-wider">SAM</h3>
-                    <span className="text-[9px] font-hud font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 px-1.5 py-0.2 rounded-full flex items-center gap-0.5">
+                    <span className="text-[9px] font-hud font-bold bg-rose-500/15 text-rose-300 border border-rose-500/30 px-1.5 py-0.2 rounded-full flex items-center gap-0.5">
                       <Sparkles className="w-2.5 h-2.5" /> GEMINI AI
                     </span>
                     {voiceEnabled && (
@@ -997,7 +997,7 @@ export default function SamAICopilot() {
                   </div>
                   <p className="text-[10px] text-slate-400 font-medium">
                     {isSpeaking ? (
-                      <span className="text-cyan-300 font-bold">🔊 Speaking Response...</span>
+                      <span className="text-rose-300 font-bold">🔊 Speaking Response...</span>
                     ) : voiceState === 'command-listening' ? (
                       <span className="text-rose-400 font-bold">🎙️ Listening to your voice...</span>
                     ) : voiceState === 'processing' ? (
@@ -1015,7 +1015,7 @@ export default function SamAICopilot() {
                   <button
                     onClick={() => { if (ttsEnabled) stopSpeaking(); setTtsEnabled(!ttsEnabled) }}
                     title={ttsEnabled ? 'Mute SAM audio output' : 'Enable SAM audio speech responses'}
-                    className={`p-1.5 rounded-lg transition-all ${ttsEnabled ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 hover:bg-cyan-500/30' : 'hover:bg-command-900 text-slate-500 border border-transparent'}`}
+                    className={`p-1.5 rounded-lg transition-all ${ttsEnabled ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/30' : 'hover:bg-command-900 text-slate-500 border border-transparent'}`}
                   >
                     {ttsEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
                   </button>
@@ -1033,7 +1033,7 @@ export default function SamAICopilot() {
 
                 <button 
                   onClick={handleClose} 
-                  className="p-1.5 rounded-lg hover:bg-command-900 transition-colors text-slate-400 hover:text-white border border-transparent hover:border-cyan-900/50"
+                  className="p-1.5 rounded-lg hover:bg-command-900 transition-colors text-slate-400 hover:text-white border border-transparent hover:border-rose-900/50"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -1047,7 +1047,7 @@ export default function SamAICopilot() {
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  className="flex-shrink-0 overflow-hidden bg-cyan-950/40 border-b border-cyan-500/30"
+                  className="flex-shrink-0 overflow-hidden bg-rose-950/40 border-b border-rose-500/30"
                 >
                   <div className="px-3.5 py-1.5 flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
@@ -1055,17 +1055,17 @@ export default function SamAICopilot() {
                         {[1, 2, 3, 4, 5].map(n => (
                           <motion.div
                             key={n}
-                            className="w-0.5 bg-cyan-400 rounded-full"
+                            className="w-0.5 bg-rose-400 rounded-full"
                             animate={{ height: [`${3 + n % 3 * 3}px`, `${8 + n % 4 * 3}px`, `${3 + n % 2 * 3}px`] }}
                             transition={{ duration: 0.45 + n * 0.08, repeat: Infinity, delay: n * 0.06 }}
                           />
                         ))}
                       </div>
-                      <span className="text-[10px] font-hud font-bold text-cyan-300">SAM is speaking response...</span>
+                      <span className="text-[10px] font-hud font-bold text-rose-300">SAM is speaking response...</span>
                     </div>
                     <button
                       onClick={stopSpeaking}
-                      className="text-[9px] text-slate-300 hover:text-white bg-cyan-950/60 hover:bg-cyan-900/60 px-2 py-0.5 rounded border border-cyan-500/40 font-hud font-bold transition-all"
+                      className="text-[9px] text-slate-300 hover:text-white bg-rose-950/60 hover:bg-rose-900/60 px-2 py-0.5 rounded border border-rose-500/40 font-hud font-bold transition-all"
                     >
                       Mute Audio
                     </button>
@@ -1075,15 +1075,15 @@ export default function SamAICopilot() {
             </AnimatePresence>
 
             {/* 3. Quick Action Chips (Fixed Compact Strip) */}
-            <div className="px-3.5 py-2 flex flex-wrap gap-1 flex-shrink-0 border-b border-cyan-900/40 bg-command-900/60">
+            <div className="px-3.5 py-2 flex flex-wrap gap-1 flex-shrink-0 border-b border-rose-900/40 bg-command-900/60">
               <span className="text-[8.5px] text-slate-400 uppercase tracking-wider font-hud font-bold w-full flex items-center gap-1 mb-0.5">
-                <Navigation className="w-2.5 h-2.5 text-cyan-400" /> Quick Commands
+                <Navigation className="w-2.5 h-2.5 text-rose-400" /> Quick Commands
               </span>
               {QUICK_COMMANDS.map(q => (
                 <button
                   key={q.cmd}
                   onClick={() => processCommand(q.cmd, false)}
-                  className="text-[9.5px] bg-command-900 border border-cyan-900/50 text-slate-300 hover:text-white hover:border-cyan-400 hover:bg-cyan-500/10 px-2 py-0.5 rounded-lg transition-all font-medium"
+                  className="text-[9.5px] bg-command-900 border border-rose-900/50 text-slate-300 hover:text-white hover:border-rose-400 hover:bg-rose-500/10 px-2 py-0.5 rounded-lg transition-all font-medium"
                 >
                   {q.label}
                 </button>
@@ -1096,7 +1096,7 @@ export default function SamAICopilot() {
                 <div key={msg.id} className={`flex gap-2.5 ${msg.type === 'user' ? 'flex-row-reverse' : ''}`}>
                   {/* Avatar */}
                   {msg.type === 'bot' ? (
-                    <div className={`w-7 h-7 bg-gradient-to-br from-cyan-500 via-sky-600 to-blue-700 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm mt-0.5 transition-all border border-cyan-400/40 ${speakingMsgId === msg.id ? 'ring-2 ring-cyan-400' : ''}`}>
+                    <div className={`w-7 h-7 bg-gradient-to-br from-rose-600 via-rose-700 to-red-800 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm mt-0.5 transition-all border border-rose-400/40 ${speakingMsgId === msg.id ? 'ring-2 ring-rose-400' : ''}`}>
                       {speakingMsgId === msg.id ? (
                         <Volume2 className="w-3.5 h-3.5 text-white animate-pulse" />
                       ) : (
@@ -1104,18 +1104,18 @@ export default function SamAICopilot() {
                       )}
                     </div>
                   ) : (
-                    <div className="w-7 h-7 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm mt-0.5 border border-white/20">
-                      {msg.isVoice ? <Mic className="w-3.5 h-3.5 text-black" /> : <User className="w-3.5 h-3.5 text-black" />}
+                    <div className="w-7 h-7 bg-gradient-to-br from-rose-500 to-red-700 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm mt-0.5 border border-white/20">
+                      {msg.isVoice ? <Mic className="w-3.5 h-3.5 text-white" /> : <User className="w-3.5 h-3.5 text-white" />}
                     </div>
                   )}
 
                   {/* Message Bubble */}
                   <div className={`group rounded-xl px-3.5 py-2.5 max-w-[380px] relative ${
                     msg.type === 'user'
-                      ? `${msg.isVoice ? 'bg-amber-500/15 border border-amber-500/30 text-white' : 'bg-cyan-500/15 border border-cyan-500/30 text-white'} text-[11.5px] leading-relaxed font-medium`
+                      ? `${msg.isVoice ? 'bg-amber-500/15 border border-amber-500/30 text-white' : 'bg-rose-500/15 border border-rose-500/30 text-white'} text-[11.5px] leading-relaxed font-medium`
                       : msg.isNav
                       ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11.5px] font-hud font-bold'
-                      : 'bg-command-900/90 border border-cyan-900/50 text-white w-full'
+                      : 'bg-command-900/90 border border-rose-900/50 text-white w-full'
                   }`}>
                     {msg.type === 'user' || msg.isNav ? (
                       <span className="text-[11.5px] flex items-center gap-1.5">
@@ -1131,14 +1131,14 @@ export default function SamAICopilot() {
                             title={speakingMsgId === msg.id ? 'Stop audio' : 'Play audio speech'}
                             className={`mt-2 flex items-center gap-1 text-[9.5px] transition-all rounded px-2 py-0.5 border font-mono font-bold ${
                               speakingMsgId === msg.id
-                                ? 'text-cyan-300 bg-cyan-950/60 border-cyan-500/40'
-                                : 'text-slate-500 hover:text-white border-transparent hover:border-cyan-900/50 hover:bg-command-900'
+                                ? 'text-rose-300 bg-rose-950/60 border-rose-500/40'
+                                : 'text-slate-500 hover:text-white border-transparent hover:border-rose-900/50 hover:bg-command-900'
                             }`}
                           >
                             {speakingMsgId === msg.id ? (
                               <><VolumeX className="w-2.5 h-2.5" /> Stop Voice</>
                             ) : (
-                              <><PlayCircle className="w-2.5 h-2.5 text-cyan-400" /> Speak Out Loud</>
+                              <><PlayCircle className="w-2.5 h-2.5 text-rose-400" /> Speak Out Loud</>
                             )}
                           </button>
                         )}
@@ -1150,14 +1150,14 @@ export default function SamAICopilot() {
 
               {isLoading && (
                 <div className="flex gap-2.5">
-                  <div className="w-7 h-7 bg-gradient-to-br from-cyan-500 via-sky-600 to-blue-700 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm border border-cyan-400/40">
+                  <div className="w-7 h-7 bg-gradient-to-br from-rose-600 via-rose-700 to-red-800 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm border border-rose-400/40">
                     <Bot className="w-3.5 h-3.5 text-white" />
                   </div>
-                  <div className="bg-command-900/90 border border-cyan-900/50 rounded-xl px-4 py-3">
+                  <div className="bg-command-900/90 border border-rose-900/50 rounded-xl px-4 py-3">
                     <div className="flex gap-1.5 items-center">
-                      <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" />
-                      <div className="w-1.5 h-1.5 bg-cyan-400/70 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }} />
-                      <div className="w-1.5 h-1.5 bg-cyan-400/40 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }} />
+                      <div className="w-1.5 h-1.5 bg-rose-400 rounded-full animate-bounce" />
+                      <div className="w-1.5 h-1.5 bg-rose-400/70 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }} />
+                      <div className="w-1.5 h-1.5 bg-rose-400/40 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }} />
                     </div>
                   </div>
                 </div>
@@ -1172,20 +1172,20 @@ export default function SamAICopilot() {
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  className="flex-shrink-0 bg-command-900 border-t border-cyan-900/50 px-3.5 py-1.5 flex items-center justify-between gap-2"
+                  className="flex-shrink-0 bg-command-900 border-t border-rose-900/50 px-3.5 py-1.5 flex items-center justify-between gap-2"
                 >
                   <div className="flex items-center gap-2 overflow-hidden">
                     <div className="flex gap-0.5 items-end h-3.5 flex-shrink-0">
                       {[1, 2, 3, 4, 5].map(n => (
                         <motion.div
                           key={n}
-                          className="w-0.5 bg-cyan-400 rounded-full"
+                          className="w-0.5 bg-rose-400 rounded-full"
                           animate={{ height: ['3px', '12px', '4px', '14px', '3px'] }}
                           transition={{ duration: 0.6 + n * 0.08, repeat: Infinity, delay: n * 0.07 }}
                         />
                       ))}
                     </div>
-                    <span className="text-[10px] text-cyan-300 font-mono truncate">
+                    <span className="text-[10px] text-rose-300 font-mono truncate">
                       {interimText ? `"${interimText}"` : 'Listening to your command...'}
                     </span>
                   </div>
@@ -1198,7 +1198,7 @@ export default function SamAICopilot() {
                         setVoiceState('wake-listening')
                       }
                     }}
-                    className="text-[9px] bg-cyan-950/60 text-cyan-300 hover:bg-cyan-900/60 border border-cyan-500/40 px-2 py-0.5 rounded font-hud font-bold transition-all flex-shrink-0"
+                    className="text-[9px] bg-rose-950/60 text-rose-300 hover:bg-rose-900/60 border border-rose-500/40 px-2 py-0.5 rounded font-hud font-bold transition-all flex-shrink-0"
                   >
                     Send Now
                   </button>
@@ -1207,7 +1207,7 @@ export default function SamAICopilot() {
             </AnimatePresence>
 
             {/* 6. Input Bar (Fixed Bottom) */}
-            <div className="px-3.5 py-3 border-t border-cyan-900/50 flex-shrink-0 bg-command-900/95 backdrop-blur-md">
+            <div className="px-3.5 py-3 border-t border-rose-900/50 flex-shrink-0 bg-command-900/95 backdrop-blur-md">
               <div className="flex gap-2 items-center">
                 {voiceSupported && (
                   <button
@@ -1216,7 +1216,7 @@ export default function SamAICopilot() {
                     className={`w-9 h-9 flex items-center justify-center rounded-xl transition-all flex-shrink-0 ${
                       voiceState === 'command-listening'
                         ? 'bg-rose-500/20 border border-rose-500/50 text-rose-400 shadow-[0_0_12px_rgba(244,63,94,0.4)]'
-                        : 'bg-command-950 border border-cyan-900/50 hover:border-cyan-400 text-slate-400 hover:text-white'
+                        : 'bg-command-950 border border-rose-900/50 hover:border-rose-400 text-slate-400 hover:text-white'
                     }`}
                   >
                     <Mic className={`w-4 h-4 ${voiceState === 'command-listening' ? 'animate-pulse text-rose-400' : ''}`} />
@@ -1229,13 +1229,13 @@ export default function SamAICopilot() {
                   onChange={e => setMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder={voiceState === 'command-listening' ? '🎙️ Listening... Speak now or type...' : 'Ask SAM or say "Hey SAM [query]"...'}
-                  className="flex-1 bg-command-950 border border-cyan-900/50 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/40 transition-all font-medium font-mono"
+                  className="flex-1 bg-command-950 border border-rose-900/50 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400/40 transition-all font-medium font-mono"
                 />
 
                 <button
                   onClick={() => processCommand(message, false)}
                   disabled={isLoading || !message.trim()}
-                  className="w-9 h-9 flex items-center justify-center bg-gradient-to-br from-cyan-600 via-sky-600 to-blue-700 hover:brightness-110 disabled:opacity-40 rounded-xl transition-all shadow-[0_0_12px_rgba(0,242,254,0.3)] border border-cyan-400/40 flex-shrink-0"
+                  className="w-9 h-9 flex items-center justify-center bg-gradient-to-br from-rose-600 via-rose-700 to-red-800 hover:brightness-110 disabled:opacity-40 rounded-xl transition-all shadow-[0_0_12px_rgba(255,23,68,0.4)] border border-rose-400/40 flex-shrink-0 cursor-pointer"
                 >
                   <Send className="w-4 h-4 text-white" />
                 </button>
