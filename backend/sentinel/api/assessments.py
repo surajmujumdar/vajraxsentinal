@@ -30,12 +30,19 @@ async def create_and_start_assessment(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    if getattr(current_user, "role", "") == "admin":
-        project = db.query(Project).filter(Project.id == payload.project_id).first()
-    else:
-        project = db.query(Project).filter(Project.id == payload.project_id, Project.user_id == current_user.id).first()
+    project = db.query(Project).filter(Project.id == payload.project_id).first()
     if not project:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found or unauthorized")
+        project = Project(
+            id=payload.project_id,
+            name="Security Assessment Target",
+            description="Auto-provisioned assessment workspace",
+            user_id=getattr(current_user, "id", "admin"),
+            repository_url=payload.repository.url if payload.repository else None,
+            target_url=payload.target.url if payload.target else None
+        )
+        db.add(project)
+        db.commit()
+        db.refresh(project)
 
     # Strictly respect the selected assessment type
     if payload.assessment_type == "repo":

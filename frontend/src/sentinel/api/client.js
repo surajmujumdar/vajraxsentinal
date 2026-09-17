@@ -159,6 +159,47 @@ export const apiClient = {
           { id: '31e761f7-a500-415a-b9f2-16dd193e6123', name: 'Customer Web Portal', target_url: 'https://portal.indigo.internal', created_at: new Date().toISOString() }
         ];
       }
+      if (endpoint === '/projects' && options.method === 'POST') {
+        const bodyObj = typeof options.body === 'string' ? JSON.parse(options.body) : (options.body || {});
+        return {
+          id: 'proj-' + Math.random().toString(36).substring(2, 9),
+          name: bodyObj.name || 'Security Assessment Target',
+          description: bodyObj.description || 'Assessment project scope',
+          repository_url: bodyObj.repository_url || null,
+          target_url: bodyObj.target_url || null,
+          created_at: new Date().toISOString()
+        };
+      }
+      if (endpoint === '/assessments' && options.method === 'POST') {
+        const bodyObj = typeof options.body === 'string' ? JSON.parse(options.body) : (options.body || {});
+        return {
+          id: 'asm-' + Math.random().toString(36).substring(2, 9),
+          project_id: bodyObj.project_id || 'a81b1778-6a4a-419f-8e6d-08a501081186',
+          assessment_type: bodyObj.assessment_type || 'repo',
+          status: 'QUEUED',
+          repository_info: bodyObj.repository || {},
+          target_info: bodyObj.target || {},
+          modules: bodyObj.modules || {},
+          overall_risk_score: 0.0,
+          critical_count: 0,
+          high_count: 0,
+          medium_count: 0,
+          low_count: 0,
+          total_findings: 0,
+          logs: [
+            { timestamp: new Date().toISOString(), stage: 'INITIALIZATION', message: 'Assessment queued and orchestrating engines.' }
+          ],
+          created_at: new Date().toISOString()
+        };
+      }
+      if (endpoint === '/repositories/github/validate' && options.method === 'POST') {
+        return {
+          valid: true,
+          accessible: true,
+          default_branch: 'main',
+          message: 'Repository connection verified successfully.'
+        };
+      }
       if (endpoint === '/assets' && (!options.method || options.method === 'GET')) {
         return [
           { id: 'ast-01', target_url: 'https://portal.indigo.internal', asset_type: 'WEB_APP', risk_score: 68.0, status: 'MONITORED' },
