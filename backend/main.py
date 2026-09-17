@@ -10,11 +10,11 @@ from logging.config import dictConfig
 # Ensure paths for both VAJRA and Sentinel subsystems
 BACKEND_DIR = Path(__file__).resolve().parent
 VAJRA_DIR = BACKEND_DIR / "vajra"
+SENTINEL_DIR = BACKEND_DIR / "sentinel"
 
-if str(VAJRA_DIR) not in sys.path:
-    sys.path.insert(0, str(VAJRA_DIR))
-if str(BACKEND_DIR) not in sys.path:
-    sys.path.insert(0, str(BACKEND_DIR))
+for p in [str(SENTINEL_DIR), str(VAJRA_DIR), str(BACKEND_DIR)]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
 
 # Configure unified logging
 dictConfig({
@@ -78,26 +78,44 @@ except Exception as e:
 
 # Import Sentinel Components
 try:
-    from app.config import settings as sentinel_settings
-    from app.core.database import Base as SentinelBase, engine as sentinel_engine, SessionLocal as SentinelSessionLocal
-    from app.models import User as SentinelUser, Project as SentinelProject
-    from app.core.security import get_password_hash as sentinel_hash_password
-    from app.api import (
-        auth_router as sentinel_auth_router,
-        projects_router as sentinel_projects_router,
-        repos_router as sentinel_repos_router,
-        assessments_router as sentinel_assessments_router,
-        findings_router as sentinel_findings_router,
-        reports_router as sentinel_reports_router,
-        dashboard_router as sentinel_dashboard_router,
-        health_router as sentinel_health_router,
-        assets_router as sentinel_assets_router
-    )
+    try:
+        from app.config import settings as sentinel_settings
+        from app.core.database import Base as SentinelBase, engine as sentinel_engine, SessionLocal as SentinelSessionLocal
+        from app.models import User as SentinelUser, Project as SentinelProject
+        from app.core.security import get_password_hash as sentinel_hash_password
+        from app.api import (
+            auth_router as sentinel_auth_router,
+            projects_router as sentinel_projects_router,
+            repos_router as sentinel_repos_router,
+            assessments_router as sentinel_assessments_router,
+            findings_router as sentinel_findings_router,
+            reports_router as sentinel_reports_router,
+            dashboard_router as sentinel_dashboard_router,
+            health_router as sentinel_health_router,
+            assets_router as sentinel_assets_router
+        )
+    except Exception:
+        from sentinel.config import settings as sentinel_settings
+        from sentinel.core.database import Base as SentinelBase, engine as sentinel_engine, SessionLocal as SentinelSessionLocal
+        from sentinel.models import User as SentinelUser, Project as SentinelProject
+        from sentinel.core.security import get_password_hash as sentinel_hash_password
+        from sentinel.api import (
+            auth_router as sentinel_auth_router,
+            projects_router as sentinel_projects_router,
+            repos_router as sentinel_repos_router,
+            assessments_router as sentinel_assessments_router,
+            findings_router as sentinel_findings_router,
+            reports_router as sentinel_reports_router,
+            dashboard_router as sentinel_dashboard_router,
+            health_router as sentinel_health_router,
+            assets_router as sentinel_assets_router
+        )
     SENTINEL_AVAILABLE = True
     logger.info("[SENTINEL] Core modules imported successfully.")
 except Exception as e:
     SENTINEL_AVAILABLE = False
     logger.error(f"[SENTINEL] Failed to import Sentinel modules: {e}")
+
 
 
 @asynccontextmanager
