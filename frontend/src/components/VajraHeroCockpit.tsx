@@ -253,7 +253,7 @@ function HolographicThreatRadarCanvas() {
 
     const threatHotspots = [
       { name: 'North America DC', origX: -60, origY: -45, origZ: 75, color: '#ff1744' },
-      { name: 'Europe Central Edge', origX: 20, origY: -65, origZ: 75, color: '#00f2fe' },
+      { name: 'Europe Central Edge', origX: 20, origY: -65, origZ: 75, color: '#ff5252' },
       { name: 'Asia-Pacific Core', origX: 85, origY: -10, origZ: 60, color: '#ff5722' },
       { name: 'South America Relay', origX: -40, origY: 55, origZ: 65, color: '#c084fc' },
       { name: 'East Asia Gateway', origX: 75, origY: 30, origZ: 60, color: '#fbbf24' }
@@ -265,7 +265,7 @@ function HolographicThreatRadarCanvas() {
       speed: 0.015 + (i % 3) * 0.008,
       tilt: 0.35 + (i % 2) * 0.25,
       size: 1.5 + (i % 2) * 1,
-      color: i % 2 === 0 ? '#ff1744' : '#00f2fe'
+      color: i % 2 === 0 ? '#ff1744' : '#e11d48'
     }))
 
     let rotY = 0
@@ -289,7 +289,7 @@ function HolographicThreatRadarCanvas() {
       ;[138, 126, 88].forEach((r, idx) => {
         ctx.beginPath()
         ctx.arc(centerX, centerY, r, 0, Math.PI * 2)
-        ctx.strokeStyle = `rgba(56, 189, 248, ${0.16 - idx * 0.04})`
+        ctx.strokeStyle = `rgba(255, 23, 68, ${0.2 - idx * 0.05})`
         ctx.lineWidth = idx === 0 ? 1.5 : 0.8
         if (idx === 1) ctx.setLineDash([3, 6])
         ctx.stroke()
@@ -297,7 +297,7 @@ function HolographicThreatRadarCanvas() {
       })
 
       // Crosshair Reticles
-      ctx.strokeStyle = 'rgba(56, 189, 248, 0.25)'
+      ctx.strokeStyle = 'rgba(255, 23, 68, 0.3)'
       ctx.lineWidth = 1
       ctx.beginPath()
       ctx.moveTo(centerX - 145, centerY)
@@ -338,7 +338,7 @@ function HolographicThreatRadarCanvas() {
             }
           }
         }
-        ctx.strokeStyle = `rgba(56, 189, 248, ${lat === 0 ? 0.25 : 0.12})`
+        ctx.strokeStyle = `rgba(255, 23, 68, ${lat === 0 ? 0.3 : 0.15})`
         ctx.lineWidth = lat === 0 ? 1.2 : 0.8
         ctx.setLineDash([2, 4])
         ctx.stroke()
@@ -360,13 +360,13 @@ function HolographicThreatRadarCanvas() {
         if (z2 > 0) {
           const isFront = z2 > sphereRadius * 0.4
           ctx.fillStyle = isFront
-            ? `rgba(255, 255, 255, ${0.45 + depth * 0.5})`
-            : `rgba(255, 23, 68, ${0.25 + depth * 0.5})`
+            ? `rgba(255, 255, 255, ${0.5 + depth * 0.5})`
+            : `rgba(255, 23, 68, ${0.3 + depth * 0.5})`
           ctx.beginPath()
           ctx.arc(screenX, screenY, radius, 0, Math.PI * 2)
           ctx.fill()
         } else {
-          ctx.fillStyle = `rgba(136, 8, 21, ${0.12 + depth * 0.2})`
+          ctx.fillStyle = `rgba(136, 8, 21, ${0.15 + depth * 0.2})`
           ctx.beginPath()
           ctx.arc(screenX, screenY, radius * 0.7, 0, Math.PI * 2)
           ctx.fill()
@@ -421,7 +421,7 @@ function HolographicThreatRadarCanvas() {
             const midX = (p1.screenX + p2.screenX) / 2
             const midY = (p1.screenY + p2.screenY) / 2 - 14
 
-            ctx.strokeStyle = 'rgba(255, 23, 68, 0.45)'
+            ctx.strokeStyle = 'rgba(255, 23, 68, 0.5)'
             ctx.lineWidth = 1.2
             ctx.setLineDash([2, 3])
             ctx.beginPath()
@@ -434,10 +434,10 @@ function HolographicThreatRadarCanvas() {
             const beadX = Math.pow(1 - packetT, 2) * p1.screenX + 2 * (1 - packetT) * packetT * midX + Math.pow(packetT, 2) * p2.screenX
             const beadY = Math.pow(1 - packetT, 2) * p1.screenY + 2 * (1 - packetT) * packetT * midY + Math.pow(packetT, 2) * p2.screenY
 
-            ctx.fillStyle = '#00f2fe'
+            ctx.fillStyle = '#ff1744'
             ctx.beginPath()
             ctx.arc(beadX, beadY, 2, 0, Math.PI * 2)
-            ctx.shadowColor = '#00f2fe'
+            ctx.shadowColor = '#ff1744'
             ctx.shadowBlur = 8
             ctx.fill()
             ctx.shadowBlur = 0
