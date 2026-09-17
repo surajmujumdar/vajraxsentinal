@@ -77,6 +77,7 @@ except Exception as e:
     logger.error(f"[VAJRA] Failed to import VAJRA modules: {e}")
 
 # Import Sentinel Components
+SENTINEL_ERROR = None
 try:
     try:
         from app.config import settings as sentinel_settings
@@ -94,7 +95,7 @@ try:
             health_router as sentinel_health_router,
             assets_router as sentinel_assets_router
         )
-    except Exception:
+    except Exception as inner_e:
         from sentinel.config import settings as sentinel_settings
         from sentinel.core.database import Base as SentinelBase, engine as sentinel_engine, SessionLocal as SentinelSessionLocal
         from sentinel.models import User as SentinelUser, Project as SentinelProject
@@ -113,6 +114,8 @@ try:
     SENTINEL_AVAILABLE = True
     logger.info("[SENTINEL] Core modules imported successfully.")
 except Exception as e:
+    import traceback
+    SENTINEL_ERROR = f"{e}\n{traceback.format_exc()}"
     SENTINEL_AVAILABLE = False
     logger.error(f"[SENTINEL] Failed to import Sentinel modules: {e}")
 
@@ -358,7 +361,8 @@ def unified_health():
             },
             "sentinel": {
                 "status": "ONLINE" if SENTINEL_AVAILABLE else "OFFLINE",
-                "database": "sentinal.db"
+                "database": "sentinal.db",
+                "error": SENTINEL_ERROR if not SENTINEL_AVAILABLE else None
             }
         }
     }
