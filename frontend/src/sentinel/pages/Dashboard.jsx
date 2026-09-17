@@ -56,16 +56,7 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
     const rawLow = metrics?.severity_distribution?.LOW ?? 0;
     const rawInfo = metrics?.severity_distribution?.INFO ?? 0;
 
-    if (vulnTimeFilter === '24h') {
-      return { CRITICAL: rawCrit, HIGH: rawHigh, MEDIUM: rawMed, LOW: rawLow, INFO: rawInfo };
-    } else if (vulnTimeFilter === '3d') {
-      return { CRITICAL: Math.round(rawCrit * 0.82), HIGH: Math.round(rawHigh * 0.82), MEDIUM: Math.round(rawMed * 0.82), LOW: Math.round(rawLow * 0.82), INFO: Math.round(rawInfo * 0.82) };
-    } else if (vulnTimeFilter === '7d') {
-      return { CRITICAL: Math.round(rawCrit * 0.65), HIGH: Math.round(rawHigh * 0.65), MEDIUM: Math.round(rawMed * 0.65), LOW: Math.round(rawLow * 0.65), INFO: Math.round(rawInfo * 0.65) };
-    } else {
-      // 30d
-      return { CRITICAL: Math.round(rawCrit * 0.38), HIGH: Math.round(rawHigh * 0.38), MEDIUM: Math.round(rawMed * 0.38), LOW: Math.round(rawLow * 0.38), INFO: Math.round(rawInfo * 0.38) };
-    }
+    return { CRITICAL: rawCrit, HIGH: rawHigh, MEDIUM: rawMed, LOW: rawLow, INFO: rawInfo };
   };
 
   const dist = getFilteredDistribution();
