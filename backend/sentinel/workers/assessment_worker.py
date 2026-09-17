@@ -21,8 +21,18 @@ from app.pipeline import (
     correlate_findings,
     apply_risk_scoring
 )
-from app.ai import ai_engine
-from app.reports import report_generator
+try:
+    from app.ai import ai_engine
+except Exception:
+    from sentinel.ai import ai_engine
+
+try:
+    from app.reports.generator import report_generator
+except Exception:
+    try:
+        from sentinel.reports.generator import report_generator
+    except Exception:
+        from app.reports import report_generator
 
 def update_assessment_log(db: Session, assessment_id: str, stage: str, message: str, status: Optional[str] = None):
     assessment = db.query(Assessment).filter(Assessment.id == assessment_id).first()
