@@ -37,7 +37,7 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
   const [severity, setSeverity] = useState('');
   const [source, setSource] = useState(initialSource);
   const [statusFilter, setStatusFilter] = useState('open'); // Default to open
-  const [limit, setLimit] = useState(250);
+  const [limit, setLimit] = useState(500);
 
   useEffect(() => {
     setSource(initialSource);
@@ -73,7 +73,7 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
         severity: severity || undefined,
         source: source || undefined,
         status: statusFilter === 'all' ? undefined : (statusFilter || undefined),
-        limit: limit || 250,
+        limit: limit || 500,
       });
       // Handle both paginated { items: [] } and raw array responses
       const items = res?.items || (Array.isArray(res) ? res : []);
@@ -115,7 +115,7 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
     setSeverity('');
     setSource('');
     setStatusFilter('open');
-    setLimit(250);
+    setLimit(500);
   };
 
   const handleQuickResolve = async (e, f) => {
@@ -191,7 +191,9 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
               <div className="text-lg font-hud font-bold text-rose-400 mt-0.5">
                 {statusFilter === 'resolved' 
                   ? `${findings.length} RESOLVED` 
-                  : `${displayOpenCount} OPEN FINDINGS`}
+                  : statusFilter === 'all'
+                    ? `${findings.length} TOTAL (ALL)`
+                    : `${displayOpenCount} OPEN FINDINGS`}
               </div>
             </div>
             <AlertTriangle className="w-6 h-6 text-rose-400/80" />
@@ -207,8 +209,10 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
 
           <div className="p-3 rounded-lg bg-command-900/80 border border-emerald-500/30 flex items-center justify-between">
             <div>
-              <div className="text-[10px] text-slate-400 uppercase tracking-wider">AUTO RESOLUTION ENGINE</div>
-              <div className="text-lg font-hud font-bold text-emerald-400 mt-0.5">AUTO-PURGE ON RESOLVE</div>
+              <div className="text-[10px] text-slate-400 uppercase tracking-wider">DISPLAYED / DATABASE</div>
+              <div className="text-lg font-hud font-bold text-emerald-400 mt-0.5">
+                {findings.length} LOADED ({limit} CAP)
+              </div>
             </div>
             <Trash2 className="w-6 h-6 text-emerald-400/80" />
           </div>
@@ -218,12 +222,12 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
       {/* SEARCH & HUD FILTERS TOOLBAR */}
       <div className="tech-border-card rounded-xl bg-command-950/90 border border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.1)] p-4 backdrop-blur-md">
         <form onSubmit={handleSearchSubmit} className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
-          <div className="md:col-span-4 relative">
+          <div className="md:col-span-3 relative">
             <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
             <input
               type="text"
               className="w-full bg-command-900/90 border border-cyan-900/60 rounded-lg pl-9 pr-3 py-2 text-xs font-mono text-cyan-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400"
-              placeholder="Search title, file, CVE, CWE, endpoint..."
+              placeholder="Search title, file, CVE, endpoint..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -243,19 +247,19 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
             </select>
           </div>
 
-          <div className="md:col-span-3">
+          <div className="md:col-span-2">
             <select
               className="w-full bg-command-900/90 border border-cyan-900/60 rounded-lg px-3 py-2 text-xs font-mono text-cyan-200 focus:outline-none focus:border-cyan-400"
               value={source}
               onChange={(e) => setSource(e.target.value)}
             >
-              <option value="">ALL ENGINES & SOURCES</option>
-              <option value="SAST">SAST (Semgrep / Static)</option>
-              <option value="SCA">SCA (OSV Database)</option>
-              <option value="SECRETS">Secret Detection</option>
-              <option value="DAST">DAST (ZAP Spider)</option>
-              <option value="WEB">Web (Nuclei Templates)</option>
-              <option value="SSL">SSL / TLS Auditor</option>
+              <option value="">ALL ENGINES</option>
+              <option value="SAST">SAST (Semgrep)</option>
+              <option value="SCA">SCA (OSV DB)</option>
+              <option value="SECRETS">Secrets (Gitleaks)</option>
+              <option value="DAST">DAST (ZAP)</option>
+              <option value="WEB">Web (Nuclei)</option>
+              <option value="SSL">SSL / TLS</option>
             </select>
           </div>
 
@@ -265,9 +269,23 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
-              <option value="open">OPEN STATUS ONLY</option>
+              <option value="open">OPEN ONLY</option>
               <option value="resolved">RESOLVED ONLY</option>
               <option value="all">ALL STATUSES</option>
+            </select>
+          </div>
+
+          <div className="md:col-span-1">
+            <select
+              className="w-full bg-command-900/90 border border-cyan-900/60 rounded-lg px-2 py-2 text-xs font-mono text-cyan-200 focus:outline-none focus:border-cyan-400"
+              value={limit}
+              onChange={(e) => setLimit(Number(e.target.value))}
+              title="Page display limit"
+            >
+              <option value={50}>50</option>
+              <option value={100}>100</option>
+              <option value={250}>250</option>
+              <option value={500}>500</option>
             </select>
           </div>
 
@@ -277,9 +295,9 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
               className="flex-1 py-2 bg-cyan-500/20 border border-cyan-400/60 hover:bg-cyan-500 hover:text-black text-cyan-300 font-hud font-bold text-xs rounded-lg transition-colors shadow-[0_0_10px_rgba(56,189,248,0.3)] flex items-center justify-center space-x-1"
             >
               <Search className="w-3.5 h-3.5" />
-              <span>SEARCH</span>
+              <span>FILTER</span>
             </button>
-            {(search || severity || source || statusFilter !== 'open') && (
+            {(search || severity || source || statusFilter !== 'open' || limit !== 500) && (
               <button
                 type="button"
                 onClick={handleResetFilters}
