@@ -137,10 +137,10 @@ export default function Navbar() {
     <header
       style={{
         height: '50px',
-        backgroundColor: 'rgba(4, 8, 20, 0.95)',
+        backgroundColor: 'rgba(12, 2, 7, 0.96)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
-        borderBottom: '1px solid rgba(56, 189, 248, 0.2)',
+        borderBottom: '1px solid rgba(255, 23, 68, 0.22)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -161,12 +161,12 @@ export default function Navbar() {
             gap: '6px',
             padding: '4px 10px',
             borderRadius: '8px',
-            background: 'rgba(6, 182, 212, 0.1)',
-            border: '1px solid rgba(56, 189, 248, 0.4)',
+            background: 'rgba(255, 23, 68, 0.12)',
+            border: '1px solid rgba(255, 23, 68, 0.4)',
             fontSize: '10.5px',
             fontWeight: 800,
-            color: '#38bdf8',
-            boxShadow: '0 0 12px rgba(6, 182, 212, 0.2)',
+            color: '#ff5252',
+            boxShadow: '0 0 12px rgba(255, 23, 68, 0.25)',
             fontFamily: 'var(--font-mono)',
             whiteSpace: 'nowrap'
           }}
@@ -176,8 +176,8 @@ export default function Navbar() {
               width: '6px',
               height: '6px',
               borderRadius: '50%',
-              background: '#00f2fe',
-              boxShadow: '0 0 8px #00f2fe',
+              background: '#ff1744',
+              boxShadow: '0 0 8px #ff1744',
               flexShrink: 0
             }}
             className="animate-pulse"
@@ -188,7 +188,7 @@ export default function Navbar() {
         </div>
 
         {/* DEFCON Level Badge */}
-        <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-rose-500/10 border border-rose-500/30 text-[10px] font-mono font-bold text-rose-400">
+        <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-rose-500/15 border border-rose-500/40 text-[10px] font-mono font-bold text-rose-300 shadow-[0_0_10px_rgba(255,23,68,0.25)]">
           <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
           <span>DEFCON: LEVEL 2</span>
         </div>
@@ -210,14 +210,14 @@ export default function Navbar() {
               gap: '6px',
               padding: '4px 10px',
               borderRadius: '8px',
-              background: 'rgba(7, 15, 36, 0.8)',
-              border: '1px solid rgba(56, 189, 248, 0.25)',
+              background: 'rgba(17, 2, 7, 0.85)',
+              border: '1px solid rgba(255, 23, 68, 0.25)',
               color: '#94a3b8',
               width: '145px',
               height: '30px',
               transition: 'all 0.15s'
             }}
-            className="lg:w-[175px] focus-within:border-cyan-400 focus-within:shadow-[0_0_12px_rgba(0,242,254,0.35)]"
+            className="lg:w-[175px] focus-within:border-rose-400 focus-within:shadow-[0_0_12px_rgba(255,23,68,0.45)]"
           >
             <Search size={12} color="#94a3b8" className="flex-shrink-0" />
             <input
@@ -241,9 +241,9 @@ export default function Navbar() {
                 fontFamily: 'var(--font-mono)',
                 padding: '1px 5px',
                 borderRadius: '3px',
-                background: 'rgba(15, 29, 66, 0.8)',
+                background: 'rgba(30, 4, 13, 0.8)',
                 color: '#94a3b8',
-                border: '1px solid rgba(56, 189, 248, 0.2)',
+                border: '1px solid rgba(255, 23, 68, 0.2)',
                 flexShrink: 0
               }}
             >
@@ -264,10 +264,10 @@ export default function Navbar() {
               fontWeight: 800,
               letterSpacing: '0.4px',
               borderRadius: '8px',
-              background: 'linear-gradient(90deg, #00f2fe 0%, #0284c7 100%)',
-              border: '1px solid #00f2fe',
-              color: '#020617',
-              boxShadow: '0 0 12px rgba(0, 242, 254, 0.4)',
+              background: 'linear-gradient(90deg, #ff1744 0%, #b7092b 100%)',
+              border: '1px solid #ff1744',
+              color: '#ffffff',
+              boxShadow: '0 0 12px rgba(255, 23, 68, 0.5)',
               display: 'flex',
               alignItems: 'center',
               gap: '5px',
@@ -288,10 +288,10 @@ export default function Navbar() {
                 top: '100%',
                 marginTop: '6px',
                 width: '210px',
-                backgroundColor: '#040814',
-                border: '1px solid rgba(56, 189, 248, 0.3)',
+                backgroundColor: '#070104',
+                border: '1px solid rgba(255, 23, 68, 0.3)',
                 borderRadius: '10px',
-                boxShadow: '0 12px 36px rgba(0, 0, 0, 0.95), 0 0 20px rgba(6, 182, 212, 0.2)',
+                boxShadow: '0 12px 36px rgba(0, 0, 0, 0.95), 0 0 20px rgba(255, 23, 68, 0.25)',
                 zIndex: 50,
                 overflow: 'hidden',
                 padding: '4px'
@@ -299,24 +299,24 @@ export default function Navbar() {
             >
               <button
                 onClick={() => handleDownloadReport('dashboard')}
-                className="w-full text-left px-3 py-2 text-xs font-bold text-white hover:bg-cyan-500/15 rounded-md flex items-center justify-between transition-colors"
+                className="w-full text-left px-3 py-2 text-xs font-bold text-white hover:bg-rose-500/15 rounded-md flex items-center justify-between transition-colors"
               >
                 <span>Full Security Audit</span>
-                <span className="text-[9.5px] text-cyan-400 font-mono font-bold">PDF</span>
+                <span className="text-[9.5px] text-rose-400 font-mono font-bold">PDF</span>
               </button>
               <button
                 onClick={() => handleDownloadReport('threat-intelligence')}
-                className="w-full text-left px-3 py-2 text-xs font-bold text-white hover:bg-cyan-500/15 rounded-md flex items-center justify-between transition-colors"
+                className="w-full text-left px-3 py-2 text-xs font-bold text-white hover:bg-rose-500/15 rounded-md flex items-center justify-between transition-colors"
               >
                 <span>Threat Intel Brief</span>
-                <span className="text-[9.5px] text-cyan-400 font-mono font-bold">PDF</span>
+                <span className="text-[9.5px] text-rose-400 font-mono font-bold">PDF</span>
               </button>
               <button
                 onClick={() => handleDownloadReport('ransomware')}
-                className="w-full text-left px-3 py-2 text-xs font-bold text-white hover:bg-cyan-500/15 rounded-md flex items-center justify-between transition-colors"
+                className="w-full text-left px-3 py-2 text-xs font-bold text-white hover:bg-rose-500/15 rounded-md flex items-center justify-between transition-colors"
               >
                 <span>Ransomware Report</span>
-                <span className="text-[9.5px] text-cyan-400 font-mono font-bold">PDF</span>
+                <span className="text-[9.5px] text-rose-400 font-mono font-bold">PDF</span>
               </button>
             </div>
           )}
@@ -331,16 +331,16 @@ export default function Navbar() {
               width: '30px',
               height: '30px',
               borderRadius: '8px',
-              background: 'rgba(7, 15, 36, 0.8)',
-              border: '1px solid rgba(56, 189, 248, 0.25)',
-              color: unreadCount > 0 ? '#00f2fe' : '#94a3b8',
+              background: 'rgba(17, 2, 7, 0.85)',
+              border: '1px solid rgba(255, 23, 68, 0.25)',
+              color: unreadCount > 0 ? '#ff1744' : '#94a3b8',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
               transition: 'all 0.15s'
             }}
-            className="hover:border-cyan-400 hover:shadow-[0_0_10px_rgba(0,242,254,0.3)]"
+            className="hover:border-rose-400 hover:shadow-[0_0_10px_rgba(255,23,68,0.4)]"
           >
             <Bell size={14} />
             {unreadCount > 0 && (
@@ -353,14 +353,14 @@ export default function Navbar() {
                   height: '16px',
                   padding: '0 4px',
                   borderRadius: '8px',
-                  background: '#f43f5e',
+                  background: '#ff1744',
                   color: '#ffffff',
                   fontSize: '9px',
                   fontWeight: 900,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 0 8px #f43f5e'
+                  boxShadow: '0 0 8px #ff1744'
                 }}
               >
                 {unreadCount > 99 ? '99+' : unreadCount}
@@ -376,17 +376,17 @@ export default function Navbar() {
                 top: '100%',
                 marginTop: '8px',
                 width: '320px',
-                backgroundColor: '#040814',
-                border: '1px solid rgba(56, 189, 248, 0.3)',
+                backgroundColor: '#070104',
+                border: '1px solid rgba(255, 23, 68, 0.3)',
                 borderRadius: '12px',
-                boxShadow: '0 16px 48px rgba(0, 0, 0, 0.95), 0 0 24px rgba(6, 182, 212, 0.2)',
+                boxShadow: '0 16px 48px rgba(0, 0, 0, 0.95), 0 0 24px rgba(255, 23, 68, 0.25)',
                 zIndex: 50,
                 overflow: 'hidden'
               }}
             >
-              <div className="flex items-center justify-between p-3 border-b border-cyan-900/40 bg-command-900">
+              <div className="flex items-center justify-between p-3 border-b border-rose-900/40 bg-command-900">
                 <div className="flex items-center gap-2">
-                  <Shield size={14} className="text-cyan-400" />
+                  <Shield size={14} className="text-rose-400" />
                   <span className="text-xs font-bold text-white uppercase tracking-wider">Alert Center</span>
                   {unreadCount > 0 && (
                     <span className="text-[9px] font-mono font-bold text-rose-400 bg-rose-500/20 border border-rose-500/40 px-1.5 py-0.2 rounded">
@@ -411,14 +411,14 @@ export default function Navbar() {
               </div>
 
               {/* Filter Tabs */}
-              <div className="flex border-b border-cyan-900/40 bg-command-950 p-1 gap-1">
+              <div className="flex border-b border-rose-900/40 bg-command-950 p-1 gap-1">
                 {(['ALL', 'CRITICAL', 'RANSOMWARE', 'GDELT'] as const).map((filter) => (
                   <button
                     key={filter}
                     onClick={() => setNotifFilter(filter)}
                     className={`flex-1 py-1 text-[8.5px] font-mono font-bold rounded transition-colors ${
                       notifFilter === filter
-                        ? 'bg-cyan-500/20 border border-cyan-400/40 text-cyan-200'
+                        ? 'bg-rose-500/20 border border-rose-400/40 text-rose-200'
                         : 'text-slate-400 hover:text-slate-200'
                     }`}
                   >
@@ -428,7 +428,7 @@ export default function Navbar() {
               </div>
 
               {/* Notification Items */}
-              <div className="max-h-64 overflow-y-auto divide-y divide-cyan-900/30">
+              <div className="max-h-64 overflow-y-auto divide-y divide-rose-900/30">
                 {filteredNotifs.length === 0 ? (
                   <div className="p-6 text-center text-xs text-slate-500 font-mono">
                     No alerts found in this category
@@ -438,8 +438,8 @@ export default function Navbar() {
                     <div
                       key={n.id}
                       onClick={() => markAsRead(n.id)}
-                      className={`p-2.5 hover:bg-cyan-500/10 cursor-pointer transition-colors ${
-                        !n.is_read ? 'bg-cyan-500/5' : ''
+                      className={`p-2.5 hover:bg-rose-500/10 cursor-pointer transition-colors ${
+                        !n.is_read ? 'bg-rose-500/5' : ''
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
@@ -448,10 +448,10 @@ export default function Navbar() {
                             <span
                               className={`text-[8px] font-mono font-bold px-1 py-0.2 rounded border ${
                                 n.severity === 'CRITICAL'
-                                  ? 'bg-rose-500/20 border-rose-500/40 text-rose-300'
-                                  : n.severity === 'HIGH'
-                                  ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
-                                  : 'bg-slate-800 border-slate-700 text-slate-300'
+                                    ? 'bg-rose-500/20 border-rose-500/40 text-rose-300'
+                                    : n.severity === 'HIGH'
+                                    ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
+                                    : 'bg-slate-800 border-slate-700 text-slate-300'
                               }`}
                             >
                               {n.severity}
@@ -465,7 +465,7 @@ export default function Navbar() {
                           </p>
                         </div>
                         {!n.is_read && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#00f2fe] flex-shrink-0 mt-1" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shadow-[0_0_6px_#ff1744] flex-shrink-0 mt-1" />
                         )}
                       </div>
                     </div>
@@ -473,13 +473,13 @@ export default function Navbar() {
                 )}
               </div>
 
-              <div className="p-2 border-t border-cyan-900/40 bg-command-950 text-center">
+              <div className="p-2 border-t border-rose-900/40 bg-command-950 text-center">
                 <button
                   onClick={() => {
                     setNotificationsOpen(false)
                     router.push('/alerts')
                   }}
-                  className="text-[10px] font-mono font-bold text-cyan-400 hover:underline"
+                  className="text-[10px] font-mono font-bold text-rose-400 hover:underline"
                 >
                   View All Alerts →
                 </button>
@@ -495,7 +495,7 @@ export default function Navbar() {
             alignItems: 'center',
             gap: '8px',
             paddingLeft: '8px',
-            borderLeft: '1px solid rgba(56, 189, 248, 0.2)',
+            borderLeft: '1px solid rgba(255, 23, 68, 0.2)',
             flexShrink: 0
           }}
         >
@@ -504,13 +504,13 @@ export default function Navbar() {
               width: '28px',
               height: '28px',
               borderRadius: '8px',
-              background: 'linear-gradient(135deg, #00f2fe 0%, #0284c7 100%)',
-              border: '1px solid #00f2fe',
-              boxShadow: '0 0 8px rgba(0, 242, 254, 0.4)',
+              background: 'linear-gradient(135deg, #ff1744 0%, #b7092b 100%)',
+              border: '1px solid #ff1744',
+              boxShadow: '0 0 8px rgba(255, 23, 68, 0.5)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#020617',
+              color: '#ffffff',
               flexShrink: 0
             }}
           >
@@ -534,7 +534,7 @@ export default function Navbar() {
               style={{
                 fontSize: '8.5px',
                 fontWeight: 800,
-                color: '#38bdf8',
+                color: '#ff5252',
                 letterSpacing: '0.6px',
                 fontFamily: 'var(--font-mono)'
               }}
