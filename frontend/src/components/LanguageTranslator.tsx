@@ -68,137 +68,135 @@ export default function LanguageTranslator() {
   // 2. High-Speed Direct DOM Translation Engine
   useEffect(() => {
     if (typeof window === 'undefined' || !document.body) return
+    if (currentLanguage === 'en') return // No DOM manipulation needed for standard English
 
     const dict = DICTIONARY[currentLanguage] || {}
-    const isEnglish = currentLanguage === 'en'
+    if (Object.keys(dict).length === 0) return
 
     // Sort dictionary keys longest-first to prevent partial collisions
     const sortedKeys = Object.keys(dict).sort((a, b) => b.length - a.length)
 
     function translateString(text: string): string {
-      if (!text || text.trim().length === 0) return text
-      if (isEnglish) return text
+      try {
+        if (!text || text.trim().length === 0) return text
+        const trimmed = text.trim()
+        if (/^[\d\s,.\/+%()\-:]+$/.test(trimmed)) return text
 
-      const trimmed = text.trim()
-      // Protect pure numbers, counts, and stats from accidental translation replacement
-      if (/^[\d\s,.\/+%()\-:]+$/.test(trimmed)) return text
-
-      // Exact match check
-      if (dict[trimmed]) {
-        return text.replace(trimmed, dict[trimmed])
-      }
-
-      // Partial phrase replacement
-      let replaced = text
-      for (const key of sortedKeys) {
-        if (key && replaced.includes(key)) {
-          replaced = replaced.split(key).join(dict[key])
+        if (dict[trimmed]) {
+          return text.replace(trimmed, dict[trimmed])
         }
+
+        let replaced = text
+        for (const key of sortedKeys) {
+          if (key && replaced.includes(key)) {
+            replaced = replaced.split(key).join(dict[key])
+          }
+        }
+        return replaced
+      } catch {
+        return text
       }
-      return replaced
     }
 
     function processNode(node: Node) {
-      if (node.nodeType === Node.TEXT_NODE) {
-        const currentVal = node.nodeValue || ''
-        if (!currentVal.trim()) return
+      try {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const currentVal = node.nodeValue || ''
+          if (!currentVal.trim()) return
 
-        // Skip non-translatable parent elements
-        const parent = node.parentElement
-        if (parent) {
-          const tagName = parent.tagName.toLowerCase()
-          if (['script', 'style', 'noscript', 'code', 'pre'].includes(tagName)) return
-          if (parent.classList.contains('notranslate')) return
-        }
-
-        // Store original text on first encounter
-        if (!originalTextMap.has(node)) {
-          originalTextMap.set(node, currentVal)
-        }
-
-        const originalText = originalTextMap.get(node) || currentVal
-
-        if (isEnglish) {
-          if (node.nodeValue !== originalText) {
-            node.nodeValue = originalText
+          const parent = node.parentElement
+          if (parent) {
+            const tagName = parent.tagName.toLowerCase()
+            if (['script', 'style', 'noscript', 'code', 'pre'].includes(tagName)) return
+            if (parent.classList.contains('notranslate')) return
           }
-        } else {
+
+          if (!originalTextMap.has(node)) {
+            originalTextMap.set(node, currentVal)
+          }
+
+          const originalText = originalTextMap.get(node) || currentVal
           const translated = translateString(originalText)
           if (node.nodeValue !== translated) {
             node.nodeValue = translated
           }
-        }
-      } else if (node.nodeType === Node.ELEMENT_NODE) {
-        const el = node as HTMLElement
-        const tagName = el.tagName.toLowerCase()
-        if (['script', 'style', 'noscript', 'code', 'pre'].includes(tagName)) return
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          const el = node as HTMLElement
+          const tagName = el.tagName.toLowerCase()
+          if (['script', 'style', 'noscript', 'code', 'pre'].includes(tagName)) return
 
-        // Translate Placeholder
-        if (el.hasAttribute('placeholder')) {
-          const currentPh = el.getAttribute('placeholder') || ''
-          if (!originalPlaceholderMap.has(el)) {
-            originalPlaceholderMap.set(el, currentPh)
+          if (el.hasAttribute('placeholder')) {
+            const currentPh = el.getAttribute('placeholder') || ''
+            if (!originalPlaceholderMap.has(el)) {
+              originalPlaceholderMap.set(el, currentPh)
+            }
+            const origPh = originalPlaceholderMap.get(el) || currentPh
+            el.setAttribute('placeholder', translateString(origPh))
           }
-          const origPh = originalPlaceholderMap.get(el) || currentPh
-          el.setAttribute('placeholder', isEnglish ? origPh : translateString(origPh))
-        }
 
-        // Translate Title Attribute
-        if (el.hasAttribute('title')) {
-          const currentTitle = el.getAttribute('title') || ''
-          if (!originalTitleMap.has(el)) {
-            originalTitleMap.set(el, currentTitle)
+          if (el.hasAttribute('title')) {
+            const currentTitle = el.getAttribute('title') || ''
+            if (!originalTitleMap.has(el)) {
+              originalTitleMap.set(el, currentTitle)
+            }
+            const origTitle = originalTitleMap.get(el) || currentTitle
+            el.setAttribute('title', translateString(origTitle))
           }
-          const origTitle = originalTitleMap.get(el) || currentTitle
-          el.setAttribute('title', isEnglish ? origTitle : translateString(origTitle))
-        }
 
-        // Translate Aria-Label
-        if (el.hasAttribute('aria-label')) {
-          const currentAria = el.getAttribute('aria-label') || ''
-          if (!originalAriaMap.has(el)) {
-            originalAriaMap.set(el, currentAria)
+          if (el.hasAttribute('aria-label')) {
+            const currentAria = el.getAttribute('aria-label') || ''
+            if (!originalAriaMap.has(el)) {
+              originalAriaMap.set(el, currentAria)
+            }
+            const origAria = originalAriaMap.get(el) || currentAria
+            el.setAttribute('aria-label', translateString(origAria))
           }
-          const origAria = originalAriaMap.get(el) || currentAria
-          el.setAttribute('aria-label', isEnglish ? origAria : translateString(origAria))
-        }
 
-        // Recursively translate children
-        el.childNodes.forEach(processNode)
+          el.childNodes.forEach(processNode)
+        }
+      } catch (err) {
+        // Safe failover
       }
     }
 
-    // Execute full DOM sweep
+    // Execute full DOM sweep safely
     isTranslatingRef.current = true
-    processNode(document.body)
+    try {
+      processNode(document.body)
+    } catch {}
     isTranslatingRef.current = false
 
-    // Dynamic MutationObserver for AJAX data, Modals, Feed updates
+    // Dynamic MutationObserver for non-English DOM updates
     const observer = new MutationObserver((mutations) => {
       if (isTranslatingRef.current) return
       isTranslatingRef.current = true
 
-      mutations.forEach((mutation) => {
-        if (mutation.type === 'childList') {
-          mutation.addedNodes.forEach(processNode)
-        } else if (mutation.type === 'characterData') {
-          processNode(mutation.target)
-        }
-      })
+      try {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'childList') {
+            mutation.addedNodes.forEach(processNode)
+          } else if (mutation.type === 'characterData') {
+            processNode(mutation.target)
+          }
+        })
+      } catch {}
 
       isTranslatingRef.current = false
     })
 
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      characterData: true,
-    })
+    try {
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+      })
+    } catch {}
 
-    // Additional pass after 300ms for delayed components
     const timer = setTimeout(() => {
       isTranslatingRef.current = true
-      processNode(document.body)
+      try {
+        processNode(document.body)
+      } catch {}
       isTranslatingRef.current = false
     }, 300)
 
