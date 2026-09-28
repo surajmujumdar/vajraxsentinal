@@ -97,6 +97,7 @@ async def perform_company_analysis_internal(company_id: int):
         db.close()
 
 # Company CRUD Operations
+@router.post("", response_model=CompanyWithDetails)
 @router.post("/", response_model=CompanyWithDetails)
 async def create_company(
     company: CompanyCreate, 
@@ -189,6 +190,7 @@ async def create_company(
     comp_dict["total_threats_count"] = 0
     return comp_dict
 
+@router.get("", response_model=List[CompanyWithDetails])
 @router.get("/", response_model=List[CompanyWithDetails])
 async def get_companies(
     skip: int = Query(0, ge=0),

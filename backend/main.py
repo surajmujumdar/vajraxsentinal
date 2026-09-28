@@ -18,7 +18,10 @@ SENTINEL_DIR = BACKEND_DIR / "sentinel"
 load_dotenv(BACKEND_DIR / ".env")
 load_dotenv(BACKEND_DIR.parent / ".env")
 
-for p in [str(SENTINEL_DIR), str(VAJRA_DIR), str(BACKEND_DIR)]:
+# Configure clean module paths:
+# 1. BACKEND_DIR allows importing app.* (Sentinel) and sentinel.*
+# 2. VAJRA_DIR allows importing VAJRA's internal modules (models.*, routes.*, database.*)
+for p in [str(BACKEND_DIR), str(VAJRA_DIR)]:
     if p not in sys.path:
         sys.path.insert(0, p)
 

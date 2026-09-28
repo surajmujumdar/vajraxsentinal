@@ -208,36 +208,59 @@ export default function CompaniesPage() {
 
       const candidateUrls = [
         `${API_URL}/api/companies/`,
+        `${API_URL}/api/companies`,
+        `${API_URL}/api/vajra/companies/`,
+        `${API_URL}/api/vajra/companies`,
         'http://localhost:8000/api/companies/',
         'http://127.0.0.1:8000/api/companies/',
         '/api/companies/'
       ]
 
-      let res: Response | null = null
+      let newCompany: any = null
       let lastError = 'Failed to connect to monitoring backend server'
 
       for (const url of candidateUrls) {
         try {
-          res = await fetch(url, {
+          const fetchRes = await fetch(url, {
             method: 'POST',
             headers,
             body: JSON.stringify(payload),
           })
-          if (res && res.ok) break
-          if (res && !res.ok) {
-            const errJson = await res.json().catch(() => null)
-            if (errJson?.detail) lastError = typeof errJson.detail === 'string' ? errJson.detail : JSON.stringify(errJson.detail)
+          
+          if (fetchRes.ok) {
+            const rawText = await fetchRes.text()
+            if (rawText) {
+              try {
+                newCompany = JSON.parse(rawText)
+                break
+              } catch {
+                newCompany = { id: Date.now(), name: companyName, domain: cleanDomain }
+                break
+              }
+            } else {
+              newCompany = { id: Date.now(), name: companyName, domain: cleanDomain }
+              break
+            }
+          } else {
+            const errText = await fetchRes.text().catch(() => '')
+            if (errText) {
+              try {
+                const errJson = JSON.parse(errText)
+                if (errJson?.detail) lastError = typeof errJson.detail === 'string' ? errJson.detail : JSON.stringify(errJson.detail)
+              } catch {
+                lastError = `Server HTTP ${fetchRes.status}: ${errText.slice(0, 100)}`
+              }
+            }
           }
         } catch (e: any) {
           lastError = e?.message || lastError
         }
       }
 
-      if (!res || !res.ok) {
+      if (!newCompany) {
         throw new Error(lastError || 'Failed to add domain to monitoring. Please verify the domain and backend status.')
       }
 
-      const newCompany = await res.json()
       setShowAddModal(false)
       setFormData({
         name: '',
@@ -253,7 +276,7 @@ export default function CompaniesPage() {
       setTimeout(() => fetchCompanies(), 1500)
       setTimeout(() => fetchCompanies(), 4000)
     } catch (err: any) {
-      setFormError(err.message || 'Failed to add domain')
+      setFormError(err?.message || 'Failed to add domain')
     } finally {
       setFormSubmitting(false)
     }
