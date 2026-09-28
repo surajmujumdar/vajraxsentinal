@@ -49,7 +49,22 @@ async def lifespan(app: FastAPI):
             )
             db.add(demo_project)
             db.commit()
-            logger.info("Seeded default admin user and demo project.")
+
+        # Ensure gha-devsecops project is registered
+        gha_proj = db.query(Project).filter(Project.repository_url.like("%gha-devsecops%")).first()
+        if not gha_proj:
+            admin_user = db.query(User).filter(User.username == "admin").first()
+            user_id = admin_user.id if admin_user else "admin"
+            gha_proj = Project(
+                name="GHA DevSecOps (OWASP Benchmark)",
+                description="Automated CI/CD security assessment target for SAST, SCA, Secrets, and DAST scanning.",
+                repository_url="https://github.com/magnologan/gha-devsecops",
+                target_url="https://xss.challenge.training.hacq.me/challenges/baby02.php",
+                user_id=user_id
+            )
+            db.add(gha_proj)
+            db.commit()
+            logger.info("Seeded GHA DevSecOps benchmark project.")
     except Exception as e:
         logger.error(f"Error seeding initial database data: {e}")
     finally:

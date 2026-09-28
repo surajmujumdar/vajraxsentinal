@@ -332,6 +332,52 @@ export const NewAssessment = ({ onAssessmentStarted }) => {
         </div>
       )}
 
+      {/* Quick Benchmark Integration Card */}
+      <div className="cyber-card mb-6 p-4 bg-gradient-to-r from-command-950 via-rose-950/40 to-command-950 border border-rose-500/40 shadow-[0_0_20px_rgba(255,23,68,0.2)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="flex items-center space-x-3">
+          <div className="w-9 h-9 rounded-lg bg-rose-500/20 border border-rose-500/50 flex items-center justify-center flex-shrink-0 text-rose-400 shadow-[0_0_10px_rgba(255,23,68,0.3)]">
+            <ShieldCheck size={20} />
+          </div>
+          <div>
+            <div className="flex items-center space-x-2">
+              <span className="text-white font-hud font-bold text-xs sm:text-sm tracking-wider uppercase">
+                TARGET PRESET: magnologan/gha-devsecops
+              </span>
+              <span className="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono text-[9px] font-bold border border-rose-500/40">
+                SAST + DAST READY
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-400 font-mono mt-0.5">
+              Integrated with Semgrep SAST, OSV SCA, Gitleaks, and OWASP ZAP / Web DAST Scanners.
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            setMode('combined');
+            setRepoUrl('https://github.com/magnologan/gha-devsecops');
+            setBranch('main');
+            setTargetUrl('https://xss.challenge.training.hacq.me/challenges/baby02.php');
+            setModules({
+              sast: true,
+              sca: true,
+              secrets: true,
+              dast: true,
+              nuclei: true,
+              wapiti: true,
+              nikto: true,
+              ssl: true
+            });
+          }}
+          className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-hud font-bold text-xs shadow-[0_0_12px_rgba(255,23,68,0.4)] flex items-center space-x-1.5 cursor-pointer flex-shrink-0 active:scale-95 transition-all"
+        >
+          <Play size={13} fill="currentColor" />
+          <span>AUTOLOAD SAST & DAST CONFIG</span>
+        </button>
+      </div>
+
       {/* Mode Selector Tabs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         {[
