@@ -544,20 +544,11 @@ export default function Navbar() {
           </div>
           <button
             onClick={handleLogout}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: '#94a3b8',
-              cursor: 'pointer',
-              padding: '2px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            className="hover:text-rose-400 transition-colors"
-            title="Logout"
+            className="px-2 sm:px-2.5 py-1 rounded-md bg-rose-950/90 border border-rose-500/60 hover:border-rose-400 hover:bg-rose-600/30 text-rose-200 hover:text-white transition-all shadow-[0_0_10px_rgba(255,23,68,0.35)] flex items-center space-x-1 cursor-pointer flex-shrink-0 text-[10px] sm:text-[11px] font-bold font-hud tracking-wider active:scale-95 ml-1"
+            title="Terminate Session / Logout"
           >
-            <LogOut size={13} />
+            <LogOut size={12} className="text-rose-400" />
+            <span className="hidden sm:inline">LOGOUT</span>
           </button>
         </div>
       </div>

@@ -12,10 +12,14 @@ import {
   Settings,
   ChevronDown,
   ChevronUp,
-  Menu
+  Menu,
+  LogOut,
+  UserCheck
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export const Sidebar = ({ currentTab, onTabChange }) => {
+  const { user, logout } = useAuth();
   const [mobileExpanded, setMobileExpanded] = useState(false);
 
   const menuItems = [
@@ -175,6 +179,27 @@ export const Sidebar = ({ currentTab, onTabChange }) => {
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
             <span>ACTIVE</span>
           </span>
+        </div>
+
+        {/* Dedicated Sidebar Operator & Logout Pod */}
+        <div className="mt-2.5 pt-2 border-t border-rose-900/40 flex items-center justify-between">
+          <div className="flex items-center space-x-2 min-w-0">
+            <div className="w-6 h-6 rounded-full bg-rose-950/90 border border-rose-500/50 flex items-center justify-center text-rose-300 font-bold text-[10px] flex-shrink-0 shadow-[0_0_6px_rgba(255,23,68,0.3)]">
+              {user?.username?.charAt(0).toUpperCase() || 'A'}
+            </div>
+            <div className="min-w-0">
+              <span className="block text-[11px] font-bold text-white truncate max-w-[90px] xl:max-w-[120px]">{user?.username || 'admin'}</span>
+              <span className="block text-[8.5px] text-rose-400 font-mono tracking-wider">SECOPS OPERATOR</span>
+            </div>
+          </div>
+          <button
+            onClick={logout}
+            className="px-2 py-1 rounded-md bg-rose-950/90 border border-rose-500/50 hover:border-rose-400 hover:bg-rose-500/25 text-rose-200 hover:text-white transition-all text-[10px] font-bold font-hud flex items-center space-x-1 cursor-pointer flex-shrink-0 shadow-[0_0_8px_rgba(255,23,68,0.25)] active:scale-95"
+            title="Terminate Session / Logout"
+          >
+            <LogOut size={11} className="text-rose-400" />
+            <span>LOGOUT</span>
+          </button>
         </div>
       </div>
     </aside>
