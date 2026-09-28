@@ -333,7 +333,7 @@ export const NewAssessment = ({ onAssessmentStarted }) => {
       )}
 
       {/* Quick Benchmark Integration Card */}
-      <div className="cyber-card mb-6 p-4 bg-gradient-to-r from-command-950 via-rose-950/40 to-command-950 border border-rose-500/40 shadow-[0_0_20px_rgba(255,23,68,0.2)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div className="cyber-card mb-6 p-4 bg-gradient-to-r from-command-950 via-rose-950/40 to-command-950 border border-rose-500/40 shadow-[0_0_20px_rgba(255,23,68,0.2)] flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
         <div className="flex items-center space-x-3">
           <div className="w-9 h-9 rounded-lg bg-rose-500/20 border border-rose-500/50 flex items-center justify-center flex-shrink-0 text-rose-400 shadow-[0_0_10px_rgba(255,23,68,0.3)]">
             <ShieldCheck size={20} />
@@ -341,41 +341,71 @@ export const NewAssessment = ({ onAssessmentStarted }) => {
           <div>
             <div className="flex items-center space-x-2">
               <span className="text-white font-hud font-bold text-xs sm:text-sm tracking-wider uppercase">
-                TARGET PRESET: magnologan/gha-devsecops
+                SECURITY BENCHMARK TARGETS
               </span>
               <span className="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono text-[9px] font-bold border border-rose-500/40">
-                SAST + DAST READY
+                PRE-INTEGRATED
               </span>
             </div>
             <p className="text-[11px] text-slate-400 font-mono mt-0.5">
-              Integrated with Semgrep SAST, OSV SCA, Gitleaks, and OWASP ZAP / Web DAST Scanners.
+              1-Click presets for Static Code Analysis (SAST) and Combined (SAST + DAST) automated pipelines.
             </p>
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={() => {
-            setMode('combined');
-            setRepoUrl('https://github.com/magnologan/gha-devsecops');
-            setBranch('main');
-            setTargetUrl('https://xss.challenge.training.hacq.me/challenges/baby02.php');
-            setModules({
-              sast: true,
-              sca: true,
-              secrets: true,
-              dast: true,
-              nuclei: true,
-              wapiti: true,
-              nikto: true,
-              ssl: true
-            });
-          }}
-          className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-hud font-bold text-xs shadow-[0_0_12px_rgba(255,23,68,0.4)] flex items-center space-x-1.5 cursor-pointer flex-shrink-0 active:scale-95 transition-all"
-        >
-          <Play size={13} fill="currentColor" />
-          <span>AUTOLOAD SAST & DAST CONFIG</span>
-        </button>
+        <div className="flex flex-wrap gap-2 w-full lg:w-auto">
+          {/* SAST ONLY PRESET */}
+          <button
+            type="button"
+            onClick={() => {
+              setMode('repo');
+              setRepoUrl('https://github.com/paulveillard/cybersecurity-sast');
+              setBranch('main');
+              setTargetUrl('https://');
+              setModules({
+                sast: true,
+                sca: true,
+                secrets: true,
+                dast: false,
+                nuclei: false,
+                wapiti: false,
+                nikto: false,
+                ssl: false
+              });
+            }}
+            className="flex-1 sm:flex-none px-3 py-1.5 rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-hud font-bold text-[11px] sm:text-xs shadow-[0_0_10px_rgba(6,182,212,0.4)] flex items-center justify-center space-x-1.5 cursor-pointer active:scale-95 transition-all"
+            title="Load SAST-only benchmark: paulveillard/cybersecurity-sast"
+          >
+            <Play size={12} fill="currentColor" />
+            <span>⚡ SAST ONLY (cybersecurity-sast)</span>
+          </button>
+
+          {/* SAST + DAST COMBINED PRESET */}
+          <button
+            type="button"
+            onClick={() => {
+              setMode('combined');
+              setRepoUrl('https://github.com/magnologan/gha-devsecops');
+              setBranch('main');
+              setTargetUrl('https://xss.challenge.training.hacq.me/challenges/baby02.php');
+              setModules({
+                sast: true,
+                sca: true,
+                secrets: true,
+                dast: true,
+                nuclei: true,
+                wapiti: true,
+                nikto: true,
+                ssl: true
+              });
+            }}
+            className="flex-1 sm:flex-none px-3 py-1.5 rounded-lg bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-hud font-bold text-[11px] sm:text-xs shadow-[0_0_10px_rgba(255,23,68,0.4)] flex items-center justify-center space-x-1.5 cursor-pointer active:scale-95 transition-all"
+            title="Load SAST + DAST benchmark: magnologan/gha-devsecops"
+          >
+            <Play size={12} fill="currentColor" />
+            <span>⚡ SAST + DAST (gha-devsecops)</span>
+          </button>
+        </div>
       </div>
 
       {/* Mode Selector Tabs */}
@@ -421,24 +451,37 @@ export const NewAssessment = ({ onAssessmentStarted }) => {
         {/* Input A: GitHub Repository Configuration */}
         {(mode === 'repo' || mode === 'combined') && (
           <div className="cyber-card" style={{ marginBottom: '20px' }}>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <GitBranch size={18} color="#00f2fe" />
                 <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#f8fafc' }}>
                   GitHub Repository Inputs
                 </h3>
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setRepoUrl('https://github.com/magnologan/gha-devsecops');
-                  setBranch('main');
-                }}
-                className="px-2.5 py-1 rounded bg-rose-500/15 border border-rose-500/40 hover:bg-rose-500/30 text-rose-300 text-[11px] font-mono font-bold flex items-center gap-1 transition-all cursor-pointer shadow-[0_0_8px_rgba(255,23,68,0.2)]"
-                title="Auto-fill benchmark repository: magnologan/gha-devsecops"
-              >
-                <span>⚡ Load magnologan/gha-devsecops</span>
-              </button>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setRepoUrl('https://github.com/paulveillard/cybersecurity-sast');
+                    setBranch('main');
+                  }}
+                  className="px-2.5 py-1 rounded bg-cyan-500/15 border border-cyan-500/40 hover:bg-cyan-500/30 text-cyan-300 text-[11px] font-mono font-bold flex items-center gap-1 transition-all cursor-pointer shadow-[0_0_8px_rgba(6,182,212,0.2)]"
+                  title="Auto-fill SAST repository: paulveillard/cybersecurity-sast"
+                >
+                  <span>⚡ SAST: paulveillard/cybersecurity-sast</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setRepoUrl('https://github.com/magnologan/gha-devsecops');
+                    setBranch('main');
+                  }}
+                  className="px-2.5 py-1 rounded bg-rose-500/15 border border-rose-500/40 hover:bg-rose-500/30 text-rose-300 text-[11px] font-mono font-bold flex items-center gap-1 transition-all cursor-pointer shadow-[0_0_8px_rgba(255,23,68,0.2)]"
+                  title="Auto-fill benchmark repository: magnologan/gha-devsecops"
+                >
+                  <span>⚡ magnologan/gha-devsecops</span>
+                </button>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

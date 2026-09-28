@@ -65,6 +65,22 @@ async def lifespan(app: FastAPI):
             db.add(gha_proj)
             db.commit()
             logger.info("Seeded GHA DevSecOps benchmark project.")
+
+        # Ensure cybersecurity-sast project is registered (SAST only)
+        sast_proj = db.query(Project).filter(Project.repository_url.like("%cybersecurity-sast%")).first()
+        if not sast_proj:
+            admin_user = db.query(User).filter(User.username == "admin").first()
+            user_id = admin_user.id if admin_user else "admin"
+            sast_proj = Project(
+                name="Cybersecurity SAST Target",
+                description="Static Application Security Testing (SAST-only) benchmark repository.",
+                repository_url="https://github.com/paulveillard/cybersecurity-sast",
+                target_url=None,
+                user_id=user_id
+            )
+            db.add(sast_proj)
+            db.commit()
+            logger.info("Seeded Cybersecurity SAST project.")
     except Exception as e:
         logger.error(f"Error seeding initial database data: {e}")
     finally:
