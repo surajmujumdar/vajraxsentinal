@@ -18,11 +18,13 @@ class Settings(BaseSettings):
 
     @property
     def DATABASE_URL(self) -> str:
-        url = self.SENTINEL_DATABASE_URL or os.getenv("SENTINEL_DATABASE_URL")
+        url = self.SENTINEL_DATABASE_URL or os.getenv("SENTINEL_DATABASE_URL") or os.getenv("DATABASE_URL")
         if url:
             if url.startswith("sqlite:///."):
                 db_rel = url.replace("sqlite:///./", "").replace("sqlite:///", "")
                 return f"sqlite:///{BASE_DIR / db_rel}"
+            elif url.startswith("postgres://"):
+                return url.replace("postgres://", "postgresql://", 1)
             return url
         return f"sqlite:///{DEFAULT_DB_PATH}"
 
