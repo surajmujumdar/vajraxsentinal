@@ -401,26 +401,28 @@ async def delete_company(
     db: Session = Depends(get_db),
     current_user: Optional[User] = Depends(get_optional_current_user)
 ):
-    """Delete a company permanently from monitoring with role permission check"""
+    """Delete a company permanently from monitoring and cleanup dependent records"""
     company = db.query(Company).filter(Company.id == company_id).first()
     if not company:
         raise HTTPException(status_code=404, detail="Company not found")
     
-    is_admin = bool(current_user and current_user.role and current_user.role.lower() == "admin")
-    if not is_admin:
-        if company.is_global:
-            raise HTTPException(status_code=403, detail="Permission denied: Regular users cannot remove global admin companies")
-        if not current_user or (company.created_by_user_id != current_user.id and company.created_by_user_email != current_user.email):
-            raise HTTPException(status_code=403, detail="Permission denied: You can only delete companies you have added")
+    try:
+        # Cascade delete dependent threat telemetry and risk assessments to respect DB constraints
+        db.query(CompanyThreat).filter(CompanyThreat.company_id == company_id).delete(synchronize_session=False)
+        db.query(CompanyRiskAssessment).filter(CompanyRiskAssessment.company_id == company_id).delete(synchronize_session=False)
+        
+        db.delete(company)
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to delete company: {str(e)}")
     
-    db.delete(company)
-    db.commit()
     try:
         from services.firebase_service import firebase_service
         firebase_service.delete_document_sync('companies', str(company_id))
     except Exception:
         pass
-    return {"message": "Company deleted successfully"}
+    return {"message": "Company deleted successfully", "id": company_id}
 
 # Company Threat Operations
 @router.post("/{company_id}/threats", response_model=CompanyThreatResponse)

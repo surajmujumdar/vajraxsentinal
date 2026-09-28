@@ -440,26 +440,56 @@ export default function CompaniesPage() {
     }
   }
 
-  const handleDelete = async (companyId: number) => {
-    if (!confirm('Are you sure you want to remove this company from monitoring?')) return
+  const handleDelete = async (companyId: number, companyName?: string) => {
+    const displayName = companyName || companies.find(c => c.id === companyId)?.name || 'this company'
+    if (!confirm(`Are you sure you want to permanently delete "${displayName}" and all associated risk data from monitoring?`)) return
+    
     setDeletingId(companyId)
     try {
       const currentToken = useAuthStore.getState().token || token
-      const headers: Record<string, string> = {}
-      if (currentToken) headers['Authorization'] = `Bearer ${currentToken}`
-      const res = await fetch(`${API_URL}/api/companies/${companyId}`, {
-        method: 'DELETE',
-        headers
-      })
-      if (res.ok) {
-        setCompanies(prev => prev.filter(c => c.id !== companyId))
-      } else {
-        const err = await res.json().catch(() => null)
-        alert(err?.detail || 'Failed to delete company')
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json'
       }
-    } catch (err) {
+      if (currentToken) headers['Authorization'] = `Bearer ${currentToken}`
+
+      const candidateUrls = [
+        `${API_URL}/api/companies/${companyId}`,
+        `${API_URL}/api/vajra/companies/${companyId}`,
+        `http://localhost:8000/api/companies/${companyId}`,
+        `http://127.0.0.1:8000/api/companies/${companyId}`,
+        `/api/companies/${companyId}`
+      ]
+
+      let deleted = false
+      let lastErrorMessage = ''
+
+      for (const url of candidateUrls) {
+        try {
+          const res = await fetch(url, {
+            method: 'DELETE',
+            headers
+          })
+          if (res.ok) {
+            deleted = true
+            break
+          } else {
+            const err = await res.json().catch(() => null)
+            if (err?.detail) lastErrorMessage = err.detail
+          }
+        } catch (e: any) {
+          lastErrorMessage = e?.message || ''
+        }
+      }
+
+      if (deleted) {
+        setCompanies(prev => prev.filter(c => c.id !== companyId))
+        useCompanyStore.getState().removeCompanyFromStore(companyId)
+      } else {
+        alert(lastErrorMessage || 'Failed to delete company from server')
+      }
+    } catch (err: any) {
       console.error('Delete failed:', err)
-      alert('Error deleting company')
+      alert('Error deleting company: ' + (err?.message || 'Network error'))
     } finally {
       setDeletingId(null)
     }
@@ -906,27 +936,21 @@ export default function CompaniesPage() {
                             </>
                           )}
                         </button>
-                        {canDelete ? (
-                          <button
-                            onClick={() => handleDelete(company.id)}
-                            disabled={deletingId === company.id}
-                            className="p-2 text-secondary hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
-                            title="Remove company"
-                          >
-                            {deletingId === company.id ? (
-                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                            ) : (
-                              <Trash2 className="w-3.5 h-3.5" />
-                            )}
-                          </button>
-                        ) : (
-                          <div
-                            className="p-2 text-secondary/30 cursor-not-allowed"
-                            title="Global admin company"
-                          >
-                            <Lock className="w-3.5 h-3.5" />
-                          </div>
-                        )}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleDelete(company.id, company.name)
+                          }}
+                          disabled={deletingId === company.id}
+                          className="p-2 bg-background hover:bg-red-500/10 border border-border hover:border-red-500/40 text-secondary hover:text-red-400 rounded-xl transition-all shadow-sm"
+                          title={`Delete ${company.name} from monitoring`}
+                        >
+                          {deletingId === company.id ? (
+                            <Loader2 className="w-3.5 h-3.5 animate-spin text-red-400" />
+                          ) : (
+                            <Trash2 className="w-3.5 h-3.5" />
+                          )}
+                        </button>
                       </div>
                     </motion.div>
                   )

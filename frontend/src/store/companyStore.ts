@@ -41,6 +41,7 @@ interface CompanyStore {
   setSelectedCompany: (company: CompanyWithDetails | null) => void
   setCompanies: (companies: CompanyWithDetails[]) => void
   addCompanyToStore: (company: CompanyWithDetails) => void
+  removeCompanyFromStore: (companyId: number) => void
   updateCompanyAssessment: (companyId: number, assessmentUpdates: any) => void
   fetchCompanies: () => Promise<void>
 }
@@ -60,6 +61,13 @@ export const useCompanyStore = create<CompanyStore>()(
           const filtered = state.companies.filter((c) => c.id !== company.id && c.domain.toLowerCase() !== company.domain.toLowerCase())
           return { companies: [company, ...filtered] }
         })
+      },
+
+      removeCompanyFromStore: (companyId: number) => {
+        set((state) => ({
+          companies: state.companies.filter((c) => c.id !== companyId),
+          selectedCompany: state.selectedCompany?.id === companyId ? null : state.selectedCompany
+        }))
       },
 
       updateCompanyAssessment: (companyId: number, assessmentUpdates: any) => {

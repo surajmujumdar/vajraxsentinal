@@ -173,6 +173,49 @@ export default function CompanyDetailsView() {
     }
   };
 
+  const [deletingCompany, setDeletingCompany] = useState(false);
+
+  const handleDeleteCompany = async () => {
+    if (!confirm(`Are you sure you want to permanently delete "${company?.name || 'this company'}" from monitoring?`)) return;
+    setDeletingCompany(true);
+    try {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const headers: Record<string, string> = {};
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const candidateUrls = [
+        `${API_URL}/api/companies/${companyId}`,
+        `${API_URL}/api/vajra/companies/${companyId}`,
+        `http://localhost:8000/api/companies/${companyId}`,
+        `http://127.0.0.1:8000/api/companies/${companyId}`,
+        `/api/companies/${companyId}`
+      ];
+
+      let deleted = false;
+      for (const url of candidateUrls) {
+        try {
+          const res = await fetch(url, { method: 'DELETE', headers });
+          if (res.ok) {
+            deleted = true;
+            break;
+          }
+        } catch {}
+      }
+
+      if (deleted) {
+        useCompanyStore.getState().removeCompanyFromStore(Number(companyId));
+        router.push('/companies');
+      } else {
+        alert('Failed to delete company from server');
+      }
+    } catch (err: any) {
+      console.error('Failed to delete company:', err);
+      alert('Error deleting company: ' + (err?.message || 'Network error'));
+    } finally {
+      setDeletingCompany(false);
+    }
+  };
+
   const fetchCompanyData = useCallback(async () => {
     try {
       const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -458,6 +501,20 @@ export default function CompanyDetailsView() {
             >
               <RefreshCw className={`w-3.5 h-3.5 ${analyzing ? 'animate-spin text-cyan-300' : ''}`} />
               {analyzing ? `Re-scanning (~${scanState.secondsRemaining}s)...` : 'Re-scan Domain'}
+            </button>
+
+            <button
+              onClick={handleDeleteCompany}
+              disabled={deletingCompany}
+              className="flex items-center gap-2 px-3 py-1.5 bg-red-950/40 hover:bg-red-900/60 border border-red-500/30 hover:border-red-500/60 text-red-300 hover:text-red-100 rounded-xl text-xs font-hud font-bold uppercase transition disabled:opacity-50"
+              title="Permanently remove company from monitoring"
+            >
+              {deletingCompany ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-red-400" />
+              ) : (
+                <Trash2 className="w-3.5 h-3.5 text-red-400" />
+              )}
+              <span>Delete Asset</span>
             </button>
           </div>
         </div>

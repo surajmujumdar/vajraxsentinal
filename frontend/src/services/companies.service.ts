@@ -85,5 +85,36 @@ export const companiesService = {
     }
 
     return inMemoryCompaniesCache || INITIAL_COMPANIES;
+  },
+
+  async delete(companyId: number, token?: string | null): Promise<boolean> {
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const candidateUrls = [
+      `${API_URL}/api/companies/${companyId}`,
+      `${API_URL}/api/vajra/companies/${companyId}`,
+      `http://localhost:8000/api/companies/${companyId}`,
+      `http://127.0.0.1:8000/api/companies/${companyId}`,
+      `/api/companies/${companyId}`
+    ];
+
+    for (const url of candidateUrls) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 6000);
+        const res = await fetch(url, { method: 'DELETE', headers, signal: controller.signal });
+        clearTimeout(timeoutId);
+        if (res.ok) {
+          if (inMemoryCompaniesCache) {
+            inMemoryCompaniesCache = inMemoryCompaniesCache.filter(c => c.id !== companyId);
+          }
+          return true;
+        }
+      } catch {
+        // try next
+      }
+    }
+    return false;
   }
 };
