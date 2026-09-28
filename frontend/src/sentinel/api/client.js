@@ -1,5 +1,3 @@
-import { FALLBACK_FINDINGS, FALLBACK_DASHBOARD, FALLBACK_ASSESSMENTS } from './fallback_data';
-
 const getApiBase = () => {
   if (typeof window !== 'undefined') {
     if (process.env.NEXT_PUBLIC_API_URL && !process.env.NEXT_PUBLIC_API_URL.includes('vajraxsentina-i7r5')) {
@@ -32,7 +30,7 @@ export const apiClient = {
     }
   },
 
-  // ── Persistent Local Assessment Storage ──────────────────────────────────────
+  // ── Persistent Local Assessment Storage (Preserves User Scans) ─────────────
   getLocalAssessments() {
     if (typeof window === 'undefined') return [];
     try {
@@ -122,7 +120,6 @@ export const apiClient = {
       return data;
     } catch (err) {
       clearTimeout(timeoutId);
-      console.warn(`API Error on [${options.method || 'GET'} ${endpoint}]:`, err.message || err);
 
       // Try namespace fallback (/api/... instead of /api/sentinel/...)
       try {
@@ -130,127 +127,21 @@ export const apiClient = {
         const altRes = await fetch(`${altBase}${endpoint}`, {
           ...options,
           headers,
-          signal: AbortSignal.timeout ? AbortSignal.timeout(3000) : undefined
+          signal: AbortSignal.timeout ? AbortSignal.timeout(5000) : undefined
         });
         if (altRes.ok) {
           if (altRes.status === 204) return null;
           return await altRes.json();
         }
       } catch {
-        // Fallthrough to safe offline mock state
-      }
-
-      // Safe fallback data returners for resilient dashboard viewing
-      if (endpoint === '/dashboard' || endpoint === '/dashboard/') {
-        return FALLBACK_DASHBOARD;
-      }
-      if (endpoint.startsWith('/assessments') && (!options.method || options.method === 'GET')) {
-        if (endpoint.includes('/') && endpoint.split('/').length > 2) {
-          return FALLBACK_ASSESSMENTS[0];
-        }
-        return FALLBACK_ASSESSMENTS;
-      }
-      if (endpoint.startsWith('/findings') && (!options.method || options.method === 'GET')) {
-        let list = [...FALLBACK_FINDINGS];
-        if (endpoint.includes('?')) {
-          const qStr = endpoint.split('?')[1];
-          const searchParams = new URLSearchParams(qStr);
-          const sourceFilter = searchParams.get('source');
-          const severityFilter = searchParams.get('severity');
-          const statusFilter = searchParams.get('status');
-          const searchTerm = searchParams.get('search');
-          const limit = parseInt(searchParams.get('limit') || '500', 10);
-
-          if (sourceFilter) {
-            const sUpper = sourceFilter.toUpperCase();
-            if (sUpper === 'DAST') {
-              list = list.filter(f => (f.source || '').toUpperCase() === 'DAST' || (f.source || '').toUpperCase() === 'WEB');
-            } else {
-              list = list.filter(f => (f.source || '').toUpperCase() === sUpper);
-            }
-          }
-          if (severityFilter) {
-            list = list.filter(f => (f.severity || '').toUpperCase() === severityFilter.toUpperCase());
-          }
-          if (statusFilter && statusFilter !== 'all') {
-            list = list.filter(f => (f.status || '').toLowerCase() === statusFilter.toLowerCase());
-          }
-          if (searchTerm) {
-            const term = searchTerm.toLowerCase();
-            list = list.filter(f => 
-              (f.title && f.title.toLowerCase().includes(term)) ||
-              (f.description && f.description.toLowerCase().includes(term)) ||
-              (f.file && f.file.toLowerCase().includes(term)) ||
-              (f.endpoint && f.endpoint.toLowerCase().includes(term)) ||
-              (f.category && f.category.toLowerCase().includes(term))
-            );
-          }
-          if (limit && limit > 0) {
-            list = list.slice(0, limit);
-          }
-        }
-        return list;
-      }
-      if (endpoint === '/projects' && (!options.method || options.method === 'GET')) {
-        return [
-          { id: 'a81b1778-6a4a-419f-8e6d-08a501081186', name: 'Production Core API', target_url: 'https://github.com/indigo-org/core-api', created_at: new Date().toISOString() },
-          { id: 'd0921ebf-db59-475a-b8e1-1bdf83faaeeb', name: 'Auth Service & Gateway', target_url: 'https://github.com/indigo-org/auth-gateway', created_at: new Date().toISOString() },
-          { id: '31e761f7-a500-415a-b9f2-16dd193e6123', name: 'Customer Web Portal', target_url: 'https://portal.indigo.internal', created_at: new Date().toISOString() }
-        ];
-      }
-      if (endpoint === '/projects' && options.method === 'POST') {
-        const bodyObj = typeof options.body === 'string' ? JSON.parse(options.body) : (options.body || {});
-        return {
-          id: 'proj-' + Math.random().toString(36).substring(2, 9),
-          name: bodyObj.name || 'Security Assessment Target',
-          description: bodyObj.description || 'Assessment project scope',
-          repository_url: bodyObj.repository_url || null,
-          target_url: bodyObj.target_url || null,
-          created_at: new Date().toISOString()
-        };
-      }
-      if (endpoint === '/assessments' && options.method === 'POST') {
-        const bodyObj = typeof options.body === 'string' ? JSON.parse(options.body) : (options.body || {});
-        return {
-          id: 'asm-' + Math.random().toString(36).substring(2, 9),
-          project_id: bodyObj.project_id || 'a81b1778-6a4a-419f-8e6d-08a501081186',
-          assessment_type: bodyObj.assessment_type || 'repo',
-          status: 'QUEUED',
-          repository_info: bodyObj.repository || {},
-          target_info: bodyObj.target || {},
-          modules: bodyObj.modules || {},
-          overall_risk_score: 0.0,
-          critical_count: 0,
-          high_count: 0,
-          medium_count: 0,
-          low_count: 0,
-          total_findings: 0,
-          logs: [
-            { timestamp: new Date().toISOString(), stage: 'INITIALIZATION', message: 'Assessment queued and orchestrating engines.' }
-          ],
-          created_at: new Date().toISOString()
-        };
-      }
-      if (endpoint === '/repositories/github/validate' && options.method === 'POST') {
-        return {
-          valid: true,
-          accessible: true,
-          default_branch: 'main',
-          message: 'Repository connection verified successfully.'
-        };
-      }
-      if (endpoint === '/assets' && (!options.method || options.method === 'GET')) {
-        return [
-          { id: 'ast-01', target_url: 'https://portal.indigo.internal', asset_type: 'WEB_APP', risk_score: 68.0, status: 'MONITORED' },
-          { id: 'ast-02', target_url: 'https://api.indigo.internal', asset_type: 'REST_API', risk_score: 42.0, status: 'MONITORED' }
-        ];
+        // Fallthrough
       }
 
       throw err;
     }
   },
 
-  // Auth
+  // ── Auth ──────────────────────────────────────────────────────────────────
   login(username, password) {
     return this.request('/auth/login', {
       method: 'POST',
@@ -269,9 +160,15 @@ export const apiClient = {
     return this.request('/auth/me');
   },
 
-  // Projects
-  getProjects() {
-    return this.request('/projects');
+  // ── Projects ──────────────────────────────────────────────────────────────
+  async getProjects() {
+    try {
+      const res = await this.request('/projects');
+      return Array.isArray(res) ? res : [];
+    } catch (err) {
+      console.error('Failed to fetch projects from backend:', err);
+      return [];
+    }
   },
 
   createProject(project) {
@@ -287,7 +184,7 @@ export const apiClient = {
     });
   },
 
-  // Repositories
+  // ── Repositories ──────────────────────────────────────────────────────────
   validateGitHub(url, branch = 'main', token = '') {
     return this.request('/repositories/github/validate', {
       method: 'POST',
@@ -304,41 +201,16 @@ export const apiClient = {
     });
   },
 
-  // Assessments
+  // ── Assessments (100% Real Live Engine with Local Persistence) ─────────────
   async startAssessment(assessment) {
-    try {
-      const res = await this.request('/assessments', {
-        method: 'POST',
-        body: JSON.stringify(assessment)
-      });
-      if (res && res.id) {
-        this.saveLocalAssessment(res);
-      }
-      return res;
-    } catch (err) {
-      console.warn('Backend startAssessment returned error/fallback, saving locally:', err);
-      const localAsm = {
-        id: 'asm-' + Math.random().toString(36).substring(2, 9),
-        project_id: assessment.project_id || 'a81b1778-6a4a-419f-8e6d-08a501081186',
-        assessment_type: assessment.assessment_type || 'dast',
-        status: 'RUNNING',
-        repository_info: assessment.repository || {},
-        target_info: assessment.target || {},
-        modules: assessment.modules || {},
-        overall_risk_score: 75.0,
-        critical_count: 0,
-        high_count: 1,
-        medium_count: 2,
-        low_count: 0,
-        total_findings: 3,
-        logs: [
-          { timestamp: new Date().toISOString(), stage: 'INITIALIZATION', message: 'Security assessment queued and executing scan modules.' }
-        ],
-        created_at: new Date().toISOString()
-      };
-      this.saveLocalAssessment(localAsm);
-      return localAsm;
+    const res = await this.request('/assessments', {
+      method: 'POST',
+      body: JSON.stringify(assessment)
+    });
+    if (res && res.id) {
+      this.saveLocalAssessment(res);
     }
+    return res;
   },
 
   async getAssessments(projectId = null) {
@@ -350,23 +222,14 @@ export const apiClient = {
         backendData = res;
       }
     } catch (err) {
-      console.warn('Could not fetch backend assessments, relying on persistent local storage:', err);
+      console.warn('Could not fetch backend assessments:', err);
     }
 
     const localList = this.getLocalAssessments();
     
-    // Merge: backend data takes precedence, but any locally launched scans not yet in backend are preserved
+    // Merge: backend data combined with any user scans in local cache
     const mergedMap = new Map();
-
-    // 1. Put fallback assessments first if no backend data and no local data
-    if (backendData.length === 0 && localList.length === 0) {
-      FALLBACK_ASSESSMENTS.forEach(a => mergedMap.set(a.id, a));
-    }
-
-    // 2. Add local assessments
     localList.forEach(a => mergedMap.set(a.id, a));
-
-    // 3. Add/overwrite with fresh backend data
     backendData.forEach(a => mergedMap.set(a.id, a));
 
     const combined = Array.from(mergedMap.values()).sort((a, b) => {
@@ -375,7 +238,6 @@ export const apiClient = {
       return tB - tA;
     });
 
-    // Save consolidated list back to localStorage
     if (typeof window !== 'undefined') {
       try {
         localStorage.setItem('sentinel_assessments_history', JSON.stringify(combined));
@@ -397,7 +259,7 @@ export const apiClient = {
     }
     const local = this.getLocalAssessments().find(a => a.id === id);
     if (local) return local;
-    return FALLBACK_ASSESSMENTS.find(a => a.id === id) || FALLBACK_ASSESSMENTS[0];
+    throw new Error(`Assessment #${id} not found.`);
   },
 
   async cancelAssessment(id) {
@@ -406,42 +268,39 @@ export const apiClient = {
       local.status = 'CANCELLED';
       this.saveLocalAssessment(local);
     }
-    try {
-      const res = await this.request(`/assessments/${id}/cancel`, {
-        method: 'POST'
-      });
-      if (res) this.saveLocalAssessment(res);
-      return res || local;
-    } catch (err) {
-      return local || { id, status: 'CANCELLED' };
-    }
+    const res = await this.request(`/assessments/${id}/cancel`, {
+      method: 'POST'
+    });
+    if (res) this.saveLocalAssessment(res);
+    return res || local;
   },
 
   async deleteAssessment(id) {
     this.removeLocalAssessment(id);
-    try {
-      return await this.request(`/assessments/${id}`, {
-        method: 'DELETE'
-      });
-    } catch (err) {
-      console.warn('Backend delete assessment failed, removed locally:', err);
-      return { message: 'Deleted locally', id };
-    }
+    return await this.request(`/assessments/${id}`, {
+      method: 'DELETE'
+    });
   },
 
   getCorrelatedRisks(assessmentId) {
     return this.request(`/assessments/${assessmentId}/correlated-risks`);
   },
 
-  // Findings
-  getFindings(params = {}) {
+  // ── Findings (100% Real Database Findings) ────────────────────────────────
+  async getFindings(params = {}) {
     const query = new URLSearchParams();
     Object.entries(params).forEach(([key, val]) => {
       if (val !== undefined && val !== null && val !== '') {
         query.append(key, val);
       }
     });
-    return this.request(`/findings?${query.toString()}`);
+    try {
+      const res = await this.request(`/findings?${query.toString()}`);
+      return Array.isArray(res) ? res : [];
+    } catch (err) {
+      console.error('Failed to fetch findings from backend:', err);
+      return [];
+    }
   },
 
   getFinding(id) {
@@ -461,7 +320,7 @@ export const apiClient = {
     });
   },
 
-  // Reports
+  // ── Reports ───────────────────────────────────────────────────────────────
   getReport(assessmentId) {
     return this.request(`/reports/${assessmentId}`);
   },
@@ -470,10 +329,16 @@ export const apiClient = {
     return `${getApiBase()}/reports/${assessmentId}/export?format=${format}`;
   },
 
-  // Assets
-  getAssets(projectId = null) {
+  // ── Assets ────────────────────────────────────────────────────────────────
+  async getAssets(projectId = null) {
     const query = projectId ? `?project_id=${projectId}` : '';
-    return this.request(`/assets${query}`);
+    try {
+      const res = await this.request(`/assets${query}`);
+      return Array.isArray(res) ? res : [];
+    } catch (err) {
+      console.error('Failed to fetch assets from backend:', err);
+      return [];
+    }
   },
 
   verifyAsset(projectId, url) {
@@ -494,9 +359,9 @@ export const apiClient = {
     return this.request(`/assets/${assetId}`);
   },
 
-  // Dashboard & Health
-  getDashboard() {
-    return this.request('/dashboard');
+  // ── Dashboard & Health (100% Live Metrics) ─────────────────────────────────
+  async getDashboard() {
+    return await this.request('/dashboard');
   },
 
   getCapabilities() {

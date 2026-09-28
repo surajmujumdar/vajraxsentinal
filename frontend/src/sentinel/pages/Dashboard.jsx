@@ -11,10 +11,9 @@ import {
 } from 'lucide-react';
 import { apiClient } from '../api/client';
 import { FindingDrawer } from '../components/FindingDrawer';
-import { FALLBACK_DASHBOARD } from '../api/fallback_data';
 
 export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings }) => {
-  const [metrics, setMetrics] = useState(FALLBACK_DASHBOARD);
+  const [metrics, setMetrics] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedFinding, setSelectedFinding] = useState(null);
   const [vulnTimeFilter, setVulnTimeFilter] = useState('24h'); // '24h' | '3d' | '7d' | '30d'

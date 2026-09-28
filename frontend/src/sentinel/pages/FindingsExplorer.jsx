@@ -22,12 +22,11 @@ import {
 import { apiClient } from '../api/client';
 import { SeverityBadge } from '../components/SeverityBadge';
 import { FindingDrawer } from '../components/FindingDrawer';
-import { FALLBACK_FINDINGS } from '../api/fallback_data';
 
 export const FindingsExplorer = ({ initialSource = '', initialSeverity = '' }) => {
-  const [findings, setFindings] = useState(FALLBACK_FINDINGS || []);
+  const [findings, setFindings] = useState([]);
   const [totalOpenFindings, setTotalOpenFindings] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedFinding, setSelectedFinding] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
@@ -82,9 +81,7 @@ export const FindingsExplorer = ({ initialSource = '', initialSeverity = '' }) =
       });
       // Handle both paginated { items: [] } and raw array responses
       const items = res?.items || (Array.isArray(res) ? res : []);
-      if (items.length > 0 || !findings.length) {
-        setFindings(items);
-      }
+      setFindings(items);
       if (statusFilter === 'open' && !search && !severity && !source) {
         setTotalOpenFindings(items.length);
       }
