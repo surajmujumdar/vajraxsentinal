@@ -76,11 +76,23 @@ body {
 }
 
 .page-container {
-  padding: 32px;
+  padding: 12px;
   flex: 1;
   max-width: 1440px;
   margin: 0 auto;
   width: 100%;
+}
+
+@media (min-width: 640px) {
+  .page-container {
+    padding: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .page-container {
+    padding: 28px;
+  }
 }
 
 /* Glassmorphism & Cyber Cards */
@@ -89,9 +101,21 @@ body {
   backdrop-filter: blur(12px);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  padding: 24px;
+  padding: 14px;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.7);
+}
+
+@media (min-width: 640px) {
+  .cyber-card {
+    padding: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cyber-card {
+    padding: 24px;
+  }
 }
 
 .cyber-card:hover {

@@ -50,10 +50,7 @@ export const Login = () => {
       background: 'radial-gradient(circle at 50% 30%, #0c192e 0%, #070a12 70%)',
       padding: '20px'
     }}>
-      <div className="cyber-card cyber-card-glow" style={{
-        width: '100%',
-        maxWidth: '440px',
-        padding: '36px',
+      <div className="cyber-card cyber-card-glow p-5 sm:p-9 w-full max-w-[440px]" style={{
         background: '#0d1322',
         border: '1px solid #1e293b'
       }}>

@@ -60,9 +60,9 @@ export const Projects = ({ onSelectProject }) => {
 
   return (
     <div className="page-container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
-          <h1 className="title-gradient" style={{ fontSize: '26px', marginBottom: '6px' }}>
+          <h1 className="title-gradient text-xl sm:text-2xl font-bold mb-1">
             Target Projects & Scopes
           </h1>
           <p style={{ color: '#94a3b8', fontSize: '14px' }}>
@@ -75,7 +75,7 @@ export const Projects = ({ onSelectProject }) => {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '20px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
         {projects.map((proj) => (
           <div
             key={proj.id}
@@ -158,7 +158,7 @@ export const Projects = ({ onSelectProject }) => {
           justifyContent: 'center',
           zIndex: 1000
         }}>
-          <div className="cyber-card" style={{ width: '100%', maxWidth: '520px', background: '#0d1322' }}>
+          <div className="cyber-card p-4 sm:p-6 w-[94%] sm:w-full max-w-[520px] mx-auto" style={{ background: '#0d1322' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#f8fafc' }}>
                 Create New Target Project

@@ -333,12 +333,7 @@ export const NewAssessment = ({ onAssessmentStarted }) => {
       )}
 
       {/* Mode Selector Tabs */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: '12px',
-        marginBottom: '24px'
-      }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         {[
           { id: 'repo', label: 'GitHub Repository', desc: 'SAST + SCA + Secret Detection', icon: GitBranch },
           { id: 'source', label: 'Source Code Upload', desc: 'ZIP / Folder Static Analysis', icon: UploadCloud },
@@ -387,8 +382,8 @@ export const NewAssessment = ({ onAssessmentStarted }) => {
               </h3>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px' }}>
-              <div className="form-group">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="form-group md:col-span-2">
                 <label className="form-label">Repository URL (Public or Private)</label>
                 <input
                   type="text"
@@ -400,7 +395,7 @@ export const NewAssessment = ({ onAssessmentStarted }) => {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="form-group md:col-span-1">
                 <label className="form-label">Branch</label>
                 <input
                   type="text"
@@ -483,8 +478,8 @@ export const NewAssessment = ({ onAssessmentStarted }) => {
               </h3>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px' }}>
-              <div className="form-group">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="form-group md:col-span-2">
                 <label className="form-label">Live Application URL</label>
                 <input
                   type="text"
@@ -496,7 +491,7 @@ export const NewAssessment = ({ onAssessmentStarted }) => {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="form-group md:col-span-1">
                 <label className="form-label">Scan Policy Depth</label>
                 <select
                   className="form-select"
@@ -530,7 +525,7 @@ export const NewAssessment = ({ onAssessmentStarted }) => {
               </span>
             )}
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {[
               { id: 'sast', label: 'SAST (Semgrep & AST Engine)', desc: 'Code flaws, SQLi, XSS, RCE', type: 'code' },
               { id: 'sca', label: 'SCA (OSV Lockfile Analyzer)', desc: '15+ ecosystems, CVEs, patches', type: 'code' },

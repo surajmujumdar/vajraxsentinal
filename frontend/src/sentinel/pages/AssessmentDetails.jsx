@@ -134,15 +134,15 @@ export const AssessmentDetails = ({ assessmentId, onBack, onViewAllFindings }) =
   return (
     <div className="page-container">
       {/* Top Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <div className="flex items-center gap-3">
           <button className="btn btn-secondary btn-sm" onClick={onBack}>
             <ArrowLeft size={16} />
             <span>Back</span>
           </button>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <h1 className="title-gradient" style={{ fontSize: '24px' }}>
+            <div className="flex items-center flex-wrap gap-2">
+              <h1 className="title-gradient text-xl sm:text-2xl font-bold">
                 Assessment Report #{assessment.id.slice(0, 8)}
               </h1>
               <span style={{
@@ -163,7 +163,7 @@ export const AssessmentDetails = ({ assessmentId, onBack, onViewAllFindings }) =
         </div>
 
         {/* Action and Report Export Buttons */}
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <div className="flex flex-wrap gap-2 items-center">
           <button className="btn btn-secondary btn-sm" onClick={() => loadAssessmentData(true)}>
             <RefreshCw size={14} />
             <span>Refresh</span>
@@ -204,9 +204,9 @@ export const AssessmentDetails = ({ assessmentId, onBack, onViewAllFindings }) =
       </div>
 
       {/* Overview Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: '20px', marginBottom: '28px' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-7">
         {/* Risk Gauge Card */}
-        <div className="cyber-card cyber-card-glow" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="cyber-card cyber-card-glow lg:col-span-4 xl:col-span-3 flex flex-col items-center justify-center p-5">
           <div style={{ fontSize: '12px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '8px' }}>
             Assessment Risk Index
           </div>
@@ -214,8 +214,8 @@ export const AssessmentDetails = ({ assessmentId, onBack, onViewAllFindings }) =
         </div>
 
         {/* Breakdown Stats */}
-        <div className="cyber-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
+        <div className="cyber-card lg:col-span-8 xl:col-span-9 flex flex-col justify-between p-5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
             <div>
               <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase' }}>Critical</div>
               <div style={{ fontSize: '28px', fontWeight: '800', color: '#ff3366', fontFamily: 'var(--font-mono)' }}>
@@ -243,24 +243,14 @@ export const AssessmentDetails = ({ assessmentId, onBack, onViewAllFindings }) =
           </div>
 
           {/* Scope Target Info */}
-          <div style={{
-            background: '#090d16',
-            border: '1px solid #1e293b',
-            borderRadius: '8px',
-            padding: '12px 16px',
-            marginTop: '16px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            fontSize: '13px'
-          }}>
-            <div>
+          <div className="bg-[#090d16] border border-[#1e293b] rounded-lg p-3 sm:p-4 mt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs sm:text-sm">
+            <div className="truncate max-w-full">
               <span style={{ color: '#64748b' }}>Repository: </span>
-              <span style={{ color: '#38bdf8', fontFamily: 'var(--font-mono)' }}>{assessment.repository_info?.url || 'Source Code Upload'}</span>
+              <span className="truncate" style={{ color: '#38bdf8', fontFamily: 'var(--font-mono)' }}>{assessment.repository_info?.url || 'Source Code Upload'}</span>
             </div>
-            <div>
+            <div className="truncate max-w-full">
               <span style={{ color: '#64748b' }}>Target URL: </span>
-              <span style={{ color: '#00f2fe', fontFamily: 'var(--font-mono)' }}>{assessment.target_info?.url || 'N/A'}</span>
+              <span className="truncate" style={{ color: '#00f2fe', fontFamily: 'var(--font-mono)' }}>{assessment.target_info?.url || 'N/A'}</span>
             </div>
           </div>
         </div>
@@ -453,7 +443,7 @@ export const AssessmentDetails = ({ assessmentId, onBack, onViewAllFindings }) =
           <div style={{ fontSize: '13px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '12px' }}>
             Security Regression Analysis (vs. Previous Assessment)
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div style={{ background: '#0d1322', padding: '12px', borderRadius: '8px', border: '1px solid #1e293b' }}>
               <span style={{ fontSize: '11px', color: '#ff3366', fontWeight: '700', textTransform: 'uppercase' }}>NEW FINDINGS</span>
               <div style={{ fontSize: '22px', fontWeight: '800', color: '#f8fafc', marginTop: '4px' }}>

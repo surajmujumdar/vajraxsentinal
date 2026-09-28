@@ -186,8 +186,8 @@ function SentinelMain() {
         />
 
         {/* Unified Dashboard Container with Cyber-HUD Sidebar */}
-        <div className="max-w-[1720px] mx-auto px-4 sm:px-6 py-6">
-          <div className="flex flex-col lg:flex-row gap-6 items-start">
+        <div className="w-full max-w-[1720px] mx-auto px-2.5 sm:px-4 lg:px-6 py-3 sm:py-6">
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 items-start w-full min-w-0">
             <Sidebar
               currentTab={currentTab === 'assessment_detail' ? 'assessments' : currentTab}
               onTabChange={(tab) => {
@@ -196,7 +196,7 @@ function SentinelMain() {
               }}
             />
 
-            <main className="flex-1 min-w-0 w-full space-y-6" data-purpose="telemetry-dashboard">
+            <main className="flex-1 min-w-0 w-full space-y-4 sm:space-y-6" data-purpose="telemetry-dashboard">
               {renderContent()}
             </main>
           </div>

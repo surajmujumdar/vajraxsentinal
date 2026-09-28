@@ -79,9 +79,9 @@ export const Reports = ({ onViewAssessment }) => {
 
   return (
     <div className="page-container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
-          <h1 className="title-gradient" style={{ fontSize: '26px', marginBottom: '6px' }}>
+          <h1 className="title-gradient text-xl sm:text-2xl font-bold mb-1">
             Security Assessments & Audit Reports
           </h1>
           <p style={{ color: '#94a3b8', fontSize: '14px' }}>
@@ -95,7 +95,7 @@ export const Reports = ({ onViewAssessment }) => {
       </div>
 
       {/* Filter Tabs */}
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
+      <div className="flex flex-wrap gap-2 mb-5">
         {[
           { id: 'ALL', label: 'All Scans' },
           { id: 'COMPLETED', label: 'Completed Reports' },
@@ -137,20 +137,16 @@ export const Reports = ({ onViewAssessment }) => {
             return (
               <div
                 key={a.id}
-                className="cyber-card"
+                className="cyber-card flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 p-4 sm:p-5"
                 onClick={() => onViewAssessment(a.id)}
                 style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  padding: '18px 20px',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease'
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.borderColor = '#00f2fe'}
                 onMouseLeave={(e) => e.currentTarget.style.borderColor = '#1e293b'}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div className="flex items-start sm:items-center gap-3 sm:gap-4 min-w-0 w-full lg:w-auto">
                   <div style={{
                     width: '42px',
                     height: '42px',
@@ -164,8 +160,8 @@ export const Reports = ({ onViewAssessment }) => {
                   }}>
                     {isCompleted ? <CheckCircle2 size={22} /> : (isFailed ? <AlertCircle size={22} /> : <Loader2 size={22} className="scanning-pulse" />)}
                   </div>
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center flex-wrap gap-2">
                       <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#f8fafc' }}>
                         Security Assessment #{a?.id ? (typeof a.id === 'string' ? a.id.slice(0, 8) : a.id) : '--------'}
                       </h3>
@@ -191,27 +187,27 @@ export const Reports = ({ onViewAssessment }) => {
                       </span>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
+                    <div className="flex items-center flex-wrap gap-x-3 gap-y-1 text-xs text-[#64748b] mt-1">
                       <span>{new Date(a.created_at).toLocaleString()}</span>
                       <span>•</span>
                       <span>{a.total_findings} findings recorded</span>
                       {a.repository_info?.url && (
                         <>
                           <span>•</span>
-                          <span style={{ color: '#38bdf8', fontFamily: 'var(--font-mono)' }}>{a.repository_info.url}</span>
+                          <span className="truncate max-w-[200px] sm:max-w-[300px]" style={{ color: '#38bdf8', fontFamily: 'var(--font-mono)' }}>{a.repository_info.url}</span>
                         </>
                       )}
                       {a.target_info?.url && (
                         <>
                           <span>•</span>
-                          <span style={{ color: '#00f2fe', fontFamily: 'var(--font-mono)' }}>{a.target_info.url}</span>
+                          <span className="truncate max-w-[200px] sm:max-w-[300px]" style={{ color: '#00f2fe', fontFamily: 'var(--font-mono)' }}>{a.target_info.url}</span>
                         </>
                       )}
                     </div>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div className="flex items-center flex-wrap justify-between lg:justify-end gap-3 sm:gap-4 w-full lg:w-auto pt-2 lg:pt-0 border-t lg:border-t-0 border-[#1e293b]">
                   {isCompleted && (
                     <div style={{ textAlign: 'right', marginRight: '8px' }}>
                       <div style={{ fontSize: '18px', fontWeight: '800', color: '#00f2fe', fontFamily: 'var(--font-mono)' }}>
@@ -221,7 +217,7 @@ export const Reports = ({ onViewAssessment }) => {
                     </div>
                   )}
 
-                  <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                  <div className="flex flex-wrap gap-1.5 items-center">
                     {isCompleted && (
                       <>
                         <button className="btn btn-secondary btn-sm" onClick={(e) => handleExport(e, a.id, 'json')}>

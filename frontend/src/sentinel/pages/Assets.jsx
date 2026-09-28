@@ -49,13 +49,11 @@ export const Assets = ({ onSelectAsset, onNewAssessment }) => {
     } finally {
       setVerifying(false);
     }
-  };
-
-  return (
-    <div className="page-container" style={{ maxWidth: '1200px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+  };  return (
+    <div className="page-container w-full max-w-[1400px]">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
-          <h1 className="title-gradient" style={{ fontSize: '26px', marginBottom: '4px' }}>
+          <h1 className="title-gradient text-xl sm:text-2xl font-bold mb-1">
             Production Application Assets
           </h1>
           <p style={{ color: '#94a3b8', fontSize: '14px', margin: 0 }}>
@@ -94,29 +92,35 @@ export const Assets = ({ onSelectAsset, onNewAssessment }) => {
           </div>
         )}
 
-        <form onSubmit={handleVerifyNewAsset} style={{ display: 'grid', gridTemplateColumns: '1fr 2fr auto', gap: '12px' }}>
-          <select
-            className="form-select"
-            value={selectedProjectId}
-            onChange={(e) => setSelectedProjectId(e.target.value)}
-          >
-            {projects.map(p => (
-              <option key={p.id} value={p.id}>{p.name}</option>
-            ))}
-          </select>
+        <form onSubmit={handleVerifyNewAsset} className="grid grid-cols-1 md:grid-cols-12 gap-3">
+          <div className="md:col-span-4">
+            <select
+              className="form-select w-full"
+              value={selectedProjectId}
+              onChange={(e) => setSelectedProjectId(e.target.value)}
+            >
+              {projects.map(p => (
+                <option key={p.id} value={p.id}>{p.name}</option>
+              ))}
+            </select>
+          </div>
 
-          <input
-            type="text"
-            className="form-input"
-            placeholder="https://app.example.com"
-            value={verifyingUrl}
-            onChange={(e) => setVerifyingUrl(e.target.value)}
-            required
-          />
+          <div className="md:col-span-6">
+            <input
+              type="text"
+              className="form-input w-full"
+              placeholder="https://app.example.com"
+              value={verifyingUrl}
+              onChange={(e) => setVerifyingUrl(e.target.value)}
+              required
+            />
+          </div>
 
-          <button type="submit" className="btn btn-primary" disabled={verifying}>
-            {verifying ? 'Running Discovery...' : 'Verify Asset'}
-          </button>
+          <div className="md:col-span-2">
+            <button type="submit" className="btn btn-primary w-full" disabled={verifying}>
+              {verifying ? 'Running...' : 'Verify Asset'}
+            </button>
+          </div>
         </form>
       </div>
 
@@ -134,7 +138,7 @@ export const Assets = ({ onSelectAsset, onNewAssessment }) => {
           </p>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '16px' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {assets.map((asset) => (
             <div key={asset.id} className="cyber-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>

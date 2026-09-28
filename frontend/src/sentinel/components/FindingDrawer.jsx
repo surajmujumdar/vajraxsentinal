@@ -120,32 +120,29 @@ export const FindingDrawer = ({ finding, onClose, onStatusUpdated }) => {
   };
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      right: 0,
-      bottom: 0,
-      width: '100%',
-      maxWidth: '680px',
-      background: '#070104',
-      borderLeft: '1px solid rgba(255, 23, 68, 0.3)',
-      boxShadow: '-10px 0 40px rgba(0, 0, 0, 0.95), 0 0 30px rgba(255, 23, 68, 0.2)',
-      zIndex: 100,
-      display: 'flex',
-      flexDirection: 'column',
-      animation: 'slideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
-    }}>
+    <div 
+      className="w-full max-w-[680px] p-0 flex flex-col z-[100]"
+      style={{
+        position: 'fixed',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        background: '#070104',
+        borderLeft: '1px solid rgba(255, 23, 68, 0.3)',
+        boxShadow: '-10px 0 40px rgba(0, 0, 0, 0.95), 0 0 30px rgba(255, 23, 68, 0.2)',
+        animation: 'slideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
+      }}
+    >
       {/* Header */}
-      <div style={{
-        padding: '24px',
-        borderBottom: '1px solid rgba(255, 23, 68, 0.25)',
-        display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'space-between',
-        background: '#0e0106'
-      }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+      <div 
+        className="p-4 sm:p-6 flex items-start justify-between gap-3"
+        style={{
+          borderBottom: '1px solid rgba(255, 23, 68, 0.25)',
+          background: '#0e0106'
+        }}
+      >
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center flex-wrap gap-2 mb-2">
             <SeverityBadge severity={finding.severity} />
             <span style={{
               background: '#1a030c',
@@ -169,7 +166,7 @@ export const FindingDrawer = ({ finding, onClose, onStatusUpdated }) => {
               {finding.scanner}
             </span>
           </div>
-          <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#f8fafc', lineHeight: 1.3 }}>
+          <h2 className="text-base sm:text-lg font-bold text-[#f8fafc] leading-snug break-words">
             {finding.title}
           </h2>
         </div>
@@ -181,7 +178,8 @@ export const FindingDrawer = ({ finding, onClose, onStatusUpdated }) => {
             color: '#64748b',
             cursor: 'pointer',
             padding: '4px',
-            borderRadius: '6px'
+            borderRadius: '6px',
+            flexShrink: 0
           }}
         >
           <X size={20} />
@@ -189,24 +187,22 @@ export const FindingDrawer = ({ finding, onClose, onStatusUpdated }) => {
       </div>
 
       {/* Body Content */}
-      <div style={{ padding: '24px', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      <div className="p-4 sm:p-6 overflow-y-auto flex-1 flex flex-col gap-5 sm:gap-6">
         {/* Risk Score & Status Bar */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          background: '#110207',
-          padding: '12px 16px',
-          borderRadius: '8px',
-          border: '1px solid rgba(255, 23, 68, 0.3)'
-        }}>
+        <div 
+          className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3 sm:p-4 rounded-lg"
+          style={{
+            background: '#110207',
+            border: '1px solid rgba(255, 23, 68, 0.3)'
+          }}
+        >
           <div>
             <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase' }}>Normalized Risk Score</div>
             <div style={{ fontSize: '20px', fontWeight: '800', color: '#ff1744', fontFamily: 'var(--font-mono)' }}>
               {finding.risk_score || 0} <span style={{ fontSize: '12px', color: '#64748b' }}>/ 100</span>
             </div>
           </div>
-          <div style={{ display: 'flex', gap: '6px' }}>
+          <div className="flex flex-wrap gap-1.5 w-full sm:w-auto">
             {['open', 'resolved', 'false_positive'].map((st) => (
               <button
                 key={st}

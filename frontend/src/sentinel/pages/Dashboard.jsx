@@ -181,16 +181,15 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
   }
 
   return (
-    <div className="space-y-6" data-purpose="telemetry-dashboard">
+    <div className="space-y-4 sm:space-y-6 w-full min-w-0" data-purpose="telemetry-dashboard">
       {/* Grand Console Container */}
-      <div className="tech-border-card rounded-xl border border-rose-500/25 bg-command-900/90 shadow-[0_0_50px_rgba(7,1,4,0.95)] backdrop-blur-md p-8">
-
+      <div className="tech-border-card rounded-xl border border-rose-500/25 bg-command-900/90 shadow-[0_0_50px_rgba(7,1,4,0.95)] backdrop-blur-md p-3.5 sm:p-5 md:p-6 lg:p-7 overflow-hidden">
 
         {/* Main Visual Grid: Left Panels, Center 3D Sphere Core, Right Panels */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-start">
           {/* LEFT COLUMN: Secondary Charts & Counters */}
-          <div className="lg:col-span-3 space-y-1.5">
-            <div className="tech-border-card rounded-lg bg-command-950/80 border border-rose-500/25 shadow-[0_0_15px_rgba(255,23,68,0.15)] px-2.5 py-1.5">
+          <div className="lg:col-span-3 space-y-2">
+            <div className="tech-border-card rounded-lg bg-command-950/80 border border-rose-500/25 shadow-[0_0_15px_rgba(255,23,68,0.15)] px-3 py-2">
               <div className="flex items-center justify-between pb-1 border-b border-rose-900/40 mb-1">
                 <div className="flex items-center space-x-2">
                   <Radar className="w-4 h-4 text-rose-400" />
@@ -198,7 +197,7 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                 </div>
               </div>
               <div className="flex items-baseline justify-between mb-1">
-                <div className="text-2xl font-hud font-black text-white drop-shadow-[0_0_8px_rgba(255,23,68,0.5)] leading-none">
+                <div className="text-xl sm:text-2xl font-hud font-black text-white drop-shadow-[0_0_8px_rgba(255,23,68,0.5)] leading-none">
                   {metrics?.total_assessments !== undefined ? metrics.total_assessments.toLocaleString() : (metrics?.total_scans ?? 30).toLocaleString()}
                 </div>
                 <span className="text-[9px] font-mono text-emerald-400 font-bold flex items-center space-x-1">
@@ -211,7 +210,7 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
               </div>
             </div>
 
-            <div className="tech-border-card rounded-lg bg-command-950/80 border border-rose-500/25 shadow-[0_0_15px_rgba(255,23,68,0.15)] px-2.5 py-1.5">
+            <div className="tech-border-card rounded-lg bg-command-950/80 border border-rose-500/25 shadow-[0_0_15px_rgba(255,23,68,0.15)] px-3 py-2">
               <div className="flex items-center justify-between pb-1 border-b border-rose-900/40 mb-1">
                 <div className="flex items-center space-x-2">
                   <AlertTriangle className="w-4 h-4 text-rose-400" />
@@ -219,7 +218,7 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
                 </div>
                 <button 
                   onClick={() => onViewFindings && onViewFindings()} 
-                  className="px-1.5 py-0.2 rounded bg-rose-500/15 border border-rose-500/30 text-[9px] font-mono text-rose-300 font-bold hover:bg-rose-500/30 transition-colors cursor-pointer"
+                  className="px-1.5 py-0.5 rounded bg-rose-500/15 border border-rose-500/30 text-[9px] font-mono text-rose-300 font-bold hover:bg-rose-500/30 transition-colors cursor-pointer"
                   title="View all findings in Findings Explorer"
                 >
                   {metrics?.open_findings ?? totalFiltered} ALERTS
@@ -267,64 +266,66 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
           </div>
 
           {/* CENTER COLUMN: Particle Hologram 3D Sphere & Master Counters */}
-          <div className="lg:col-span-6 flex flex-col items-center justify-between relative">
-            <div className="relative w-full h-[400px] flex items-center justify-center glow-sphere-container my-2">
-              <div className="absolute w-[340px] h-[340px] rounded-full bg-gradient-to-r from-rose-500/20 via-red-600/30 to-rose-700/20 blur-3xl pointer-events-none animate-pulse"></div>
-              <div className="absolute w-[260px] h-[260px] rounded-full bg-rose-500/15 blur-2xl pointer-events-none"></div>
-              
-              <div className="absolute w-[360px] h-[360px] rounded-full border border-rose-500/20 animate-spin" style={{ animationDuration: '40s' }}></div>
-              <div className="absolute w-[320px] h-[320px] rounded-full border border-dashed border-rose-400/30 animate-spin" style={{ animationDuration: '25s', animationDirection: 'reverse' }}></div>
-              <div className="absolute w-[270px] h-[270px] rounded-full border border-rose-400/40 shadow-[0_0_30px_rgba(255,23,68,0.3)]"></div>
-              <div className="absolute w-[220px] h-[220px] rounded-full border border-red-500/40 animate-pulse"></div>
-              
-              <div className="absolute w-[360px] h-[360px] rounded-full animate-spin pointer-events-none" style={{ animationDuration: '18s' }}>
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_8px_#ff1744]"></div>
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-1.5 h-1.5 rounded-full bg-red-400"></div>
-              </div>
-              <div className="absolute w-[300px] h-[300px] rounded-full animate-spin pointer-events-none" style={{ animationDuration: '12s', animationDirection: 'reverse' }}>
-                <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981]"></div>
-                <div className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]"></div>
-              </div>
-              
-              <div className="absolute w-[380px] h-px bg-gradient-to-r from-transparent via-rose-500/30 to-transparent pointer-events-none"></div>
-              <div className="absolute h-[380px] w-px bg-gradient-to-b from-transparent via-rose-500/30 to-transparent pointer-events-none"></div>
-              
-              <canvas ref={canvasRef} className="w-[360px] h-[360px] z-10 relative" data-purpose="holographic-sphere-animation" height="360" width="360"></canvas>
-              
-              <div className="absolute z-20 flex flex-col items-center justify-center text-center pointer-events-none">
-                <div className="backdrop-blur-md bg-command-950/80 p-4 rounded-full border border-rose-500/40 shadow-[0_0_30px_rgba(255,23,68,0.35)] flex flex-col items-center justify-center w-[180px] h-[180px] relative">
-                  <svg className="w-full h-full -rotate-90 transform absolute inset-0" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" fill="none" r="42" stroke="#22040f" strokeWidth="6"></circle>
-                    <circle
-                      className="transition-all duration-700 ease-out"
-                      cx="50"
-                      cy="50"
-                      fill="none"
-                      r="42"
-                      stroke={currentRiskScore >= 70 ? "#ff1744" : currentRiskScore >= 40 ? "#f59e0b" : currentRiskScore >= 15 ? "#ff5252" : "#10b981"}
-                      strokeDasharray="263.8"
-                      strokeDashoffset={263.8 - (263.8 * (Math.min(100, Math.max(0, currentRiskScore)) / 100))}
-                      strokeLinecap="round"
-                      strokeWidth="6"
-                    ></circle>
-                  </svg>
-                  <span className="text-[9px] font-mono tracking-widest text-rose-300 uppercase mb-0.5">RISK SCORE</span>
-                  <div className={`text-3xl font-hud font-black leading-none ${
-                    currentRiskScore >= 70 ? 'text-rose-400 drop-shadow-[0_0_10px_rgba(255,23,68,0.7)]' : currentRiskScore >= 40 ? 'text-amber-400 drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]' : currentRiskScore >= 15 ? 'text-rose-300 drop-shadow-[0_0_10px_rgba(255,82,82,0.6)]' : 'text-emerald-400 drop-shadow-[0_0_10px_rgba(16,185,129,0.6)]'
-                  }`}>
-                    {Number(currentRiskScore).toFixed(1)}
-                  </div>
-                  <span className="text-[9px] font-mono text-slate-400 mt-0.5">/ 100</span>
-                  <div className={`mt-1 px-2 py-0.5 rounded text-[8px] font-mono font-bold tracking-wider uppercase border ${
-                    currentRiskScore >= 70 ? 'bg-rose-500/20 text-rose-400 border-rose-400/40 shadow-[0_0_8px_rgba(255,23,68,0.4)]' : currentRiskScore >= 40 ? 'bg-amber-500/20 text-amber-400 border-amber-400/40 shadow-[0_0_8px_rgba(245,158,11,0.4)]' : currentRiskScore >= 15 ? 'bg-rose-500/20 text-rose-300 border-rose-400/40 shadow-[0_0_8px_rgba(255,23,68,0.4)]' : 'bg-emerald-500/20 text-emerald-400 border-emerald-400/40 shadow-[0_0_8px_rgba(16,185,129,0.4)]'
-                  }`}>
-                    {currentRiskScore >= 70 ? 'CRITICAL' : currentRiskScore >= 40 ? 'HIGH RISK' : currentRiskScore >= 15 ? 'MODERATE' : 'OPTIMAL'}
+          <div className="lg:col-span-6 flex flex-col items-center justify-center relative w-full overflow-hidden">
+            <div className="relative w-full max-w-[380px] h-[320px] sm:h-[360px] md:h-[390px] flex items-center justify-center glow-sphere-container my-1 mx-auto overflow-hidden">
+              <div className="relative w-[360px] h-[360px] flex items-center justify-center scale-[0.78] sm:scale-[0.88] md:scale-100 origin-center transition-transform">
+                <div className="absolute w-[340px] h-[340px] rounded-full bg-gradient-to-r from-rose-500/20 via-red-600/30 to-rose-700/20 blur-3xl pointer-events-none animate-pulse"></div>
+                <div className="absolute w-[260px] h-[260px] rounded-full bg-rose-500/15 blur-2xl pointer-events-none"></div>
+                
+                <div className="absolute w-[360px] h-[360px] rounded-full border border-rose-500/20 animate-spin" style={{ animationDuration: '40s' }}></div>
+                <div className="absolute w-[320px] h-[320px] rounded-full border border-dashed border-rose-400/30 animate-spin" style={{ animationDuration: '25s', animationDirection: 'reverse' }}></div>
+                <div className="absolute w-[270px] h-[270px] rounded-full border border-rose-400/40 shadow-[0_0_30px_rgba(255,23,68,0.3)]"></div>
+                <div className="absolute w-[220px] h-[220px] rounded-full border border-red-500/40 animate-pulse"></div>
+                
+                <div className="absolute w-[360px] h-[360px] rounded-full animate-spin pointer-events-none" style={{ animationDuration: '18s' }}>
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_8px_#ff1744]"></div>
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-1.5 h-1.5 rounded-full bg-red-400"></div>
+                </div>
+                <div className="absolute w-[300px] h-[300px] rounded-full animate-spin pointer-events-none" style={{ animationDuration: '12s', animationDirection: 'reverse' }}>
+                  <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981]"></div>
+                  <div className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]"></div>
+                </div>
+                
+                <div className="absolute w-[380px] h-px bg-gradient-to-r from-transparent via-rose-500/30 to-transparent pointer-events-none"></div>
+                <div className="absolute h-[380px] w-px bg-gradient-to-b from-transparent via-rose-500/30 to-transparent pointer-events-none"></div>
+                
+                <canvas ref={canvasRef} className="w-[360px] h-[360px] z-10 relative" data-purpose="holographic-sphere-animation" height="360" width="360"></canvas>
+                
+                <div className="absolute z-20 flex flex-col items-center justify-center text-center pointer-events-none">
+                  <div className="backdrop-blur-md bg-command-950/80 p-4 rounded-full border border-rose-500/40 shadow-[0_0_30px_rgba(255,23,68,0.35)] flex flex-col items-center justify-center w-[180px] h-[180px] relative">
+                    <svg className="w-full h-full -rotate-90 transform absolute inset-0" viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" fill="none" r="42" stroke="#22040f" strokeWidth="6"></circle>
+                      <circle
+                        className="transition-all duration-700 ease-out"
+                        cx="50"
+                        cy="50"
+                        fill="none"
+                        r="42"
+                        stroke={currentRiskScore >= 70 ? "#ff1744" : currentRiskScore >= 40 ? "#f59e0b" : currentRiskScore >= 15 ? "#ff5252" : "#10b981"}
+                        strokeDasharray="263.8"
+                        strokeDashoffset={263.8 - (263.8 * (Math.min(100, Math.max(0, currentRiskScore)) / 100))}
+                        strokeLinecap="round"
+                        strokeWidth="6"
+                      ></circle>
+                    </svg>
+                    <span className="text-[9px] font-mono tracking-widest text-rose-300 uppercase mb-0.5">RISK SCORE</span>
+                    <div className={`text-2xl sm:text-3xl font-hud font-black leading-none ${
+                      currentRiskScore >= 70 ? 'text-rose-400 drop-shadow-[0_0_10px_rgba(255,23,68,0.7)]' : currentRiskScore >= 40 ? 'text-amber-400 drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]' : currentRiskScore >= 15 ? 'text-rose-300 drop-shadow-[0_0_10px_rgba(255,82,82,0.6)]' : 'text-emerald-400 drop-shadow-[0_0_10px_rgba(16,185,129,0.6)]'
+                    }`}>
+                      {Number(currentRiskScore).toFixed(1)}
+                    </div>
+                    <span className="text-[9px] font-mono text-slate-400 mt-0.5">/ 100</span>
+                    <div className={`mt-1 px-2 py-0.5 rounded text-[8px] font-mono font-bold tracking-wider uppercase border ${
+                      currentRiskScore >= 70 ? 'bg-rose-500/20 text-rose-400 border-rose-400/40 shadow-[0_0_8px_rgba(255,23,68,0.4)]' : currentRiskScore >= 40 ? 'bg-amber-500/20 text-amber-400 border-amber-400/40 shadow-[0_0_8px_rgba(245,158,11,0.4)]' : currentRiskScore >= 15 ? 'bg-rose-500/20 text-rose-300 border-rose-400/40 shadow-[0_0_8px_rgba(255,23,68,0.4)]' : 'bg-emerald-500/20 text-emerald-400 border-emerald-400/40 shadow-[0_0_8px_rgba(16,185,129,0.4)]'
+                    }`}>
+                      {currentRiskScore >= 70 ? 'CRITICAL' : currentRiskScore >= 40 ? 'HIGH RISK' : currentRiskScore >= 15 ? 'MODERATE' : 'OPTIMAL'}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="absolute -bottom-4 w-full h-24 bg-gradient-to-t from-rose-950/40 to-transparent pointer-events-none border-b border-rose-500/30">
-                <div className="w-full h-full opacity-30 cyber-grid"></div>
+                <div className="absolute -bottom-4 w-full h-24 bg-gradient-to-t from-rose-950/40 to-transparent pointer-events-none border-b border-rose-500/30">
+                  <div className="w-full h-full opacity-30 cyber-grid"></div>
+                </div>
               </div>
             </div>
 
