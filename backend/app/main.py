@@ -81,6 +81,22 @@ async def lifespan(app: FastAPI):
             db.add(sast_proj)
             db.commit()
             logger.info("Seeded Cybersecurity SAST project.")
+
+        # Ensure cybersecurity-dast project is registered (DAST only)
+        dast_proj = db.query(Project).filter(Project.repository_url.like("%cybersecurity-dast%")).first()
+        if not dast_proj:
+            admin_user = db.query(User).filter(User.username == "admin").first()
+            user_id = admin_user.id if admin_user else "admin"
+            dast_proj = Project(
+                name="Cybersecurity DAST Target",
+                description="Dynamic Application Security Testing (DAST-only) benchmark repository.",
+                repository_url="https://github.com/paulveillard/cybersecurity-dast",
+                target_url="https://xss.challenge.training.hacq.me/challenges/baby02.php",
+                user_id=user_id
+            )
+            db.add(dast_proj)
+            db.commit()
+            logger.info("Seeded Cybersecurity DAST project.")
     except Exception as e:
         logger.error(f"Error seeding initial database data: {e}")
     finally:

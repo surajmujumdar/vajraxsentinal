@@ -348,7 +348,7 @@ export const NewAssessment = ({ onAssessmentStarted }) => {
               </span>
             </div>
             <p className="text-[11px] text-slate-400 font-mono mt-0.5">
-              1-Click presets for Static Code Analysis (SAST) and Combined (SAST + DAST) automated pipelines.
+              1-Click presets for SAST-only, DAST-only, and Combined (SAST + DAST) automated pipelines.
             </p>
           </div>
         </div>
@@ -378,6 +378,31 @@ export const NewAssessment = ({ onAssessmentStarted }) => {
           >
             <Play size={12} fill="currentColor" />
             <span>⚡ SAST ONLY (cybersecurity-sast)</span>
+          </button>
+
+          {/* DAST ONLY PRESET */}
+          <button
+            type="button"
+            onClick={() => {
+              setMode('dast');
+              setTargetUrl('https://xss.challenge.training.hacq.me/challenges/baby02.php');
+              setRepoUrl('');
+              setModules({
+                sast: false,
+                sca: false,
+                secrets: false,
+                dast: true,
+                nuclei: true,
+                wapiti: true,
+                nikto: true,
+                ssl: true
+              });
+            }}
+            className="flex-1 sm:flex-none px-3 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-hud font-bold text-[11px] sm:text-xs shadow-[0_0_10px_rgba(16,185,129,0.4)] flex items-center justify-center space-x-1.5 cursor-pointer active:scale-95 transition-all"
+            title="Load DAST-only benchmark: paulveillard/cybersecurity-dast"
+          >
+            <Play size={12} fill="currentColor" />
+            <span>⚡ DAST ONLY (cybersecurity-dast)</span>
           </button>
 
           {/* SAST + DAST COMBINED PRESET */}
@@ -573,11 +598,25 @@ export const NewAssessment = ({ onAssessmentStarted }) => {
         {/* Input C: Live Application DAST Target */}
         {(mode === 'dast' || mode === 'combined') && (
           <div className="cyber-card" style={{ marginBottom: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-              <Globe size={18} color="#00f2fe" />
-              <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#f8fafc' }}>
-                Live Application Target (DAST & Web Probes)
-              </h3>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Globe size={18} color="#00f2fe" />
+                <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#f8fafc' }}>
+                  Live Application Target (DAST & Web Probes)
+                </h3>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTargetUrl('https://xss.challenge.training.hacq.me/challenges/baby02.php');
+                  }}
+                  className="px-2.5 py-1 rounded bg-emerald-500/15 border border-emerald-500/40 hover:bg-emerald-500/30 text-emerald-300 text-[11px] font-mono font-bold flex items-center gap-1 transition-all cursor-pointer shadow-[0_0_8px_rgba(16,185,129,0.2)]"
+                  title="Auto-fill DAST benchmark target: hacq.me XSS Challenge Lab"
+                >
+                  <span>⚡ DAST Target: hacq.me XSS Lab</span>
+                </button>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
