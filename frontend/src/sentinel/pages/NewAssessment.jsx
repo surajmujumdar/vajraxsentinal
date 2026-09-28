@@ -375,11 +375,24 @@ export const NewAssessment = ({ onAssessmentStarted }) => {
         {/* Input A: GitHub Repository Configuration */}
         {(mode === 'repo' || mode === 'combined') && (
           <div className="cyber-card" style={{ marginBottom: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-              <GitBranch size={18} color="#00f2fe" />
-              <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#f8fafc' }}>
-                GitHub Repository Inputs
-              </h3>
+            <div className="flex items-center justify-between mb-4">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <GitBranch size={18} color="#00f2fe" />
+                <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#f8fafc' }}>
+                  GitHub Repository Inputs
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setRepoUrl('https://github.com/magnologan/gha-devsecops');
+                  setBranch('main');
+                }}
+                className="px-2.5 py-1 rounded bg-rose-500/15 border border-rose-500/40 hover:bg-rose-500/30 text-rose-300 text-[11px] font-mono font-bold flex items-center gap-1 transition-all cursor-pointer shadow-[0_0_8px_rgba(255,23,68,0.2)]"
+                title="Auto-fill benchmark repository: magnologan/gha-devsecops"
+              >
+                <span>⚡ Load magnologan/gha-devsecops</span>
+              </button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
