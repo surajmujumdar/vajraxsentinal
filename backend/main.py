@@ -7,10 +7,16 @@ from contextlib import asynccontextmanager
 import logging
 from logging.config import dictConfig
 
+from dotenv import load_dotenv
+
 # Ensure paths for both VAJRA and Sentinel subsystems
 BACKEND_DIR = Path(__file__).resolve().parent
 VAJRA_DIR = BACKEND_DIR / "vajra"
 SENTINEL_DIR = BACKEND_DIR / "sentinel"
+
+# Load environment variables
+load_dotenv(BACKEND_DIR / ".env")
+load_dotenv(BACKEND_DIR.parent / ".env")
 
 for p in [str(SENTINEL_DIR), str(VAJRA_DIR), str(BACKEND_DIR)]:
     if p not in sys.path:

@@ -7,9 +7,12 @@ from dotenv import load_dotenv
 
 class EmailService:
     def _get_config(self):
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        env_path = os.path.join(base_dir, ".env")
-        load_dotenv(env_path, override=True)
+        # Load from default environment or explicit paths
+        load_dotenv(override=False)
+        backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        load_dotenv(os.path.join(backend_dir, ".env"), override=False)
+        load_dotenv(os.path.join(os.path.dirname(backend_dir), ".env"), override=False)
+        
         smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
         smtp_port = int(os.getenv("SMTP_PORT", "587"))
         smtp_username = os.getenv("SMTP_USERNAME")
