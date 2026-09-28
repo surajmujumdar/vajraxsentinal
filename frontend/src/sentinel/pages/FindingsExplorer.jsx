@@ -68,7 +68,7 @@ export const FindingsExplorer = ({ initialSource = '', initialSeverity = '' }) =
     }, 3500);
   };
 
-  const loadFindings = useCallback(async (showLoading = false) => {
+  const loadFindings = useCallback(async (showLoading = true) => {
     try {
       if (showLoading) setLoading(true);
       setError(null);
@@ -87,14 +87,13 @@ export const FindingsExplorer = ({ initialSource = '', initialSeverity = '' }) =
       }
     } catch (err) {
       console.error('Error loading findings:', err);
-      // Keep existing findings rather than wiping state
     } finally {
-      if (showLoading) setLoading(false);
+      setLoading(false);
     }
-  }, [search, severity, source, statusFilter, limit, findings.length]);
+  }, [search, severity, source, statusFilter, limit]);
 
   useEffect(() => {
-    loadFindings(false);
+    loadFindings(true);
   }, [loadFindings]);
 
   // Listen to platform scan updates and auto-refresh silently

@@ -56,7 +56,7 @@ export const AssessmentDetails = ({ assessmentId, onBack, onViewAllFindings }) =
     } catch (err) {
       console.error('Failed to load assessment details:', err);
     } finally {
-      if (showLoading) setLoading(false);
+      setLoading(false);
     }
   };
 

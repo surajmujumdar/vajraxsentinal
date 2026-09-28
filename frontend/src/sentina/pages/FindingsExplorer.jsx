@@ -85,7 +85,7 @@ export const FindingsExplorer = ({ initialSource = '' }) => {
       console.error('Error loading findings:', err);
       setError(err.response?.data?.detail || err.message || 'Failed to query findings');
     } finally {
-      if (showLoading) setLoading(false);
+      setLoading(false);
     }
   }, [search, severity, source, statusFilter, limit]);
 
