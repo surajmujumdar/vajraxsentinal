@@ -2,8 +2,14 @@ import httpx
 import re
 import urllib.parse
 from typing import List, Dict, Any, Optional
-from app.scanners.base import ScannerAdapter, RawFinding
-from app.scanners.dast.crawler import crawl_target, CrawledEndpoint
+try:
+    from app.scanners.base import ScannerAdapter, RawFinding
+    from app.scanners.dast.crawler import crawl_target, CrawledEndpoint
+    from app.scanners.dast.dom_xss_analyzer import scan_html_for_dom_xss
+except Exception:
+    from sentinel.scanners.base import ScannerAdapter, RawFinding
+    from sentinel.scanners.dast.crawler import crawl_target, CrawledEndpoint
+    from sentinel.scanners.dast.dom_xss_analyzer import scan_html_for_dom_xss
 
 SQL_ERROR_PATTERNS = [
     r'you have an error in your sql syntax',
@@ -55,6 +61,12 @@ class ZAPAdapter(ScannerAdapter):
             for ep in endpoints:
                 try:
                     resp = await client.request(ep.method, ep.url)
+
+                    # --- Check 0: Client-Side DOM-Based Security & DOM XSS Analysis ---
+                    content_type = resp.headers.get("content-type", "").lower()
+                    if ("text/html" in content_type or "<script" in resp.text.lower() or "<html" in resp.text.lower()) and resp.text:
+                        dom_findings = scan_html_for_dom_xss(resp.text, ep.url, scanner_name="owasp-zap")
+                        findings.extend(dom_findings)
 
                     # --- Check 1: Insecure Cookie Flags ---
                     set_cookie_headers = resp.headers.get_list("set-cookie") if hasattr(resp.headers, "get_list") else [resp.headers.get("set-cookie", "")]
