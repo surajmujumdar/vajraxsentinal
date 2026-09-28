@@ -25,6 +25,11 @@ export const Reports = ({ onViewAssessment }) => {
 
   useEffect(() => {
     loadAssessments();
+    const handleUpdate = () => loadAssessments();
+    window.addEventListener('sentinel_assessments_updated', handleUpdate);
+    return () => {
+      window.removeEventListener('sentinel_assessments_updated', handleUpdate);
+    };
   }, []);
 
   const loadAssessments = async () => {

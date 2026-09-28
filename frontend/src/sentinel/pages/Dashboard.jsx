@@ -67,9 +67,11 @@ export const Dashboard = ({ onNewAssessment, onViewAssessment, onViewFindings })
     loadDashboard();
     const handleRefresh = () => loadDashboard();
     window.addEventListener('sentinal_findings_updated', handleRefresh);
+    window.addEventListener('sentinel_assessments_updated', handleRefresh);
     const interval = setInterval(loadDashboard, 10000);
     return () => {
       window.removeEventListener('sentinal_findings_updated', handleRefresh);
+      window.removeEventListener('sentinel_assessments_updated', handleRefresh);
       clearInterval(interval);
     };
   }, []);
