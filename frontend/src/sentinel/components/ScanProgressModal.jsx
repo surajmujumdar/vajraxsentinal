@@ -99,7 +99,7 @@ export const ScanProgressModal = ({ assessment, onClose, onCancel, onViewDetails
                 {isCompleted ? 'Assessment Completed' : (isFailed ? 'Assessment Failed' : 'Security Assessment in Progress')}
               </h3>
               <div style={{ fontSize: '12px', color: '#94a3b8' }}>
-                ID: {assessment.id.slice(0, 8)}... • Type: {assessment.assessment_type?.toUpperCase()}
+                ID: {assessment?.id ? (typeof assessment.id === 'string' ? assessment.id.slice(0, 8) : assessment.id) : '--------'}... • Type: {assessment?.assessment_type?.toUpperCase() || 'SCAN'}
               </div>
             </div>
           </div>

@@ -80,7 +80,8 @@ export const FindingsExplorer = ({ initialSource = '', initialSeverity = '' }) =
         limit: limit || 500,
       });
       // Handle both paginated { items: [] } and raw array responses
-      const items = res?.items || (Array.isArray(res) ? res : []);
+      const rawItems = res?.items || (Array.isArray(res) ? res : []);
+      const items = rawItems.filter(item => item && typeof item === 'object' && item.id);
       setFindings(items);
       if (statusFilter === 'open' && !search && !severity && !source) {
         setTotalOpenFindings(items.length);

@@ -29,11 +29,15 @@ function SentinelMain() {
   // Poll running assessment status if active in modal
   useEffect(() => {
     let timer = null;
-    if (activeRunningAssessment && activeRunningAssessment.status !== 'COMPLETED' && activeRunningAssessment.status !== 'FAILED' && activeRunningAssessment.status !== 'CANCELLED') {
+    const activeId = activeRunningAssessment?.id;
+    const status = activeRunningAssessment?.status;
+    if (activeId && status && status !== 'COMPLETED' && status !== 'FAILED' && status !== 'CANCELLED') {
       timer = setInterval(async () => {
         try {
-          const updated = await apiClient.getAssessment(activeRunningAssessment.id);
-          setActiveRunningAssessment(updated);
+          const updated = await apiClient.getAssessment(activeId);
+          if (updated && updated.id) {
+            setActiveRunningAssessment(updated);
+          }
         } catch (err) {
           console.error('Error polling active assessment:', err);
         }
@@ -57,14 +61,17 @@ function SentinelMain() {
   }
 
   const handleAssessmentStarted = (newAssessment) => {
-    setActiveRunningAssessment(newAssessment);
+    if (newAssessment && newAssessment.id) {
+      setActiveRunningAssessment(newAssessment);
+    }
   };
 
   const handleCancelActiveScan = async () => {
-    if (activeRunningAssessment) {
+    const activeId = activeRunningAssessment?.id;
+    if (activeId) {
       try {
-        const cancelled = await apiClient.cancelAssessment(activeRunningAssessment.id);
-        setActiveRunningAssessment(cancelled);
+        const cancelled = await apiClient.cancelAssessment(activeId);
+        if (cancelled) setActiveRunningAssessment(cancelled);
       } catch (err) {
         console.error('Cancel failed:', err);
       }

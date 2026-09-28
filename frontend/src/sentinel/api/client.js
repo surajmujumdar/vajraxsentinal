@@ -35,7 +35,10 @@ export const apiClient = {
     if (typeof window === 'undefined') return [];
     try {
       const raw = localStorage.getItem('sentinel_assessments_history');
-      return raw ? JSON.parse(raw) : [];
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      return parsed.filter(a => a && typeof a === 'object' && a.id);
     } catch {
       return [];
     }
@@ -45,7 +48,7 @@ export const apiClient = {
     if (typeof window === 'undefined' || !assessment || !assessment.id) return;
     try {
       const list = this.getLocalAssessments();
-      const existingIdx = list.findIndex(a => a.id === assessment.id);
+      const existingIdx = list.findIndex(a => a?.id === assessment.id);
       if (existingIdx >= 0) {
         list[existingIdx] = { ...list[existingIdx], ...assessment };
       } else {
@@ -59,9 +62,9 @@ export const apiClient = {
   },
 
   removeLocalAssessment(id) {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || !id) return;
     try {
-      const list = this.getLocalAssessments().filter(a => a.id !== id);
+      const list = this.getLocalAssessments().filter(a => a?.id && a.id !== id);
       localStorage.setItem('sentinel_assessments_history', JSON.stringify(list));
       window.dispatchEvent(new CustomEvent('sentinel_assessments_updated'));
     } catch (e) {
@@ -218,9 +221,8 @@ export const apiClient = {
     let backendData = [];
     try {
       const res = await this.request(`/assessments${query}`);
-      if (Array.isArray(res)) {
-        backendData = res;
-      }
+      const rawItems = res?.items || (Array.isArray(res) ? res : []);
+      backendData = rawItems.filter(a => a && typeof a === 'object' && a.id);
     } catch (err) {
       console.warn('Could not fetch backend assessments:', err);
     }
@@ -229,12 +231,12 @@ export const apiClient = {
     
     // Merge: backend data combined with any user scans in local cache
     const mergedMap = new Map();
-    localList.forEach(a => mergedMap.set(a.id, a));
-    backendData.forEach(a => mergedMap.set(a.id, a));
+    localList.forEach(a => { if (a?.id) mergedMap.set(a.id, a); });
+    backendData.forEach(a => { if (a?.id) mergedMap.set(a.id, a); });
 
     const combined = Array.from(mergedMap.values()).sort((a, b) => {
-      const tA = new Date(a.created_at || 0).getTime();
-      const tB = new Date(b.created_at || 0).getTime();
+      const tA = new Date(a?.created_at || 0).getTime();
+      const tB = new Date(b?.created_at || 0).getTime();
       return tB - tA;
     });
 
@@ -248,6 +250,7 @@ export const apiClient = {
   },
 
   async getAssessment(id) {
+    if (!id) throw new Error("Assessment ID is required.");
     try {
       const res = await this.request(`/assessments/${id}`);
       if (res && res.id) {
@@ -257,22 +260,30 @@ export const apiClient = {
     } catch (err) {
       console.warn(`Failed to fetch live assessment ${id}:`, err);
     }
-    const local = this.getLocalAssessments().find(a => a.id === id);
+    const local = this.getLocalAssessments().find(a => a?.id === id);
     if (local) return local;
     throw new Error(`Assessment #${id} not found.`);
   },
 
   async cancelAssessment(id) {
-    const local = this.getLocalAssessments().find(a => a.id === id);
+    if (!id) return null;
+    const local = this.getLocalAssessments().find(a => a?.id === id);
     if (local) {
       local.status = 'CANCELLED';
       this.saveLocalAssessment(local);
     }
-    const res = await this.request(`/assessments/${id}/cancel`, {
-      method: 'POST'
-    });
-    if (res) this.saveLocalAssessment(res);
-    return res || local;
+    try {
+      const res = await this.request(`/assessments/${id}/cancel`, {
+        method: 'POST'
+      });
+      if (res && res.id) {
+        this.saveLocalAssessment(res);
+        return res;
+      }
+    } catch (err) {
+      console.warn('Cancel failed on backend:', err);
+    }
+    return local;
   },
 
   async deleteAssessment(id) {

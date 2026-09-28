@@ -52,13 +52,15 @@ export const Reports = ({ onViewAssessment }) => {
 
   const handleDelete = async (e, id) => {
     e.stopPropagation();
-    if (!window.confirm(`Are you sure you want to permanently delete Assessment #${id.slice(0, 8)}? All findings, telemetry, and report files will be removed.`)) {
+    if (!id) return;
+    const shortId = typeof id === 'string' ? id.slice(0, 8) : id;
+    if (!window.confirm(`Are you sure you want to permanently delete Assessment #${shortId}? All findings, telemetry, and report files will be removed.`)) {
       return;
     }
     setDeletingId(id);
     try {
       await apiClient.deleteAssessment(id);
-      setAssessments(assessments.filter(a => a.id !== id));
+      setAssessments(prev => (Array.isArray(prev) ? prev.filter(a => a?.id && a.id !== id) : []));
     } catch (err) {
       alert(`Failed to delete assessment: ${err.message}`);
     } finally {
@@ -66,7 +68,8 @@ export const Reports = ({ onViewAssessment }) => {
     }
   };
 
-  const filteredAssessments = assessments.filter((a) => {
+  const filteredAssessments = (Array.isArray(assessments) ? assessments : []).filter((a) => {
+    if (!a || !a.id) return false;
     if (filterStatus === 'ALL') return true;
     if (filterStatus === 'COMPLETED') return a.status === 'COMPLETED';
     if (filterStatus === 'RUNNING') return a.status !== 'COMPLETED' && a.status !== 'FAILED' && a.status !== 'CANCELLED';
@@ -164,7 +167,7 @@ export const Reports = ({ onViewAssessment }) => {
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#f8fafc' }}>
-                        Security Assessment #{a.id.slice(0, 8)}
+                        Security Assessment #{a?.id ? (typeof a.id === 'string' ? a.id.slice(0, 8) : a.id) : '--------'}
                       </h3>
                       <span style={{
                         fontSize: '11px',
