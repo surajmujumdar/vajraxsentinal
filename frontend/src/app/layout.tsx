@@ -76,8 +76,8 @@ export default function RootLayout({
         <ErrorBoundary>
           <LanguageTranslator />
           <NotificationToast />
-          {/* Chatbot disabled for now */}
-          {/* <SamAICopilot /> */}
+          {children}
+          {/* Chatbot disabled for now: <SamAICopilot /> */}
         </ErrorBoundary>
       </body>
     </html>
