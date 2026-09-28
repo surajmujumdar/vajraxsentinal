@@ -347,6 +347,9 @@ function inlineFormat(text: string): React.ReactNode {
 
 // ── Main SAM AI Copilot Component ────────────────────────────────────────────
 export default function SamAICopilot() {
+  // Chatbot disabled for now
+  return null
+  
   const pathname = usePathname()
   const router = useRouter()
   
