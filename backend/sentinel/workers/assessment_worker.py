@@ -183,7 +183,11 @@ async def run_assessment_job(assessment_id: str):
                     dest_dir=workspace_path
                 )
                 if success:
-                    update_assessment_log(db, assessment_id, "DISCOVERING", "Repository source tree retrieved and indexed successfully.", "DISCOVERING")
+                    code_files = [f for f in workspace_path.rglob("*") if f.is_file() and not any(p in str(f) for p in [".git", "node_modules"])]
+                    if not code_files:
+                        update_assessment_log(db, assessment_id, "DISCOVERING", "Target repository is empty (0 source files found on default branch). Verify repository URL.", "DISCOVERING")
+                    else:
+                        update_assessment_log(db, assessment_id, "DISCOVERING", f"Repository source tree retrieved: {len(code_files)} files indexed for security auditing.", "DISCOVERING")
                     repo_or_code_target = workspace_path
                 else:
                     update_assessment_log(db, assessment_id, "DISCOVERING", "Could not download remote repository archive. Continuing with remaining modules.")
