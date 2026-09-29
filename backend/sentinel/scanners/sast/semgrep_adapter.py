@@ -46,7 +46,17 @@ class SemgrepAdapter(ScannerAdapter):
 
         if context["has_cli"] and context.get("cmd_prefix"):
             try:
-                cmd = list(context["cmd_prefix"]) + ["scan", "--json", "--quiet", "--config", "auto"]
+                cmd = list(context["cmd_prefix"]) + [
+                    "scan", "--json", "--quiet", "--config", "auto",
+                    "--exclude", ".git",
+                    "--exclude", "node_modules",
+                    "--exclude", "vendor",
+                    "--exclude", "dist",
+                    "--exclude", "build",
+                    "--exclude", "__pycache__",
+                    "--exclude", ".venv",
+                    "--exclude", "venv"
+                ]
                 local_config = target_path / ".semgrep.yml"
                 if not local_config.exists():
                     local_config = Path(".semgrep.yml")

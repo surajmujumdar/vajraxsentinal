@@ -55,20 +55,22 @@ async def download_github_repo(repo_url: str, branch: Optional[str], token: Opti
     if clean_url.endswith(".git"):
         clean_url = clean_url[:-4]
 
-    # Tier 1: Fast Git Shallow Clone (Handles any default branch - main, master, harpoon2, dev, etc.)
+    # Tier 1: Fast Git Shallow Clone (Handles any default branch - main, master, dev, etc.)
     try:
-        git_cmd = ["git", "clone", "--depth", "1"]
+        git_cmd = ["git", "clone", "--depth", "1", "--single-branch"]
         if branch and branch.strip() and branch.strip() not in ["main", "master", "HEAD"]:
             git_cmd.extend(["--branch", branch.strip()])
         clone_target = repo_url if repo_url.endswith(".git") else f"{clean_url}.git"
         git_cmd.extend([clone_target, str(dest_dir)])
 
+        clone_env = {**os.environ, "GIT_TERMINAL_PROMPT": "0", "GIT_ASKPASS": "echo"}
         proc = await asyncio.create_subprocess_exec(
             *git_cmd,
             stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
+            stderr=asyncio.subprocess.PIPE,
+            env=clone_env
         )
-        stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=60)
+        stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=45)
         if proc.returncode == 0 and any(dest_dir.iterdir()):
             logger.info(f"Successfully cloned repository {repo_url} via git clone")
             return True
@@ -226,13 +228,28 @@ async def run_assessment_job(assessment_id: str):
                 "dast": "DAST_RUNNING",
                 "nuclei": "DAST_RUNNING",
                 "ssl": "SSL_RUNNING",
-                "headers": "DAST_RUNNING"
+                "headers": "DAST_RUNNING",
+                "http_discovery": "DAST_RUNNING"
             }
             curr_state = status_map.get(module_key, "RUNNING")
-            msg = f"Scanner module [{module_key}] status: {status_val}"
-            if err:
-                msg += f" (Note: {err})"
-            update_assessment_log(db, assessment_id, curr_state, msg, curr_state if status_val == "RUNNING" else None)
+            if status_val == "RUNNING":
+                friendly_names = {
+                    "sast": "Semgrep AST Static Analysis & OWASP Vulnerability Scanner",
+                    "sca": "Software Composition Analysis (Google OSV CVE Database)",
+                    "secrets": "Secrets & Credential Exposure Detection",
+                    "dast": "Dynamic Web Application Security Scanner",
+                    "nuclei": "Nuclei Vulnerability & Threat Feeds",
+                    "ssl": "SSL/TLS Cipher Suite & Certificate Auditor",
+                    "headers": "HTTP Security Headers Inspector"
+                }
+                name = friendly_names.get(module_key, module_key.upper())
+                msg = f"Executing scanner module [{module_key.upper()}]: {name}..."
+                update_assessment_log(db, assessment_id, curr_state, msg, curr_state)
+            else:
+                msg = f"Scanner module [{module_key.upper()}] completed with status: {status_val}"
+                if err:
+                    msg += f" (Note: {err})"
+                update_assessment_log(db, assessment_id, curr_state, msg)
 
         # 4. Execute Scanner Modules
         raw_results = await orchestrator.run_assessment_modules(

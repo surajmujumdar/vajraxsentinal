@@ -494,7 +494,14 @@ def scan_directory_sast(directory: Path) -> List[RawFinding]:
     if not directory.exists() or not directory.is_dir():
         return all_findings
 
-    for root, _, files in os.walk(directory):
+    skip_dirs = {
+        ".git", "node_modules", "vendor", "dist", "build", "__pycache__", 
+        "venv", ".venv", "env", ".env", ".tox", ".idea", ".vscode", 
+        "coverage", ".next", ".cache", ".turbo", "out", "target"
+    }
+
+    for root, dirs, files in os.walk(directory):
+        dirs[:] = [d for d in dirs if d.lower() not in skip_dirs and not d.startswith(".")]
         for f in files:
             full_path = Path(root) / f
             file_findings = scan_file_sast(full_path, directory)
