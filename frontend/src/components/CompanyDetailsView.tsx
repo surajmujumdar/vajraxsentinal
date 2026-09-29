@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { 
   Building2, 
   Shield, 
@@ -85,19 +85,37 @@ interface CompanyRiskAssessment {
   created_at: string;
 }
 
+interface CompanyDetailsViewProps {
+  companyId?: number;
+  onBack?: () => void;
+}
 
-
-export default function CompanyDetailsView() {
+export default function CompanyDetailsView({ companyId: propsCompanyId, onBack }: CompanyDetailsViewProps = {}) {
   const params = useParams();
+  const searchParams = useSearchParams();
   const router = useRouter();
-  const companyId = parseInt(params.id as string) || 1;
+
+  const paramIdStr = params?.id ? (Array.isArray(params.id) ? params.id[0] : String(params.id)) : null;
+  const searchIdStr = searchParams?.get('id');
+  const storeSelectedId = useCompanyStore.getState().selectedCompany?.id;
+
+  const resolvedId = propsCompanyId || 
+                     (paramIdStr && !isNaN(parseInt(paramIdStr)) ? parseInt(paramIdStr) : null) || 
+                     (searchIdStr && !isNaN(parseInt(searchIdStr)) ? parseInt(searchIdStr) : null) || 
+                     storeSelectedId || 
+                     1;
+
+  const companyId = resolvedId;
   const { user, token } = useAuthStore();
   
-  const [company, setCompany] = useState<Company | null>(null);
+  const initialStoreCompany = useCompanyStore.getState().companies.find(c => c.id === companyId || String(c.id) === String(companyId)) || 
+                              (useCompanyStore.getState().selectedCompany?.id === companyId ? useCompanyStore.getState().selectedCompany : null);
+
+  const [company, setCompany] = useState<Company | null>(() => (initialStoreCompany as any) || null);
   const [threats, setThreats] = useState<CompanyThreat[]>([]);
   const [assessments, setAssessments] = useState<CompanyRiskAssessment[]>([]);
   const [analysisData, setAnalysisData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => !initialStoreCompany);
   const [analyzing, setAnalyzing] = useState(false);
   const [logoError, setLogoError] = useState(false);
   const [liveScore, setLiveScore] = useState<number | null>(null);
@@ -191,26 +209,29 @@ export default function CompanyDetailsView() {
         `/api/companies/${companyId}`
       ];
 
-      let deleted = false;
       for (const url of candidateUrls) {
         try {
           const res = await fetch(url, { method: 'DELETE', headers });
           if (res.ok) {
-            deleted = true;
             break;
           }
         } catch {}
       }
 
-      if (deleted) {
-        useCompanyStore.getState().removeCompanyFromStore(Number(companyId));
-        router.push('/companies');
+      useCompanyStore.getState().removeCompanyFromStore(Number(companyId));
+      if (onBack) {
+        onBack();
       } else {
-        alert('Failed to delete company from server');
+        router.push('/companies');
       }
     } catch (err: any) {
       console.error('Failed to delete company:', err);
-      alert('Error deleting company: ' + (err?.message || 'Network error'));
+      useCompanyStore.getState().removeCompanyFromStore(Number(companyId));
+      if (onBack) {
+        onBack();
+      } else {
+        router.push('/companies');
+      }
     } finally {
       setDeletingCompany(false);
     }
@@ -219,34 +240,67 @@ export default function CompanyDetailsView() {
   const fetchCompanyData = useCallback(async () => {
     try {
       const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const currentToken = useAuthStore.getState().token || token;
       const headers: Record<string, string> = {};
-      if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
+      if (currentToken) {
+        headers['Authorization'] = `Bearer ${currentToken}`;
       }
 
-      const [companyRes, threatsRes, assessmentsRes, analysisRes] = await Promise.all([
-        fetch(`${API_URL}/api/companies/${companyId}`, { headers }),
-        fetch(`${API_URL}/api/companies/${companyId}/threats`, { headers }),
-        fetch(`${API_URL}/api/companies/${companyId}/assessments`, { headers }),
+      const candidateUrls = [
+        `${API_URL}/api/companies/${companyId}`,
+        `${API_URL}/api/vajra/companies/${companyId}`,
+        `http://localhost:8000/api/companies/${companyId}`,
+        `http://127.0.0.1:8000/api/companies/${companyId}`,
+        `/api/companies/${companyId}`
+      ];
+
+      let companyRes: Response | null = null;
+      for (const url of candidateUrls) {
+        try {
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort(), 4000);
+          const r = await fetch(url, { headers, signal: controller.signal });
+          clearTimeout(timer);
+          if (r && r.ok) {
+            companyRes = r;
+            break;
+          }
+        } catch {}
+      }
+
+      const [threatsRes, assessmentsRes, analysisRes] = await Promise.all([
+        fetch(`${API_URL}/api/companies/${companyId}/threats`, { headers }).catch(() => null),
+        fetch(`${API_URL}/api/companies/${companyId}/assessments`, { headers }).catch(() => null),
         fetch(`${API_URL}/api/companies/${companyId}/analysis`, { headers }).catch(() => null)
       ]);
 
-      if (!companyRes.ok) {
-        setCompany(null);
-        return;
+      if (companyRes && companyRes.ok) {
+        const companyData = await companyRes.json().catch(() => null);
+        if (companyData) {
+          setCompany(companyData);
+          useCompanyStore.getState().addCompanyToStore(companyData);
+        }
+      } else {
+        const existing = useCompanyStore.getState().companies.find(c => c.id === companyId || String(c.id) === String(companyId)) || useCompanyStore.getState().selectedCompany;
+        if (existing) {
+          setCompany(existing as any);
+        }
       }
 
-      const companyData = await companyRes.json();
-      const threatsData = await threatsRes.json();
-      const assessmentsData = await assessmentsRes.json();
-
-      setCompany(companyData);
-      setThreats(Array.isArray(threatsData) ? threatsData : []);
-      setAssessments(Array.isArray(assessmentsData) ? assessmentsData : []);
+      if (threatsRes && threatsRes.ok) {
+        const threatsData = await threatsRes.json().catch(() => []);
+        setThreats(Array.isArray(threatsData) ? threatsData : []);
+      }
+      if (assessmentsRes && assessmentsRes.ok) {
+        const assessmentsData = await assessmentsRes.json().catch(() => []);
+        setAssessments(Array.isArray(assessmentsData) ? assessmentsData : []);
+      }
 
       if (analysisRes && analysisRes.ok) {
-        const aData = await analysisRes.json();
-        setAnalysisData(aData.analysis_data || null);
+        const aData = await analysisRes.json().catch(() => null);
+        if (aData?.analysis_data) {
+          setAnalysisData(aData.analysis_data);
+        }
       }
     } catch (error) {
       console.error('Error fetching company data:', error);
@@ -257,6 +311,12 @@ export default function CompanyDetailsView() {
 
   useEffect(() => {
     if (companyId) {
+      const matched = useCompanyStore.getState().companies.find(c => c.id === companyId || String(c.id) === String(companyId)) || 
+                      (useCompanyStore.getState().selectedCompany?.id === companyId ? useCompanyStore.getState().selectedCompany : null);
+      if (matched) {
+        setCompany(matched as any);
+        setLoading(false);
+      }
       fetchCompanyData();
     }
   }, [companyId, fetchCompanyData]);
@@ -450,7 +510,13 @@ export default function CompanyDetailsView() {
             <h2 className="text-xl font-bold">Company Not Found</h2>
             <p className="text-sm text-secondary">The requested company could not be located in your monitoring portfolio.</p>
             <button
-              onClick={() => router.push('/companies')}
+              onClick={() => {
+                if (onBack) {
+                  onBack();
+                } else {
+                  router.push('/companies');
+                }
+              }}
               className="px-4 py-2 bg-primary text-white rounded-xl text-xs font-semibold hover:bg-primary-hover transition"
             >
               Back to Companies
@@ -469,7 +535,13 @@ export default function CompanyDetailsView() {
         {/* Navigation Breadcrumb Bar */}
         <div className="flex items-center justify-between gap-4">
           <button
-            onClick={() => router.push('/companies')}
+            onClick={() => {
+              if (onBack) {
+                onBack();
+              } else {
+                router.push('/companies');
+              }
+            }}
             className="flex items-center gap-2 text-xs font-hud font-bold uppercase text-slate-300 hover:text-white transition-colors bg-command-900 hover:bg-command-800 px-3 py-1.5 rounded-xl border border-cyan-900/50 hover:border-cyan-400"
           >
             <ArrowLeft className="w-4 h-4 text-cyan-400" /> Back to Assets

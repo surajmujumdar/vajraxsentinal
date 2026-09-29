@@ -13,13 +13,15 @@ def get_health():
         "environment": settings.ENVIRONMENT
     }
 
+from app.scanners.sast.semgrep_adapter import get_semgrep_cmd
+
 @router.get("/capabilities")
 def get_capabilities():
     return {
         "ai_provider": settings.AI_PROVIDER,
         "ai_model": settings.AI_MODEL,
         "scanners": {
-            "sast": {"semgrep_cli": shutil.which("semgrep") is not None, "native_engine": True},
+            "sast": {"semgrep_cli": get_semgrep_cmd() is not None, "native_engine": True},
             "sca": {"osv_api": True, "lockfiles_supported": 15},
             "secrets": {"gitleaks_cli": shutil.which("gitleaks") is not None, "entropy_scanner": True},
             "dast": {"zap_cli": shutil.which("zap.sh") is not None or shutil.which("zaproxy") is not None, "zap_crawler": True, "active_probe_engine": True},

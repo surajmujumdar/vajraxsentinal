@@ -19,9 +19,12 @@ export default function PlatformToggle({ className = '', compact = false }: Plat
   const isSentinel = currentPlatform === 'SENTINEL' || currentPlatform === 'SENTINA'
 
   const handleSwitch = (platform: PlatformMode) => {
+    if (currentPlatform === platform) return
     setPlatform(platform)
-    if (pathname !== '/' && pathname !== '/vajra' && pathname !== '/sentinel') {
-      router.push('/')
+    if (platform === 'SENTINEL' && pathname === '/vajra') {
+      router.push('/sentinel')
+    } else if (platform === 'VAJRA' && (pathname === '/sentinel' || pathname === '/sentina')) {
+      router.push('/vajra')
     }
   }
 

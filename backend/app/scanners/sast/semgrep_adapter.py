@@ -1,11 +1,30 @@
 import json
+import sys
 import shutil
 import subprocess
 import asyncio
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from app.scanners.base import ScannerAdapter, RawFinding
 from app.scanners.sast.sast_engine import scan_directory_sast
+
+def get_semgrep_cmd() -> Optional[List[str]]:
+    if shutil.which("semgrep"):
+        return ["semgrep"]
+    for path in [
+        "/opt/homebrew/bin/semgrep",
+        "/usr/local/bin/semgrep",
+        str(Path.home() / ".local/bin/semgrep"),
+        "/Library/Frameworks/Python.framework/Versions/3.11/bin/semgrep"
+    ]:
+        if Path(path).exists() and Path(path).is_file():
+            return [path]
+    try:
+        import semgrep
+        return [sys.executable, "-m", "semgrep"]
+    except ImportError:
+        pass
+    return None
 
 class SemgrepAdapter(ScannerAdapter):
     def __init__(self):
@@ -18,16 +37,22 @@ class SemgrepAdapter(ScannerAdapter):
         return False
 
     def prepare(self, target: Any) -> Dict[str, Any]:
-        has_cli = shutil.which("semgrep") is not None
-        return {"target_path": Path(target), "has_cli": has_cli}
+        cmd_prefix = get_semgrep_cmd()
+        return {"target_path": Path(target), "has_cli": cmd_prefix is not None, "cmd_prefix": cmd_prefix}
 
     async def execute(self, target: Any, context: Dict[str, Any]) -> Any:
         target_path: Path = context["target_path"]
         findings: List[RawFinding] = []
 
-        if context["has_cli"]:
+        if context["has_cli"] and context.get("cmd_prefix"):
             try:
-                cmd = ["semgrep", "scan", "--json", "--quiet", "--config", "auto", str(target_path)]
+                cmd = list(context["cmd_prefix"]) + ["scan", "--json", "--quiet", "--config", "auto"]
+                local_config = target_path / ".semgrep.yml"
+                if not local_config.exists():
+                    local_config = Path(".semgrep.yml")
+                if local_config.exists():
+                    cmd.extend(["--config", str(local_config.resolve())])
+                cmd.append(str(target_path))
                 proc = await asyncio.create_subprocess_exec(
                     *cmd,
                     stdout=asyncio.subprocess.PIPE,

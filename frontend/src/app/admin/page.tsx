@@ -452,7 +452,10 @@ export default function AdminDashboard() {
 
                               <td className="py-3 px-4 text-right">
                                 <button
-                                  onClick={() => router.push(`/companies/${comp.id}`)}
+                                  onClick={() => {
+                                    useCompanyStore.getState().setSelectedCompany(comp as any);
+                                    router.push(`/companies?id=${comp.id}`);
+                                  }}
                                   className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary/10 text-primary border border-primary/20 rounded-md hover:bg-primary/20 transition-colors text-xs font-semibold"
                                 >
                                   View Details

@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
+import CompanyDetailsView from '@/components/CompanyDetailsView'
 import { useAuthStore } from '@/store/authStore'
 import { useCompanyStore } from '@/store/companyStore'
 import {
@@ -66,12 +67,17 @@ import { computeUnifiedSecurityStats, getGradeFromScore } from '@/lib/securitySc
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
-export default function CompaniesPage() {
+function CompaniesContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const searchIdStr = searchParams?.get('id')
+  const initialSelectedId = searchIdStr && !isNaN(parseInt(searchIdStr)) ? parseInt(searchIdStr) : null
+
   const { user, token } = useAuthStore()
   const isAdmin = Boolean(user?.role?.toLowerCase() === 'admin')
   const storeCompanies = useCompanyStore((state) => state.companies)
 
+  const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(initialSelectedId)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [sidebarWidth, setSidebarWidth] = useState(200)
   const [mounted, setMounted] = useState(false)
@@ -82,6 +88,27 @@ export default function CompaniesPage() {
   const [showAddModal, setShowAddModal] = useState(false)
   const [analyzingId, setAnalyzingId] = useState<number | null>(null)
   const [deletingId, setDeletingId] = useState<number | null>(null)
+
+  // Listen for browser navigation history popstate events (Back / Forward)
+  useEffect(() => {
+    const onPopState = () => {
+      const params = new URLSearchParams(window.location.search)
+      const idParam = params.get('id')
+      if (idParam && !isNaN(parseInt(idParam))) {
+        setSelectedCompanyId(parseInt(idParam))
+      } else {
+        setSelectedCompanyId(null)
+      }
+    }
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
+  }, [])
+
+  useEffect(() => {
+    if (searchIdStr && !isNaN(parseInt(searchIdStr))) {
+      setSelectedCompanyId(parseInt(searchIdStr))
+    }
+  }, [searchIdStr])
 
   // Live Scanning Progress & Countdown HUD State
   const [scanState, setScanState] = useState<ScanState>({
@@ -496,7 +523,14 @@ export default function CompaniesPage() {
   }
 
   const handleViewDetails = (companyId: number) => {
-    router.push(`/companies/${companyId}`)
+    const target = companies.find(c => c.id === companyId)
+    if (target) {
+      useCompanyStore.getState().setSelectedCompany(target)
+    }
+    setSelectedCompanyId(companyId)
+    if (typeof window !== 'undefined') {
+      window.history.pushState(null, '', `/companies?id=${companyId}`)
+    }
   }
 
   const isCompanyGlobal = (c: Company) => {
@@ -613,6 +647,20 @@ export default function CompaniesPage() {
     if (score >= 70) return 'text-cyan-400'
     if (score >= 50) return 'text-amber-400'
     return 'text-red-400'
+  }
+
+  if (selectedCompanyId) {
+    return (
+      <CompanyDetailsView
+        companyId={selectedCompanyId}
+        onBack={() => {
+          setSelectedCompanyId(null)
+          if (typeof window !== 'undefined') {
+            window.history.pushState(null, '', '/companies')
+          }
+        }}
+      />
+    )
   }
 
   return (
@@ -1133,5 +1181,17 @@ export default function CompaniesPage() {
         onClose={() => setScanState(prev => ({ ...prev, active: false }))} 
       />
     </div>
+  )
+}
+
+export default function CompaniesPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen bg-command-950 items-center justify-center">
+        <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+      </div>
+    }>
+      <CompaniesContent />
+    </Suspense>
   )
 }
