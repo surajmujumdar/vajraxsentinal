@@ -5,6 +5,7 @@ import { Shield, Mail, Lock, User, KeyRound, ArrowLeft, RefreshCw, CheckCircle, 
 import { authService } from '../../services/auth.service'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
+import PlatformToggle from '@/components/PlatformToggle'
 
 export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true)
@@ -142,6 +143,11 @@ export default function LoginPage() {
           
           {/* Top Cyan Cyber Sheen */}
           <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_12px_#00f2fe]" />
+
+          {/* Platform Toggle Switcher */}
+          <div className="flex justify-center mb-5 relative z-10">
+            <PlatformToggle />
+          </div>
 
           {/* Platform Header */}
           <div className="flex flex-col items-center justify-center gap-2 mb-6 relative z-10">

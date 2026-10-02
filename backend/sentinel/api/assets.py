@@ -60,7 +60,7 @@ async def verify_target_asset(
     if getattr(current_user, "role", "") == "admin":
         project = db.query(Project).filter(Project.id == payload.project_id).first()
     else:
-        project = db.query(Project).filter(Project.id == payload.project_id, Project.user_id == current_user.id).first()
+        project = db.query(Project).filter(Project.id == payload.project_id, Project.user_id == str(current_user.id)).first()
     if not project:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found or unauthorized")
 
@@ -121,7 +121,7 @@ def list_assets(
     if getattr(current_user, "role", "") == "admin":
         query = db.query(Asset)
     else:
-        query = db.query(Asset).join(Project).filter(Project.user_id == current_user.id)
+        query = db.query(Asset).join(Project).filter(Project.user_id == str(current_user.id))
     if project_id:
         query = query.filter(Asset.project_id == project_id)
     assets = query.order_by(Asset.created_at.desc()).all()
@@ -136,7 +136,7 @@ def get_asset_details(
     if getattr(current_user, "role", "") == "admin":
         asset = db.query(Asset).filter(Asset.id == asset_id).first()
     else:
-        asset = db.query(Asset).join(Project).filter(Asset.id == asset_id, Project.user_id == current_user.id).first()
+        asset = db.query(Asset).join(Project).filter(Asset.id == asset_id, Project.user_id == str(current_user.id)).first()
     if not asset:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Asset not found")
     return AssetResponse.model_validate(asset)

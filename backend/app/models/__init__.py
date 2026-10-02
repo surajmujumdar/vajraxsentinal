@@ -8,7 +8,7 @@ def generate_uuid():
     return str(uuid.uuid4())
 
 class User(Base):
-    __tablename__ = "users"
+    __tablename__ = "sentina_users"
     __table_args__ = {'extend_existing': True}
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
@@ -30,7 +30,7 @@ class Project(Base):
     id = Column(String(36), primary_key=True, default=generate_uuid)
     name = Column(String(128), nullable=False)
     description = Column(Text, nullable=True)
-    user_id = Column(String(36), ForeignKey("users.id"), nullable=False)
+    user_id = Column(String(36), ForeignKey("sentina_users.id"), nullable=True)
     repository_url = Column(String(512), nullable=True)
     target_url = Column(String(512), nullable=True)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
@@ -183,7 +183,7 @@ class CorrelatedRisk(Base):
 
 
 class Report(Base):
-    __tablename__ = "reports"
+    __tablename__ = "sentina_reports"
     __table_args__ = {'extend_existing': True}
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
@@ -209,7 +209,7 @@ class AuditLog(Base):
     __table_args__ = {'extend_existing': True}
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
-    user_id = Column(String(36), ForeignKey("users.id"), nullable=True)
+    user_id = Column(String(36), ForeignKey("sentina_users.id"), nullable=True)
     action = Column(String(64), nullable=False)
     resource_type = Column(String(64), nullable=False)
     resource_id = Column(String(64), nullable=True)

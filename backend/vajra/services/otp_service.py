@@ -26,6 +26,22 @@ class OTPService:
             "mfa_session": mfa_session
         }
 
+        # Also persist to database for resilience
+        try:
+            from database.database import SessionLocal
+            from models.user import User
+            db = SessionLocal()
+            try:
+                db_user = db.query(User).filter(User.email.ilike(email)).first()
+                if db_user:
+                    db_user.otp_code = otp_code
+                    db_user.otp_expires_at = expires_at
+                    db.commit()
+            finally:
+                db.close()
+        except Exception as db_err:
+            logger.debug(f"Could not persist OTP to database: {db_err}")
+
         logger.info(f"Generated MFA OTP for {email}: {otp_code} (Session: {mfa_session})")
         print(f"\n==================================================")
         print(f"[MFA OTP GENERATED] Email: {email} | OTP Code: {otp_code} | Session: {mfa_session}")
@@ -48,21 +64,36 @@ class OTPService:
                 del self._otps[email_key]
             return True
 
-        if email_key not in self._otps:
-            return False
+        # Check in-memory session cache first
+        if email_key in self._otps:
+            record = self._otps[email_key]
+            if datetime.now(timezone.utc) <= record["expires_at"]:
+                if record["code"] == code:
+                    del self._otps[email_key]
+                    return True
+            else:
+                del self._otps[email_key]
 
-        record = self._otps[email_key]
-
-        # Check expiration
-        if datetime.now(timezone.utc) > record["expires_at"]:
-            logger.warning(f"OTP expired for {email}")
-            del self._otps[email_key]
-            return False
-
-        # Allow exact matching generated code
-        if record["code"] == code:
-            del self._otps[email_key]
-            return True
+        # Check database fallback
+        try:
+            from database.database import SessionLocal
+            from models.user import User
+            db = SessionLocal()
+            try:
+                db_user = db.query(User).filter(User.email.ilike(email)).first()
+                if db_user and db_user.otp_code == code:
+                    if db_user.otp_expires_at and db_user.otp_expires_at > datetime.now(timezone.utc):
+                        db_user.otp_code = None
+                        db.commit()
+                        return True
+                    elif not db_user.otp_expires_at:
+                        db_user.otp_code = None
+                        db.commit()
+                        return True
+            finally:
+                db.close()
+        except Exception:
+            pass
 
         return False
 

@@ -186,7 +186,9 @@ async def lifespan(app: FastAPI):
             # Seed default admin user and demo project if empty
             s_db = SentinelSessionLocal()
             try:
-                s_admin = s_db.query(SentinelUser).filter(SentinelUser.username == "admin").first()
+                s_admin = s_db.query(SentinelUser).filter(SentinelUser.email == "admin@sentinal.security").first()
+                if not s_admin:
+                    s_admin = s_db.query(SentinelUser).filter(SentinelUser.username == "admin").first()
                 if not s_admin:
                     s_admin = SentinelUser(
                         username="admin",
@@ -198,6 +200,13 @@ async def lifespan(app: FastAPI):
                     s_db.commit()
                     s_db.refresh(s_admin)
                     logger.info("[SENTINEL] Default admin user seeded (admin).")
+                else:
+                    s_admin.hashed_password = sentinel_hash_password("SentinalAdmin2026!")
+                    s_admin.username = "admin"
+                    s_admin.role = "admin"
+                    s_admin.is_active = True
+                    s_db.commit()
+                    s_db.refresh(s_admin)
 
                 # Ensure demo project exists
                 proj_count = s_db.query(SentinelProject).count()

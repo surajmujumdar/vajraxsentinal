@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Shield, Lock, User, KeyRound, ArrowRight, Zap } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import PlatformToggle from '@/components/PlatformToggle';
 
 export const Login = () => {
   const { login, register } = useAuth();
@@ -54,6 +55,11 @@ export const Login = () => {
         background: '#0d1322',
         border: '1px solid #1e293b'
       }}>
+        {/* Platform Toggle */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+          <PlatformToggle />
+        </div>
+
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '28px' }}>
           <img

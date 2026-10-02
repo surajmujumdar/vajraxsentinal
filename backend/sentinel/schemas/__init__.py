@@ -1,6 +1,6 @@
 from datetime import datetime
-from typing import List, Optional, Dict, Any
-from pydantic import BaseModel, Field
+from typing import List, Optional, Dict, Any, Union
+from pydantic import BaseModel, Field, field_validator
 
 # --- Auth & User Schemas ---
 class UserCreate(BaseModel):
@@ -13,15 +13,25 @@ class UserLogin(BaseModel):
     password: str
 
 class UserResponse(BaseModel):
-    id: str
-    username: str
+    id: Any
+    username: Optional[str] = None
     email: str
-    role: str
-    is_active: bool
-    created_at: datetime
+    role: Optional[str] = "admin"
+    is_active: Optional[bool] = True
+    created_at: Optional[datetime] = None
 
     class Config:
         from_attributes = True
+
+    @field_validator('id', mode='before')
+    @classmethod
+    def convert_id(cls, v):
+        return str(v) if v is not None else ""
+
+    @field_validator('username', mode='before')
+    @classmethod
+    def convert_username(cls, v):
+        return str(v) if v else "admin"
 
 class Token(BaseModel):
     access_token: str
@@ -46,17 +56,22 @@ class ProjectUpdate(BaseModel):
     target_url: Optional[str] = None
 
 class ProjectResponse(BaseModel):
-    id: str
+    id: Any
     name: str
     description: Optional[str] = None
-    user_id: str
+    user_id: Any
     repository_url: Optional[str] = None
     target_url: Optional[str] = None
-    created_at: datetime
-    updated_at: datetime
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
 
     class Config:
         from_attributes = True
+
+    @field_validator('id', 'user_id', mode='before')
+    @classmethod
+    def convert_ids(cls, v):
+        return str(v) if v is not None else ""
 
 # --- Assessment Schemas ---
 class AssessmentModulesConfig(BaseModel):

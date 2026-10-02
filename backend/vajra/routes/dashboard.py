@@ -137,6 +137,7 @@ async def get_attack_map():
     ]
 
 @router.get("/attack-trend")
+@router.get("/attack-trends")
 async def get_attack_trend():
     return {
         "trend": [

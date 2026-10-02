@@ -185,7 +185,7 @@ def get_assessment(
     if getattr(current_user, "role", "") == "admin":
         assessment = db.query(Assessment).filter(Assessment.id == assessment_id).first()
     else:
-        assessment = db.query(Assessment).join(Project).filter(Assessment.id == assessment_id, Project.user_id == current_user.id).first()
+        assessment = db.query(Assessment).join(Project).filter(Assessment.id == assessment_id, Project.user_id == str(current_user.id)).first()
     if not assessment:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assessment not found")
     return AssessmentResponse.model_validate(assessment)
@@ -199,7 +199,7 @@ def delete_assessment(
     if getattr(current_user, "role", "") == "admin":
         assessment = db.query(Assessment).filter(Assessment.id == assessment_id).first()
     else:
-        assessment = db.query(Assessment).join(Project).filter(Assessment.id == assessment_id, Project.user_id == current_user.id).first()
+        assessment = db.query(Assessment).join(Project).filter(Assessment.id == assessment_id, Project.user_id == str(current_user.id)).first()
     if not assessment:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assessment not found")
 
@@ -237,7 +237,7 @@ def cancel_assessment(
     if getattr(current_user, "role", "") == "admin":
         assessment = db.query(Assessment).filter(Assessment.id == assessment_id).first()
     else:
-        assessment = db.query(Assessment).join(Project).filter(Assessment.id == assessment_id, Project.user_id == current_user.id).first()
+        assessment = db.query(Assessment).join(Project).filter(Assessment.id == assessment_id, Project.user_id == str(current_user.id)).first()
     if not assessment:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assessment not found")
 
@@ -264,7 +264,7 @@ def get_assessment_correlated_risks(
     if getattr(current_user, "role", "") == "admin":
         assessment = db.query(Assessment).filter(Assessment.id == assessment_id).first()
     else:
-        assessment = db.query(Assessment).join(Project).filter(Assessment.id == assessment_id, Project.user_id == current_user.id).first()
+        assessment = db.query(Assessment).join(Project).filter(Assessment.id == assessment_id, Project.user_id == str(current_user.id)).first()
     if not assessment:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assessment not found")
 

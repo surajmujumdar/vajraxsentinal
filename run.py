@@ -39,7 +39,7 @@ def cleanup(signum=None, frame=None):
 signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
 
-def check_backend_health(url="http://127.0.0.1:8000/api/health", timeout_secs=25):
+def check_backend_health(url="http://127.0.0.1:8000/api/health", timeout_secs=60):
     start = time.time()
     while time.time() - start < timeout_secs:
         try:

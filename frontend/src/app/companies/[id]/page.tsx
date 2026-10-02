@@ -31,8 +31,9 @@ export async function generateStaticParams() {
   return staticIds;
 }
 
-export default function CompanyDetailPage({ params }: { params: { id: string } }) {
-  const numericId = params?.id && !isNaN(parseInt(params.id)) ? parseInt(params.id) : undefined;
+export default async function CompanyDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  const numericId = resolvedParams?.id && !isNaN(parseInt(resolvedParams.id)) ? parseInt(resolvedParams.id) : undefined;
   return (
     <Suspense fallback={
       <div className="flex min-h-screen bg-command-950 items-center justify-center">

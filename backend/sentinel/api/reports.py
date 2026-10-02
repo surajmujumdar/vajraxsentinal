@@ -19,7 +19,7 @@ def get_report(
     if getattr(current_user, "role", "") == "admin":
         report = db.query(Report).filter(Report.assessment_id == assessment_id).first()
     else:
-        report = db.query(Report).join(Project).filter(Report.assessment_id == assessment_id, Project.user_id == current_user.id).first()
+        report = db.query(Report).join(Project).filter(Report.assessment_id == assessment_id, Project.user_id == str(current_user.id)).first()
     if not report:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Report not found for this assessment.")
     return ReportResponse.model_validate(report)
@@ -34,7 +34,7 @@ def export_report(
     if getattr(current_user, "role", "") == "admin":
         report = db.query(Report).filter(Report.assessment_id == assessment_id).first()
     else:
-        report = db.query(Report).join(Project).filter(Report.assessment_id == assessment_id, Project.user_id == current_user.id).first()
+        report = db.query(Report).join(Project).filter(Report.assessment_id == assessment_id, Project.user_id == str(current_user.id)).first()
     if not report:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Report not found.")
 

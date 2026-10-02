@@ -17,7 +17,7 @@ def list_projects(
     if getattr(current_user, "role", "") == "admin":
         projects = db.query(Project).order_by(Project.created_at.desc()).all()
     else:
-        projects = db.query(Project).filter(Project.user_id == current_user.id).order_by(Project.created_at.desc()).all()
+        projects = db.query(Project).filter(Project.user_id == str(current_user.id)).order_by(Project.created_at.desc()).all()
     return [ProjectResponse.model_validate(p) for p in projects]
 
 @router.post("", response_model=ProjectResponse, status_code=status.HTTP_201_CREATED)
@@ -31,7 +31,7 @@ def create_project(
         description=payload.description,
         repository_url=payload.repository_url,
         target_url=payload.target_url,
-        user_id=current_user.id
+        user_id=str(current_user.id)
     )
     db.add(project)
     db.commit()
@@ -39,7 +39,7 @@ def create_project(
 
     # Log audit
     audit = AuditLog(
-        user_id=current_user.id,
+        user_id=str(current_user.id),
         action="CREATE_PROJECT",
         resource_type="Project",
         resource_id=project.id,
@@ -59,7 +59,7 @@ def get_project(
     if getattr(current_user, "role", "") == "admin":
         project = db.query(Project).filter(Project.id == project_id).first()
     else:
-        project = db.query(Project).filter(Project.id == project_id, Project.user_id == current_user.id).first()
+        project = db.query(Project).filter(Project.id == project_id, Project.user_id == str(current_user.id)).first()
     if not project:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
     return ProjectResponse.model_validate(project)
@@ -74,7 +74,7 @@ def update_project(
     if getattr(current_user, "role", "") == "admin":
         project = db.query(Project).filter(Project.id == project_id).first()
     else:
-        project = db.query(Project).filter(Project.id == project_id, Project.user_id == current_user.id).first()
+        project = db.query(Project).filter(Project.id == project_id, Project.user_id == str(current_user.id)).first()
     if not project:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
 
@@ -100,7 +100,7 @@ def delete_project(
     if getattr(current_user, "role", "") == "admin":
         project = db.query(Project).filter(Project.id == project_id).first()
     else:
-        project = db.query(Project).filter(Project.id == project_id, Project.user_id == current_user.id).first()
+        project = db.query(Project).filter(Project.id == project_id, Project.user_id == str(current_user.id)).first()
     if not project:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
 

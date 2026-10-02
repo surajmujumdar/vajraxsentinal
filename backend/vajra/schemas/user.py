@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 
 class UserBase(BaseModel):
@@ -13,8 +13,10 @@ class UserLogin(BaseModel):
     username: Optional[str] = None
     password: str
 
-class UserResponse(UserBase):
+class UserResponse(BaseModel):
     id: int
+    email: str
+    name: str
     role: str
     is_active: bool
 
@@ -23,7 +25,7 @@ class UserResponse(UserBase):
 
 class Token(BaseModel):
     access_token: str
-    refresh_token: str
+    refresh_token: Optional[str] = None
     token_type: str = "bearer"
     user: UserResponse
 
@@ -31,8 +33,10 @@ class TokenRefresh(BaseModel):
     refresh_token: str
 
 class OTPVerifyRequest(BaseModel):
-    email: EmailStr
-    otp_code: str
+    email: Optional[str] = None
+    otp_code: Optional[str] = None
+    otp: Optional[str] = None
+    code: Optional[str] = None
     mfa_session: Optional[str] = None
 
 class OTPSendRequest(BaseModel):
